@@ -16,7 +16,6 @@ class fileManager extends CI_Controller{
         $this->load->model('maintenance_model');
     }
 
-
     function updateFile($ruta, $error, $name, $tmpName){
         $result;
         if(!$error){
@@ -24,12 +23,12 @@ class fileManager extends CI_Controller{
       //      $file_type = $_FILES['fileActividad']['type'];
             $file_name = preg_replace("/[^a-z0-9_\.\-[:space:]]/i", "_", $file_name);
             move_uploaded_file($tmpName, $ruta.$file_name);
-            $result[0] =  true;
+            $result[0] =  "true";
             $result[1] =  'Congratulations!  Your file was accepted.';
             $result[2] =  $file_name;
         //    $result[3] =  $file_type;
         } else {
-            $result[0] =  false;
+            $result[0] =  "false";
             $result[1] = 'Ooops!  Your upload triggered the following error:  '.$error;
         }
         return $result;

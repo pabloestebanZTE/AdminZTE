@@ -1,10 +1,14 @@
 <?php
 
+$msgJS = "";
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 include 'fileManager.php';       // include the class
 
 class Mantenimientos extends CI_Controller {
+
+
 
     function __construct() {
         parent::__construct();
@@ -26,19 +30,33 @@ class Mantenimientos extends CI_Controller {
         }
         $respuesta['MP'] = $this->arregloGraficasMP($PVDs);
         $respuesta['tablas'] = $this->arregloTablas($respuesta['MP']);
+        if ($GLOBALS['$msgJS'] != ""){
+          $respuesta['msg'] = $GLOBALS['$msgJS'];
+        }
         $this->load->view('MPreventivos', $respuesta);
     }
 
     function subirArchivoMP(){
         $archivo = new fileManager;
         $result = $archivo->updateFile('files/', $_FILES['file']['error'],"uploadMantenimientosP.xls",$_FILES['file']['tmp_name']);
+        if($result[0] == "true"){
+          $GLOBALS['$msgJS'][0] = "Bien Hecho";
+          $GLOBALS['$msgJS'][1] = "Archivo cargado correctamente";
+          $GLOBALS['$msgJS'][2] = "success";
+        } else {
+          $GLOBALS['$msgJS'][0] = "Algo salio mal";
+          $GLOBALS['$msgJS'][1] = "El archivo no se cargo";
+          $GLOBALS['$msgJS'][2] = "error";
+        }
         $this->loadMPView();
     }
 
     function actualizarMP(){
         $excel = new fileManager;
         $result = $excel->excelReader("uploadMantenimientosP");
-        $result = "Base de Datos MP actualizada";
+        $GLOBALS['$msgJS'][0] = "Bien Hecho";
+        $GLOBALS['$msgJS'][1] = "Base de datos actualizada";
+        $GLOBALS['$msgJS'][2] = "success";
         $this->loadMPView();
     }
 

@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
-<!--
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
--->
+
     <script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
@@ -24,6 +24,8 @@
     <script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
+    <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 
     <script type="text/javascript">
       PGEMP();
@@ -32,6 +34,14 @@
       PGEMPln2();
     </script>
 
+    <script type="text/javascript" charset="utf-8" async defer>
+        function showMessage(){
+            var a = "<?php echo $msg[0]; ?>";
+            var b = "<?php echo $msg[1]; ?>";
+            var c = "<?php echo $msg[2]; ?>";
+            sweetAlert(a, b, c);
+        }
+    </script>
 
   </head>
 
@@ -66,7 +76,7 @@
                   }
                 }
               ?>
-              <li id="nav6"><a href="#">Salir<span>Logout</span></a></li>
+              <li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
   					</ul>
   				</nav>
   				</div>
@@ -179,53 +189,25 @@
   					</section>
 
             <?php
+            if($_SESSION['permissions'][6] == 1){
               echo "<section class='col-3-4'>";
                 echo "<div class='wrap-col'>";
-
-                <h2 class="under">Actualizar</h2>
-                <form id="ContactForm" method="post"  enctype="multipart/form-data">
-                  <div id="divFileActividad" class="form-group">
-                    <label for='fileActividad'>Archivo Adjunto:</label>
-                    <input type="file" id='file' name="file" required/>
-                  </div>
-                  <div>
-                    <?php
+                  echo "<h2 class='under'>Actualizar</h2>";
+                  echo "<form id='ContactForm' method='post'  enctype='multipart/form-data'>";
+                    echo "<div id='divFileActividad' class='form-group'>";
+                      echo "<label for='fileActividad'>Archivo Adjunto:</label>";
+                      echo "<input type='file' id='file' name='file' required/>";
+                    echo "</div>";
+                    echo "<div>";
                       echo "<input type='submit' value='Subir Archivo' id='btnSubmit' class='btn btn-warning' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/subirArchivoMP' \">";
                       echo "</br></br>";
-                    ?>
-                  </div>
-                </form>
-                <?php
+                    echo "</div>";
+                  echo "</form>";
                   echo "<a href='/AdminZTE/index.php/Mantenimientos/actualizarMP' class='btn btn-danger' role='button' >Actuzalizar B.D. M.P.</a>";
-                ?>
-                </div>
-                </section>
-
-
-
-
-             ?>
-            <section class="col-3-4">
-            <div class="wrap-col">
-              <h2 class="under">Actualizar</h2>
-              <form id="ContactForm" method="post"  enctype="multipart/form-data">
-                <div id="divFileActividad" class="form-group">
-                  <label for='fileActividad'>Archivo Adjunto:</label>
-                  <input type="file" id='file' name="file" required/>
-                </div>
-                <div>
-                  <?php
-                    echo "<input type='submit' value='Subir Archivo' id='btnSubmit' class='btn btn-warning' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/subirArchivoMP' \">";
-                    echo "</br></br>";
-                  ?>
-                </div>
-              </form>
-              <?php
-                echo "<a href='/AdminZTE/index.php/Mantenimientos/actualizarMP' class='btn btn-danger' role='button' >Actuzalizar B.D. M.P.</a>";
-              ?>
-              </div>
-            </section>
-
+                echo "</div>";
+                echo "</section>";
+            }
+            ?>
   				</div>
   			</article>
   		</div>
@@ -238,6 +220,9 @@
         echo "<script type='text/javascript'>PEMP(".json_encode($MP).");</script>";
         echo "<script type='text/javascript'>PGEMPln(".json_encode($MP).");</script>";
         echo "<script type='text/javascript'>PGEMPln2(".json_encode($MP).");</script>";
+        if ($msg != ""){
+          echo "<script type='text/javascript'>showMessage();</script>";
+        }
     ?>
 
   	<div class="body4">
@@ -250,18 +235,5 @@
   <!-- content end -->
   		</div>
   	</div>
-  		<div class="main zerogrid">
-  <!-- footer -->
-  			<footer>
-          <a href="#" target="_blank">ZTE </a> designed by <a href="#" target="_blank">ZTE Colombia</a><br>
-  			</footer>
-  <!-- footer end -->
-  		</div>
-  <script type="text/javascript"> Cufon.now(); </script>
-  <script>
-  	$(document).ready(function() {
-  		tabs.init();
-  	})
-  </script>
   </body>
 </html>

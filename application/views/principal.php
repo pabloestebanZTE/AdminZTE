@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Home</title>
+<title>ZTE Principal</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
@@ -66,7 +66,7 @@
 								}
 							}
             ?>
-						<li id="nav6"><a href="#">Salir<span>Logout</span></a></li>
+						<li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
 					</ul>
 				</nav>
 				</div>
