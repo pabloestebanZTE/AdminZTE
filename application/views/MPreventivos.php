@@ -205,18 +205,8 @@
             if($_SESSION['permissions'][6] == 1){
               echo "<section class='col-3-4'>";
                 echo "<div class='wrap-col'>";
-                  echo "<h2 class='under'>Actualizar</h2>";
-                  echo "<form id='ContactForm' method='post'  enctype='multipart/form-data'>";
-                    echo "<div id='divFileActividad' class='form-group'>";
-                      echo "<label for='fileActividad'>Archivo Adjunto:</label>";
-                      echo "<input type='file' id='file' name='file' required/>";
-                    echo "</div>";
-                    echo "<div>";
-                      echo "<input type='submit' value='Subir Archivo' id='btnSubmit' class='btn btn-warning' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/subirArchivoMP' \">";
-                      echo "</br></br>";
-                    echo "</div>";
-                  echo "</form>";
-                  echo "<a href='/AdminZTE/index.php/Mantenimientos/actualizarMP' class='btn btn-danger' role='button' >Actuzalizar B.D. M.P.</a>";
+                  echo "<h2 class='under'>Ver todos los MP</h2>";
+                  echo "<a href='/AdminZTE/index.php/Mantenimientos/editarMP' class='btn btn-primary' role='button' >Ver M.P.</a>";
                 echo "</div>";
                 echo "</section>";
             }

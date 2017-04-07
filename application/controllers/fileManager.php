@@ -42,12 +42,10 @@ class fileManager extends CI_Controller{
 
     function actualizarMantenimientos($excel){
         for ($i = 2; $i<=$excel->sheets[0]['numRows']; $i++){
-            //print_r($excel->sheets[0]['cells'][$i]);
             $mantenimiento = new maintenance_model();
             $daoMantenimiento = new dao_maintenance_model();
             $mantenimiento = $mantenimiento->createMaintenance($excel->sheets[0]['cells'][$i][5], $excel->sheets[0]['cells'][$i][4], "", $excel->sheets[0]['cells'][$i][6]);
             $mantenimientoBD = $daoMantenimiento->getManPrePerID($mantenimiento->getId());
-            //print_r($respuesta);
             if(strtotime($mantenimiento->getDate())  != strtotime($mantenimientoBD->getDate())){
                 $respuestaAct = $daoMantenimiento->updateDateManPre($mantenimientoBD->getId(), $mantenimiento->getDate());
             }

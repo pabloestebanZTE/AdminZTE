@@ -36,6 +36,18 @@ class Mantenimientos extends CI_Controller {
         $this->load->view('MPreventivos', $respuesta);
     }
 
+    function editarMP(){
+      $PVDs = $this->dao_PVD_model->getPVDs();
+      for($i = 0; $i < count($PVDs); $i++){
+        $PVDs[$i]->setMaintenance($this->dao_maintenance_model->getManPrePerPVD($PVDs[$i]->getId()));
+        for($j = 0; $j < count($PVDs[$i]->getMaintenance()); $j++){
+          $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
+        }
+      }
+      $respuesta['PVDs'] = $PVDs;
+      $this->load->view('EditarMP', $respuesta);
+    }
+
     function subirArchivoMP(){
         $archivo = new fileManager;
         $result = $archivo->updateFile('files/', $_FILES['file']['error'],"uploadMantenimientosP.xls",$_FILES['file']['tmp_name']);

@@ -60,10 +60,8 @@
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
               $sql = "UPDATE maintenance SET D_STARTDATE = STR_TO_DATE('".$newdate."', '%Y-%m-%d') where K_IDMAINTENANCE = ".$id.";";
-              echo $sql;
               if ($session != "false"){
                 $result = $session->query($sql);
-                print_r($result);
               } else {
                 $respuesta = "No se pudo actualizar";
               }
