@@ -85,6 +85,7 @@ var chart = new CanvasJS.Chart("chartContainer4",
 }
 
 function PGEMP(array) {
+  console.log(array);
   var datos1 = [
     {  y: array.Enero.contador, label: "Enero"},
     {  y: array.Febrero.contador, label: "Febrero" },
@@ -101,6 +102,7 @@ var chart = new CanvasJS.Chart("chartContainer",
     text: "Plan General Consorcio Ejecución de Manteniminetos Preventivos",
     fontSize: 22
     },
+
     axisY:{
       title:"Manteniminetos"
     },
@@ -260,6 +262,17 @@ function  PGEMPln2(array) {
          text: "Plan General Consorcio Ejecución de Manteniminetos Preventivos %",
          fontZise: 22
        },
+       toolTip: {
+                   shared: true,
+                   contentFormatter: function (e) {
+                     var content = " ";
+                     for (var i = 0; i < e.entries.length; i++) {
+                       content += e.entries[i].dataSeries.name + " " + "<strong>" + (e.entries[i].dataPoint.y * 100).toFixed(0) + "%" + "</strong>";
+                       content += "<br/>";
+                     }
+                     return content;
+                   }
+                 },
        theme: "theme1",
        animationEnabled: true,
        axisX: {
@@ -275,16 +288,18 @@ function  PGEMPln2(array) {
          type: "area",
          color: "rgba(40,175,101,0.6)",
          markerSize: 0,
-        showInLegend: true,
+        showInLegend: false,
          legendText: "Planeados",
+         name: "Planeados",
         dataPoints:datos1
       },
       {
         type: "area",
         color: "rgba(0,75,141,0.7)",
         markerSize: 0,
-       showInLegend: true,
+       showInLegend: false,
         legendText: "Ejecutados",
+        name: "Ejecutados",
        dataPoints:datos2
      }
       ]

@@ -2,6 +2,7 @@
 <html >
 		<head>
 			<meta charset="UTF-8">
+			<link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
 			<link rel="stylesheet" type="text/css" href="/AdminZTE/assets/css/loginStyle.css"/>
 			<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
 			<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>

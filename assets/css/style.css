@@ -90,7 +90,7 @@ header{padding-top:34px; min-height: 150px;}
 .tabs {}
 .tabs ul.nav {float:left; padding-bottom:24px; padding-left: 10px;}
 .tabs ul.nav li{padding-right:1px;float:left}
-.tabs ul.nav li a{display:block;position:relative;width:32px;height:32px;font-size:19px;color:#fff;line-height:32px;background:#60b000;text-decoration:none;text-align:center}
+.tabs ul.nav li a{display:block;position:relative;width:70px;height:32px;font-size:19px;color:#fff;line-height:32px;background:#6495ED;text-decoration:none;text-align:center}
 .tabs ul.nav .selected a, .tabs ul.nav  a:hover{background:#696969}
 .tabs .tab-content {display:none}
 .tab-content{margin : 10px;}

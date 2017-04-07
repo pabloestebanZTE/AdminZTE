@@ -3,6 +3,7 @@
 <head>
 <title>ZTE Principal</title>
 <meta charset="utf-8">
+<link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
 <link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
@@ -131,21 +132,21 @@
 					<div class="wrap-col">
 						<h4>¿Porque elegirnos?</h4>
 						<ul class="list1">
-							<li><a href="#">Lorem ipsum dolor sit</a></li>
-							<li><a href="#">Dmet, consectetur</a></li>
-							<li><a href="#">Adipisicing elit eiusmod </a></li>
-							<li><a href="#">Tempor incididunt ut</a></li>
+							<li><a href="#">Proyecto ZTE-FONADE</a></li>
+							<li><a href="#">Manteniminetos</a></li>
+							<li><a href="#">Facturación</a></li>
+							<li><a href="#">Manejo Interno</a></li>
 						</ul>
 					</div>
-					</section>
-					<section class="col-1-4">
+				</section>
+				<section class="col-1-4">
 					<div class="wrap-col">
 						<h4>Dirección</h4>
 						<ul class="address">
 							<li><span>Pais:</span>Colombia</li>
 							<li><span>Ciudad:</span>Bogotá</li>
-							<li><span>Telefono:</span>Telefono</li>
-							<li><span>Email:</span><a href="mailto:">progress@mail.com</a></li>
+							<li><span>Telefono:</span>6913709</li>
+							<li><span>Web:</span><a href="mailto:">ztemobilecolombia.com</a></li>
 						</ul>
 					</div>
 					</section>

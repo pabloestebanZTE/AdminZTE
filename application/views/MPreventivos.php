@@ -3,6 +3,7 @@
   <head>
     <title>M. Preventivos</title>
     <meta charset="utf-8">
+    <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
     <link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
@@ -26,13 +27,6 @@
     <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
     <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
-
-    <script type="text/javascript">
-      PGEMP();
-      PGEMPln();
-      PEMP();
-      PGEMPln2();
-    </script>
 
     <script type="text/javascript" charset="utf-8" async defer>
         function showMessage(){
@@ -120,73 +114,92 @@
   					</section>
       <!-- fin graficas -->
       <!-- tablas -->
+  					<div class="wrapper tabs">
+              <?php
+              if (isset($tablas)){
+                $meses[1] = 'Enero';
+                $meses[2] = 'Febrero';
+                $meses[3] = 'Marzo';
+                $meses[4] = 'Abril';
+                $meses[5] = 'Mayo';
+                $meses[6] = 'Junio';
+                $meses[7] = 'Julio';
 
-  					<section class="col-1-1">
-  					<div class="wrap-col">
-  						<div class="wrapper pad_bot2">
-                <?php
-                    if(isset($tablas)){
-                      echo "<div class='wrapperTable'>";
+                echo "<br><br><br>";
+                echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
+                echo "<ul class='nav'>";
+                  echo "<center>";
+                  for ($p = 1; $p <= count($meses); $p++){
+                    if ($p == 1){
+                      echo "<li class='selected'><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
 
-                        //Tabla 1
-                        echo "<h2 class='under'>"."Porcentaje de avance por zonas mes de Marzo"."</h2>";
-                        echo "<div class='table'>";
-                          echo "<div class='row header'>";
-                          for ($i = 0; $i<count($tablas['tabla1']['Titulos']); $i++){
-                            echo "<div class='cell'>".$tablas['tabla1']['Titulos'][$i]."</div>";
-                          }
-                          echo "</div>";
-                          for ($i = 1; $i<count($tablas['tabla1']); $i++){
-                            echo "<div class='row'>";
-                              for ($j = 0; $j<count($tablas['tabla1']['linea'.$i]); $j++){
-                                echo "<div class='cell'>".$tablas['tabla1']['linea'.$i][$j]."</div>";
-                              }
-                            echo "</div>";
-                          }
-                        echo "</div>";
-
-                        //Tabla 2
-                        echo "<h2 class='under'>"."Avance Departamentos zonas 1 y 4 mes de Marzo"."</h2>";
-                        echo "<div class='table'>";
-                          echo "<div class='row header green'>";
-                          for ($i = 0; $i<count($tablas['tabla2']['Titulos']); $i++){
-                            echo "<div class='cell'>".$tablas['tabla2']['Titulos'][$i]."</div>";
-                          }
-                          echo "</div>";
-
-                          for ($i = 0; $i<count($tablas['tabla2']['ciudades']); $i++){
-                            echo "<div class='row'>";
-                            echo "<div class='cell'>".$tablas['tabla2']['ciudades'][$i]."</div>";
-                              for ($j = 0; $j<count($tablas['tabla2'][$tablas['tabla2']['ciudades'][$i]]); $j++){
-                                echo "<div class='cell'>".$tablas['tabla2'][$tablas['tabla2']['ciudades'][$i]][$j]."</div>";
-                              }
-                            echo "</div>";
-                          }
-                        echo "</div>";
-
-                        //Tabla 3
-                        echo "<h2 class='under'>"."Detalle de tickets zona 1 y 4 mes de Marzo"."</h2>";
-                        echo "<div class='table'>";
-                          echo "<div class='row header blue'>";
-                          for ($i = 0; $i<count($tablas['tabla3']['Titulos']); $i++){
-                            echo "<div class='cell'>".$tablas['tabla3']['Titulos'][$i]."</div>";
-                          }
-                          echo "</div>";
-                          for ($i = 0; $i<count($tablas['tabla3']['lineas']); $i++){
-                            echo "<div class='row'>";
-                              for ($j = 0; $j<count($tablas['tabla3']['lineas'][$i]); $j++){
-                                echo "<div class='cell'>".$tablas['tabla3']['lineas'][$i][$j]."</div>";
-                              }
-                            echo "</div>";
-                          }
-                        echo "</div>";
-                      echo "</div>";
-                    //  print_r($tablas['tabla3']);
+                    } else {
+                      echo "<li><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
                     }
-                 ?>
-  						</div>
-  					</div>
-  					</section>
+                  }
+                  echo "</center>";
+                echo "</ul>";
+
+                for ($p = 1; $p <= count($meses); $p++){
+                  echo "<div class='tab-content' id='tab".$p."'>";
+                    echo "<div class='wrapperTable'>";
+                      //Tabla 1
+                      echo "<h2 class='under'>"."Porcentaje de avance por zonas mes de ".$meses[$p]."</h2>";
+                      echo "<div class='table'>";
+                        echo "<div class='row header'>";
+                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla1']['Titulos']); $i++){
+                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['Titulos'][$i]."</div>";
+                        }
+                        echo "</div>";
+                        for ($i = 1; $i<count($tablas[$meses[$p]]['tabla1']); $i++){
+                          echo "<div class='row'>";
+                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla1']['linea'.$i]); $j++){
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['linea'.$i][$j]."</div>";
+                            }
+                          echo "</div>";
+                        }
+                      echo "</div>";
+
+                      //Tabla 2
+                      echo "<h2 class='under'>"."Avance Departamentos zonas 1 y 4 mes de ".$meses[$p]."</h2>";
+                      echo "<div class='table'>";
+                        echo "<div class='row header green'>";
+                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['Titulos']); $i++){
+                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['Titulos'][$i]."</div>";
+                        }
+                        echo "</div>";
+                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['ciudades']); $i++){
+                          echo "<div class='row'>";
+                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['ciudades'][$i]."</div>";
+                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]]); $j++){
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][$j]."</div>";
+                            }
+                          echo "</div>";
+                        }
+                      echo "</div>";
+
+                      //Tabla 3
+                      echo "<h2 class='under'>"."Detalle de tickets zona 1 y 4 mes de ".$meses[$p]."</h2>";
+                      echo "<div class='table'>";
+                        echo "<div class='row header blue'>";
+                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
+                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</div>";
+                        }
+                        echo "</div>";
+                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
+                          echo "<div class='row'>";
+                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</div>";
+                            }
+                          echo "</div>";
+                        }
+                      echo "</div>";
+                    echo "</div>";
+                  echo "</div>";
+                }
+              }
+              ?>
+            </div>
 
             <?php
             if($_SESSION['permissions'][6] == 1){
@@ -235,5 +248,11 @@
   <!-- content end -->
   		</div>
   	</div>
+    <script type="text/javascript"> Cufon.now(); </script>
+    <script>
+    	$(document).ready(function() {
+    		tabs.init();
+    	})
+    </script>
   </body>
 </html>

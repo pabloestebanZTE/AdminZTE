@@ -75,29 +75,31 @@ insert into user (K_IDUSER, K_IDTYPEUSER, N_PASSWORD, N_NAME, N_LASTNAME)
   (80383573, 2, 'JIJM6183000899' , 'Jose Ismael' , 'Jorge Moreno' ),
   (1022374394, 2, 'JELU6183000900' , 'Jhon Edison' , 'Lizarazo Umaña' ),
   (1022436490, 2, 'FLLU6183000906' , 'Freddy Leonardo' , 'Leal Umaña' ),
-  (1014178155, 2, 'NJSC6183000912' , 'Nestor Javier' , 'Salcedo Chaves' );/*
-  (2, 'HGR6183000911' , 'Hernan Gallego' , 'Rincon ' ),
-  (2, 'JACT6183000895' , 'Jairo Andres' , 'Calderon Trejos' ),
-  (2, 'LRBA6183000896' , 'Lina Rocio' , 'Bejarano Acosta' ),
-  (2, 'JAMC6183000894' , 'Jhonny Alexander' , 'Moreno Cruz' ),
-  (2, 'JVPH6183000914' , 'Juan Vicente' , 'Padila Hernandez' ),
-  (2, 'FABA6183000907' , 'Fabio Alonzo' , 'Betancurt Alvarez' ),
-  (2, 'RADY6183000913' , 'Robinson arley' , 'Duque Yocari' ),
-  (2, 'JCFZ6183000903' , 'Juan Camilo' , 'Franco Zapata' ),
-  (2, 'YJRG6183000904' , 'Yurany julieth' , 'Reyes guayacundo' ),
-  (2, 'JFRL6183000905' , 'Jeison Fabian' , 'Ramirez luna' ),
-  (2, 'BCM6183000916' , 'Braiam Cepeda' , 'Matallana ' ),
-  (2, 'EATJ6183000915' , 'Edison Alberto' , 'Tabares jimenez' ),
-  (2, 'JCAR6183000909' , 'Juan Carlos' , 'Alzate Ramirez' ),
-  (2, 'NTPM6183000260' , 'Nadia tatiana' , 'Polania Mendez' ),
-  (2, 'JDQM6183000910' , 'Jose Duvier' , 'Quinchoa muñoz' ),
-  (2, 'MAGP6183000921' , 'Mario Alejandro' , 'Godoy Patiño' ),
-  (2, 'JDHO6183000922' , 'Julian David' , 'Hurtado Orozco' ),
-  (2, 'DSV6183000920' , 'Deivid Sanchez' , 'Vargas ' ),
-  (2, 'EGZ6183000932' , 'Erneth Gallego' , 'Zapata ' ),
-  (2, 'GDPV6183000933' , 'Gabriel David' , 'Piedrahita Velasquez' ),
-  (2, 'CAQQ6183000892' , 'Carlos Andres' , 'Quiroga Quevedo');
-*/
+  (1014178155, 2, 'NJSC6183000912' , 'Nestor Javier' , 'Salcedo Chaves' ),
+  (80176730, 2, 'HGR6183000911' , 'Hernan Gallego' , 'Rincon ' ),
+  (1022376582 ,3, 'SCC6183000883', 'Stephania', 'Colmenares Cruz'),
+  (2716133, 2, 'JACT6183000895' , 'Jairo Andres' , 'Calderon Trejos' ),
+  (1110477443, 2, 'LRBA6183000896' , 'Lina Rocio' , 'Bejarano Acosta' ),
+  (1110504238, 2, 'JAMC6183000894' , 'Jhonny Alexander' , 'Moreno Cruz' ),
+  (93387048, 2, 'JVPH6183000914' , 'Juan Vicente' , 'Padila Hernandez' ),
+  (71171017, 2, 'FABA6183000907' , 'Fabio Alonzo' , 'Betancurt Alvarez' ),
+  (1042762389, 2, 'RADY6183000913' , 'Robinson Arley' , 'Duque Yocari' ),
+  (71368744, 2, 'JCFZ6183000903' , 'Juan Camilo' , 'Franco Zapata' ),
+  (1097401965, 2, 'YJRG6183000904' , 'Yurany Julieth' , 'Reyes guayacundo' ),
+  (1110470109, 2, 'JFRL6183000905' , 'Jeison Fabian' , 'Ramirez luna' ),
+  (1053793145, 2, 'BCM6183000916' , 'Braiam Cepeda' , 'Matallana ' ),
+  (9977112, 2, 'EATJ6183000915' , 'Edison Alberto' , 'Tabares jimenez' ),
+  (16073130, 2, 'JCAR6183000909' , 'Juan Carlos' , 'Alzate Ramirez' ),
+  (36308802, 2, 'NTPM6183000260' , 'Nadia Tatiana' , 'Polania Mendez' ),
+  (1081401136, 2, 'JDQM6183000910' , 'Jose Duvier' , 'Quinchoa muñoz' ),
+  (1110460891, 2, 'MAGP6183000921' , 'Mario Alejandro' , 'Godoy Patiño' ),
+  (1053822228, 2, 'JDHO6183000922' , 'Julian David' , 'Hurtado Orozco' ),
+  (1053806043, 2, 'DSV6183000920' , 'Deivid Sanchez' , 'Vargas ' ),
+  (1047375762, 2, 'EGZ6183000932' , 'Erneth Gallego' , 'Zapata ' ),
+  (3383939, 2, 'GDPV6183000933' , 'Gabriel David' , 'Piedrahita Velasquez' ),
+  (1110529622, 2, 'CAQQ6183000892' , 'Carlos Andres' , 'Quiroga Quevedo'),
+  (14102016, 1, 'LJDP6183000936', 'Laura Jackelinne', 'Delgado Pinilla');
+
 /*Table Region*/
 insert into REGION (K_IDREGION, N_NAME)
   values (1, 'Zona 1'),
@@ -2440,7 +2442,7 @@ insert into MAINTENANCE_TYPE (K_IDMAINTENANCET, K_NAME)
 
 /*table maintenance*/
 insert into MAINTENANCE (K_IDMAINTENANCE, K_IDPVD, K_IDMAINTENANCET, D_STARTDATE)
-  values (1,68459,1, STR_TO_DATE('01-01-2017', '%d-%m-%Y')),
+  values (1,68412,1, STR_TO_DATE('01-01-2017', '%d-%m-%Y')),
 (2,10344,1, STR_TO_DATE('01-02-2017', '%d-%m-%Y')),
 (3,69835,1, STR_TO_DATE('01-02-2017', '%d-%m-%Y')),
 (4,69046,1, STR_TO_DATE('01-02-2017', '%d-%m-%Y')),
