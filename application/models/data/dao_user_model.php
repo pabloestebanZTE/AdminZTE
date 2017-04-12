@@ -50,5 +50,28 @@
             }
             return $arrayPermissions;
         }
+
+        public function getAllUsers(){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "SELECT * FROM USER;";
+          if ($session != "false"){
+            $result = $session->query($sql);
+            if ($result->num_rows > 0) {
+              $i = 0;
+              while($row = $result->fetch_assoc()) {
+                  $user = new user_model();
+                  $user = $user->createUser($row['K_IDUSER'], "", $row['N_NAME'], $row['N_LASTNAME']);
+                  $respuesta[$i] = $user;
+                  $i++;
+              }
+            } else {
+              $respuesta = "No Users";
+              }
+          } else {
+            $respuesta = "Error en BD";
+          }
+          return $respuesta;
+        }
     }
 ?>

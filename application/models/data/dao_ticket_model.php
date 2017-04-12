@@ -1,4 +1,4 @@
-<?php
+  <?php
 
     defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -22,7 +22,7 @@
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
                     $ticket = new ticket_model();
-                    $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                    $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                     $result2 = $session->query($sql2);
                     $row2 = $result2->fetch_assoc();
                     $ticket = $ticket->createTicket($row['ID_TICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
@@ -43,13 +43,13 @@
             public function getTicketByID($id){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "SELECT * FROM ticket where ID_TICKET = '".$id."';";
+              $sql = "SELECT * FROM TICKET where ID_TICKET = '".$id."';";
               if ($session != "false"){
                 $result = $session->query($sql);
                 if ($result->num_rows > 0) {
                   $row = $result->fetch_assoc();
                   $ticket = new ticket_model();
-                  $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                  $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                   $result2 = $session->query($sql2);
                   $row2 = $result2->fetch_assoc();
                   $ticket = $ticket->createTicket($row['ID_TICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
@@ -63,10 +63,36 @@
               return $respuesta;
             }
 
+            public function getAllTickets(){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT * FROM TICKET;";
+              if ($session != "false"){
+                $result = $session->query($sql);
+                if ($result->num_rows > 0) {
+                  $i = 0;
+                  while($row = $result->fetch_assoc()) {
+                      $ticket = new ticket_model();
+                      $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                      $result2 = $session->query($sql2);
+                      $row2 = $result2->fetch_assoc();
+                      $ticket = $ticket->createTicket($row['ID_TICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
+                      $respuesta[$i] = $ticket;
+                      $i++;
+                  }
+                } else {
+                  $respuesta = "No tickets";
+                  }
+              } else {
+                $respuesta = "Error en BD";
+              }
+              return $respuesta;
+            }
+
             public function insertTicket($ticket, $tipo){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
+              $sql = "SELECT K_IDSTATUSTICKET from TICKET_STATUS where N_NAME = '".$ticket->getStatus()."';";
               $result = $session->query($sql);
               $row = $result->fetch_assoc();
 
@@ -83,14 +109,14 @@
             public function updateTicket($ticket, $tipo){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
+              $sql = "SELECT K_IDSTATUSTICKET from TICKET_STATUS where N_NAME = '".$ticket->getStatus()."';";
               $result = $session->query($sql);
               $row = $result->fetch_assoc();
 
              if ($tipo == "Cerrado"){
-                $sql = "UPDATE ticket SET K_IDSTATUSTICKET=".$row['K_IDSTATUSTICKET'].", D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'), D_FINISHDATE= STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'), I_DURATION=".$ticket->getDuracion()." WHERE ID_TICKET='".$ticket->getId()."';";
+                $sql = "UPDATE TICKET SET K_IDSTATUSTICKET=".$row['K_IDSTATUSTICKET'].", D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'), D_FINISHDATE= STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'), I_DURATION=".$ticket->getDuracion()." WHERE ID_TICKET='".$ticket->getId()."';";
              } else {
-                $sql = "UPDATE ticket SET D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE ID_TICKET='".$ticket->getId()."';";
+                $sql = "UPDATE TICKET SET D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE ID_TICKET='".$ticket->getId()."';";
              }
             $session->query($sql);
             }

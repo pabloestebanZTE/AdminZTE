@@ -18,6 +18,7 @@ class Mantenimientos extends CI_Controller {
         $this->load->model('data/dao_PVD_model');
         $this->load->model('user_model');
         $this->load->model('maintenance_model');
+        $this->load->model('ticket_model');
     }
 
     function loadMPView(){
@@ -48,19 +49,27 @@ class Mantenimientos extends CI_Controller {
       $this->load->view('EditarMP', $respuesta);
     }
 
-    function subirArchivoMP(){
-        $archivo = new fileManager;
-        $result = $archivo->updateFile('files/', $_FILES['file']['error'],"uploadMantenimientosP.xls",$_FILES['file']['tmp_name']);
-        if($result[0] == "true"){
-          $GLOBALS['$msgJS'][0] = "Bien Hecho";
-          $GLOBALS['$msgJS'][1] = "Archivo cargado correctamente";
-          $GLOBALS['$msgJS'][2] = "success";
-        } else {
-          $GLOBALS['$msgJS'][0] = "Algo salio mal";
-          $GLOBALS['$msgJS'][1] = "El archivo no se cargo";
-          $GLOBALS['$msgJS'][2] = "error";
+    function updateMP(){
+      $mantenimientos = $_POST['cantidad'];
+      for($i = 0; $i<=$mantenimientos+1;$i++){
+        if ($_POST[$i."-1"] != ""){
+          $mantenimiento = new maintenance_model();
+          $ticket =  new ticket_model();
+          $mantenimiento = $mantenimiento->createMaintenance($_POST[$i."-7"],"","",$_POST[$i."-1"]);
+          $this->dao_maintenance_model->updateDateManPre($mantenimiento);
+          if($_POST[$i."-3"] == "Cerrado" || $_POST[$i."-3"] == "En Progreso"){
+            $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $_POST[$i."-4"], $_POST[$i."-5"], $_POST[$i."-6"]);
+            $oldTicket = $this->dao_ticket_model->getTicketByID($ticket->getId());
+            if($oldTicket == "No ticket"){
+              $this->dao_ticket_model->insertTicket($ticket, $ticket->getStatus());
+            } else {
+              $this->dao_ticket_model->updateTicket($ticket, $ticket->getStatus());
+            }
+            $mantenimiento->setTicket($ticket);
+          }
         }
-        $this->loadMPView();
+      }
+      $this->editarMP();
     }
 
     function actualizarMP(){

@@ -56,10 +56,10 @@
               return $respuesta;
             }
 
-            public function updateDateManPre($id, $newdate){
+            public function updateDateManPre($maintenance){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "UPDATE maintenance SET D_STARTDATE = STR_TO_DATE('".$newdate."', '%Y-%m-%d') where K_IDMAINTENANCE = ".$id.";";
+              $sql = "UPDATE MAINTENANCE SET D_STARTDATE = STR_TO_DATE('".$maintenance->getDate()."', '%Y-%m-%d') where K_IDMAINTENANCE = ".$maintenance->getId().";";
               if ($session != "false"){
                 $result = $session->query($sql);
               } else {
