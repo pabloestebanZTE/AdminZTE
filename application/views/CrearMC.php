@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>M. Preventivos</title>
+<title>M. Correctivos ZTE-FONADE</title>
 <meta charset="utf-8">
 <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -25,6 +25,37 @@
 <script src="/AdminZTE/assets/js/responsiveslides.js"></script>
 
 <script>
+      function cambiarSelect(categorias){
+        $('#field7').empty();
+        var valorOption = $('#field6 option:selected').attr('value');
+        for(var i = 0; i < categorias[valorOption-1].tipo.length; i++){
+          $("#field7").append("<option value='"+categorias[valorOption-1].tipo[i].tipoId+"'>"+categorias[valorOption-1].tipo[i].nombre+"</option>");
+        }
+        $("#field7").append("<option value='-1'>OTRO</option>");
+      }
+
+      function mostrarFieldOtro(){
+        var valorOption = $('#field7 option:selected').attr('value');
+        if (valorOption == "-1"){
+          $("#fieldOtros").show();
+          $("#fieldOtros").attr('required', true);
+        } else {
+          $("#fieldOtros").hide();
+          $("#fieldOtros").attr('required', false);
+        }
+      }
+
+      function cambiarSelectPVD(zonas){
+        $('#field4').empty();
+        var valorOption = $('#field3 option:selected').attr('value');
+        var tipo = valorOption.split("/");
+        for(var i = 0; i < zonas.length; i++){
+          if(zonas[i].idTIPO == tipo[1]){
+            $("#field4").append("<option value='"+zonas[i].id.id+"'>"+zonas[i].id.name+"</option>");
+          }
+        }
+      }
+
     function sel(c, name){
       var fieldName = "field"+name;
       formu=document.forms['formulario'];
@@ -154,6 +185,7 @@
 <body id="page1">
 <div class="body1">
 	<div class="body2">
+  <div class="body5">
 		<div class="main zerogrid">
 <!-- header -->
 			<header>
@@ -163,7 +195,7 @@
 					<ul id="menu">
           	<?php
 							if ($_SESSION['permissions'] != NULL){
-								echo "<li id='nav1' class='active'><a >Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
+								echo "<li id='nav1' ><a >Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
 								if($_SESSION['permissions'][3] == 1){
 									echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
 								}
@@ -187,6 +219,7 @@
 				</div>
 			</header>
 <!-- header end-->
+    </div>
 		</div>
 	</div>
 </div>
@@ -197,12 +230,12 @@
         <div class="wrapper row">
           <section class="col-4-4">
           <div class="wrap-col">
-            <h2 class="under">Contact form</h2>
-
+            <h2 class="under">Crear mantenimiento correctivo</h2>
+            <img src="/AdminZTE/assets/images/wrench-flat.png" />
 
 
             <div class="form-style-5">
-              <form  name="formulario">
+              <form  name="formulario" id="formulario" method="post" accept-charset="utf-8">
               <fieldset>
                 <?php
                   echo "<legend><span class='number'>1</span> Información General</legend>";
@@ -219,78 +252,61 @@
                   echo  "<input type='text' name='buscar2' onKeyUp='sel(this.value, 2)'  placeholder='Buscar nombre empleado *'>";
                   echo "<select id='field2' name='field2'>";
                     for($i = 0; $i<count($users); $i++){
-                      echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
+                      echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
                     }
                   echo "</select>";
-
                   echo "<legend><span class='number'>2</span> Información PVD</legend>";
 
                   echo "<label for='job'>ID PVD:</label>";
                   echo  "<input type='text' name='buscar3' onKeyUp='sel(this.value, 3)'  placeholder='Buscar ID PVD *'>";
-                  echo "<select id='field3' name='field3'>";
+                  $json2 = json_encode($places);
+                  echo "<select onchange='cambiarSelectPVD(".$json2.")' id='field3' name='field3'>";
                     for($i = 0; $i<count($pvds); $i++){
-                      echo "<option value='".$pvds[$i]->getId()."'>".$pvds[$i]->getId()."</option>";
+                      echo "<option value='".$pvds[$i]->getId()."/".$pvds[$i]->getTipologia()."'>".$pvds[$i]->getId()."</option>";
                     }
                   echo "</select>";
+                  echo "<label for='job'>Ubicación dentro del PVD:</label>";
+                  echo "<select id='field4' name='field4' required>";
+                    for($i = 0; $i<count($places); $i++){
+                      if($places[$i]['idTIPO'] == $pvds[0]->getTipologia()){
+                        echo "<option value='".$places[$i]['id']['id']."'>".$places[$i]['id']['name']."</option>";
+                      }
+                    }
+                  echo "</select>";
+                  echo "<legend><span class='number'>3</span> Información sobre el equipo(s)</legend>";
+                  echo "<input type='number' name='field5' placeholder='Cantidad de Equipos *' required>";
+                  echo "<label for='job'>Categoria:</label>";
+                  $json  = json_encode($categoriaE);
+
+                  echo "<select id='field6' name='field6' onchange='cambiarSelect(".$json.")'>";
+                    for($i = 0; $i<count($categoriaE); $i++){
+                      echo "<option value='".$categoriaE[$i]['id']."'>".$categoriaE[$i]['nombre']."</option>";
+                    }
+                  echo "</select>";
+                  echo "<label for='job'>Tipo de equipo:</label>";
+                  echo "<select id='field7' name='field7' onchange='mostrarFieldOtro()'>";
+                    for($i = 0; $i<count($categoriaE[0]['tipo']); $i++){
+                      echo "<option value='".$categoriaE[0]['tipo'][$i]['tipoId']."'>".$categoriaE[0]['tipo'][$i]['nombre']."</option>";
+                    }
+                    echo "<option value='-1'>OTRO</option>";
+                  echo "</select>";
+                  echo  "<input type='text' name='fieldOtros' id='fieldOtros'  placeholder='Cual otro tipo *' hidden>";
+                  echo "<input type='text' name='field8' placeholder='Serial *' required>";
+                  echo "<input type='text' name='field9' placeholder='Marca *' required>";
+                  echo "<input type='text' name='field10' placeholder='Modelo *' required>";
+                  echo "<legend><span class='number'>4</span> Información sobre el fallo</legend>";
+                  echo "<label for='job'>Tipo:</label>";
+                  echo "<select id=job name='field11'>";
+                  for($i = 0; $i<count($daños); $i++){
+                    echo "<option value='".$daños[$i]['id']."'>".$daños[$i]['nombre']."</option>";
+                  }
+                  echo "</select>";
+                  echo "<textarea name='field12' placeholder='Descripción *' required></textarea>";
+                  echo "<textarea name='field13' placeholder='Materiales necesarios para solucionar la falla *' required></textarea>";
                  ?>
-
-
-
-
-                <label for="job">Ubicación dentro del PVD:</label>
-                <select id="job" name="field4">
-                  <option value="fishkeeping">Fishkeeping</option>
-                  <option value="reading">Reading</option>
-                  <option value="boxing">Boxing</option>
-                  <option value="debate">Debate</option>
-                  <option value="gaming">Gaming</option>
-                  <option value="snooker">Snooker</option>
-                </select>
-                <legend><span class="number">3</span> Información sobre el equipo(s)</legend>
-                <input type="text" name="field5" placeholder="Cantidad de Equipos *">
-                <label for="job">Categoria:</label>
-                <select id="job" name="field6">
-                  <option value="fishkeeping">Fishkeeping</option>
-                  <option value="reading">Reading</option>
-                  <option value="boxing">Boxing</option>
-                  <option value="debate">Debate</option>
-                  <option value="gaming">Gaming</option>
-                  <option value="snooker">Snooker</option>
-                </select>
-                <label for="job">Tipo de equipo:</label>
-                <select id="job" name="field7">
-                  <option value="fishkeeping">Fishkeeping</option>
-                  <option value="reading">Reading</option>
-                  <option value="boxing">Boxing</option>
-                  <option value="debate">Debate</option>
-                  <option value="gaming">Gaming</option>
-                  <option value="snooker">Snooker</option>
-                </select>
-                <input type="text" name="field8" placeholder="Serial *">
-                <input type="text" name="field9" placeholder="Marca *">
-                <input type="text" name="field10" placeholder="Modelo *">
-                <legend><span class="number">4</span> Información sobre el fallo</legend>
-                <input type="date" name="field11" placeholder="Ubicacion dentro del PVD *">
-                <label for="job">Tipo:</label>
-                <select id="job" name="field12">
-                  <option value="fishkeeping">Fishkeeping</option>
-                  <option value="reading">Reading</option>
-                  <option value="boxing">Boxing</option>
-                  <option value="debate">Debate</option>
-                  <option value="gaming">Gaming</option>
-                  <option value="snooker">Snooker</option>
-                </select>
-                <textarea name="field13" placeholder="Descripción"></textarea>
-                <textarea name="field14" placeholder="Materiales necesarios para solucionar la falla"></textarea>
-                <input type="submit" value="Enviar" />
+                <input type="submit" value="Enviar" onclick = "this.form.action = 'http://localhost/AdminZTE/index.php/MCorrectivos/crearMC'"/>
               </form>
             </div>
-
-
-
-
-
-
           </div>
           </section>
         </div>

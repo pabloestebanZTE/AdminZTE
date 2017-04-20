@@ -50,6 +50,16 @@ create table ADMIN_PVD
 );
 
 /*==============================================================*/
+/* Table: CATEGORIA_EQUIPO                                      */
+/*==============================================================*/
+create table CATEGORIA_EQUIPO
+(
+   K_IDCATEGORIAE       int not null,
+   N_NAME               varchar(200) not null,
+   primary key (K_IDCATEGORIAE)
+);
+
+/*==============================================================*/
 /* Table: CITY                                                  */
 /*==============================================================*/
 create table CITY
@@ -58,6 +68,34 @@ create table CITY
    K_IDDEPARTMENT       int,
    N_NAME               varchar(200) not null,
    primary key (K_IDCITY)
+);
+
+/*==============================================================*/
+/* Table: CORRECTIVE_MAINTENANCE                                */
+/*==============================================================*/
+create table CORRECTIVE_MAINTENANCE
+(
+   K_IDCORRECTIVE_MAINTENANCE      int not null AUTO_INCREMENT,
+   K_IDTICKET                      varchar(14) not null,
+   K_IDUSER                        int,
+   K_IDPVD                         int,
+   K_IDPVDPLACE                    int,
+   Q_QUANTITY                      int,
+   K_IDFALLO                       int,
+   K_IDEQUIPMENT                   int,
+   N_DESCRIPTION                   varchar(1000) not null,
+   N_STUFF                         varchar(1000) not null,
+   primary key (K_IDCORRECTIVE_MAINTENANCE)
+);
+
+/*==============================================================*/
+/* Table: DAMAGE                                                */
+/*==============================================================*/
+create table DAMAGE
+(
+   K_IDDAMAGE           int not null,
+   N_NAME               varchar(200) not null,
+   primary key (K_IDDAMAGE)
 );
 
 /*==============================================================*/
@@ -82,6 +120,22 @@ create table EJECUTOR
 );
 
 /*==============================================================*/
+/* Table: EQUIPMENT                                             */
+/*==============================================================*/
+create table EQUIPMENT
+(
+   K_IDEQUIPMENT         int not null AUTO_INCREMENT,
+   N_NAME                varchar(200),
+   K_IDCATEGORIAE        int not null,
+   K_IDTIPOE             int,
+   N_OTROTIPO            varchar(200),
+   N_SERIAL              varchar(100),
+   N_MARCA               varchar(100),
+   N_MODELO              varchar(100),
+   primary key (K_IDEQUIPMENT)
+);
+
+/*==============================================================*/
 /* Table: MAINTENANCE                                           */
 /*==============================================================*/
 create table MAINTENANCE
@@ -90,6 +144,7 @@ create table MAINTENANCE
    K_IDPVD              int,
    K_IDMAINTENANCET     int,
    D_STARTDATE          date not null,
+   K_IDDAMAGE           int,
    primary key (K_IDMAINTENANCE)
 );
 
@@ -131,6 +186,27 @@ create table PVD
 );
 
 /*==============================================================*/
+/* Table: PVD_ZONE                                              */
+/*==============================================================*/
+create table PVD_ZONE
+(
+   K_IDPVDZONE          int not null,
+   N_NAME               varchar(200) not null,
+   primary key (K_IDPVDZONE)
+);
+
+/*==============================================================*/
+/* Table: PVD_PLACE                                             */
+/*==============================================================*/
+
+create table PVD_PLACE
+(
+   K_IDTYPEPVD         varchar(2) not null,
+   K_IDZONE            int not null,
+   primary key (K_IDTYPEPVD, K_IDZONE)
+);
+
+/*==============================================================*/
 /* Table: REGION                                                */
 /*==============================================================*/
 create table REGION
@@ -163,6 +239,18 @@ create table TICKET_STATUS
    N_NAME               varchar(200) not null,
    N_DESCRIPTION        varchar(300) not null,
    primary key (K_IDSTATUSTICKET)
+);
+
+
+/*==============================================================*/
+/* Table: TIPO_EQUIPO                                           */
+/*==============================================================*/
+create table TIPO_EQUIPO
+(
+   K_IDTIPOE            int not null,
+   K_IDCATEGORIAE       int not null,
+   N_NAME               varchar(200) not null,
+   primary key (K_IDTIPOE)
 );
 
 /*==============================================================*/
@@ -202,14 +290,35 @@ create table USER_PERMISSION
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
       references DEPARTMENT (K_IDDEPARTMENT) on delete restrict on update restrict;
 
+alter table CORRECTIVE_MAINTENANCE add constraint FK_USER_MC foreign key (K_IDUSER)
+      references USER (K_IDUSER) on delete restrict on update restrict;
+
+alter table CORRECTIVE_MAINTENANCE add constraint FK_PVD_MC foreign key (K_IDPVD)
+      references PVD (K_IDPVD) on delete restrict on update restrict;
+
+alter table CORRECTIVE_MAINTENANCE add constraint FK_DAMAGE_MC foreign key (K_IDFALLO)
+      references DAMAGE (K_IDDAMAGE) on delete restrict on update restrict;
+
+alter table CORRECTIVE_MAINTENANCE add constraint FK_EQUIPMENT_MC foreign key (K_IDEQUIPMENT)
+      references EQUIPMENT (K_IDEQUIPMENT) on delete restrict on update restrict;
+
 alter table DEPARTMENT add constraint FK_REGION_DEPARTMENT foreign key (K_IDREGION)
       references REGION (K_IDREGION) on delete restrict on update restrict;
+
+alter table EQUIPMENT add constraint FK_CATEGORIA_EQUIPMENT foreign key (K_IDCATEGORIAE)
+      references CATEGORIA_EQUIPO (K_IDCATEGORIAE) on delete restrict on update restrict;
+
+alter table EQUIPMENT add constraint FK_TIPO_EQUIPMENT foreign key (K_IDTIPOE)
+      references TIPO_EQUIPO (K_IDTIPOE) on delete restrict on update restrict;
 
 alter table MAINTENANCE add constraint FK_PVD_MAINTENANCE foreign key (K_IDPVD)
       references PVD (K_IDPVD) on delete restrict on update restrict;
 
 alter table MAINTENANCE add constraint FK_TYPE_MAINTENANCE foreign key (K_IDMAINTENANCET)
       references MAINTENANCE_TYPE (K_IDMAINTENANCET) on delete restrict on update restrict;
+
+alter table MAINTENANCE add constraint FK_TYPE_DAMAGE foreign key (K_IDDAMAGE)
+      references DAMAGE (K_IDDAMAGE) on delete restrict on update restrict;
 
 alter table PVD add constraint FK_CITY_PVD foreign key (K_IDCITY)
       references CITY (K_IDCITY) on delete restrict on update restrict;
@@ -220,11 +329,17 @@ alter table PVD add constraint FK_EJECUTOR_PVD foreign key (K_IDEJECUTOR)
 alter table PVD add constraint FK_PVD_ADMIN_ foreign key (K_IDADMIN)
       references ADMIN_PVD (K_IDADMIN) on delete restrict on update restrict;
 
+alter table PVD_PLACE add constraint FK_ZONE_PLACE foreign key (K_IDZONE)
+      references PVD_ZONE (K_IDPVDZONE) on delete restrict on update restrict;
+
 alter table TICKET add constraint FK_MAINTENANCE_TICKET foreign key (K_IDMAINTENANCE)
       references MAINTENANCE (K_IDMAINTENANCE) on delete restrict on update restrict;
 
 alter table TICKET add constraint FK_TICKET_STATUS foreign key (K_IDSTATUSTICKET)
       references TICKET_STATUS (K_IDSTATUSTICKET) on delete restrict on update restrict;
+
+alter table TIPO_EQUIPO add constraint FK_EQUIPO_TIPO foreign key (K_IDCATEGORIAE)
+      references CATEGORIA_EQUIPO (K_IDCATEGORIAE) on delete restrict on update restrict;
 
 alter table USER add constraint FK_USER_TYPE foreign key (K_IDTYPEUSER)
       references TYPE_USER (K_IDTYPEUSER) on delete restrict on update restrict;
