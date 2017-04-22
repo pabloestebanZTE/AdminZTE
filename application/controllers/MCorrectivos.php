@@ -14,6 +14,8 @@ class MCorrectivos extends CI_Controller {
         $this->load->model('data/dao_PVD_model');
         $this->load->model('user_model');
         $this->load->model('maintenance_model');
+        $this->load->model('equipment_model');
+        $this->load->model('correctiveM_model');
         $this->load->model('ticket_model');
     }
 
@@ -29,9 +31,27 @@ class MCorrectivos extends CI_Controller {
     }
 
     public function crearMC(){
-      print_r($_POST);
-      $idEquipment = $this->dao_equipment_model->insertEquipment($_POST['field6'], $_POST['field7'], $_POST['fieldOtros'], $_POST['field8'],$_POST['field9'],$_POST['field10']);
-      $this->dao_MC_model->insertMC($_POST['field1'], explode("/",$_POST['field2'])[1], explode("/",$_POST['field3'])[0], $_POST['field4'], $_POST['field5'],$_POST['field11'],$_POST['field12'],$_POST['field13'], $idEquipment);
+      $equipment = new equipment_model;
+      $maintenaceC = new correctiveM_model;
+      $equipment = $equipment->createEquipment("", $_POST['field6'], $_POST['field7'], $_POST['fieldOtros'], $_POST['field8'],$_POST['field9'],$_POST['field10']);
+      $idEquipment = $this->dao_equipment_model->insertEquipment($equipment);
+      $maintenaceC = $maintenaceC->createMaintenance("", $_POST['field1'], explode("/",$_POST['field2'])[1], explode("/",$_POST['field3'])[0],$_POST['field4'], $_POST['field5'],$_POST['field11'],$idEquipment,$_POST['field12'],$_POST['field13']);
+      $this->dao_MC_model->insertMC($maintenaceC);
+      $respuesta['mc'] = $this->dao_MC_model->getAllMC();
+      $respuesta['usuariosMC'] = $this->dao_MC_model->getAllUsersMC();
+      print_r($respuesta['usuariosMC']);
+      $respuesta['titulosMCResumen'] = $this->crearTitulos();
+      $this->load->view('verMC', $respuesta);
+    }
+
+    public function crearTitulos(){
+        $tituloResumen[0] = "ID";
+        $tituloResumen[1] = "PVD";
+        $tituloResumen[2] = "Región";
+        $tituloResumen[3] = "Ticket";
+        $tituloResumen[4] = "Fecha inicio";
+        $tituloResumen[5] = "Técnico";
+      return $tituloResumen;
     }
 
 }

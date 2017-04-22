@@ -79,17 +79,17 @@
           return $respuesta;
         }
 
-        public function insertEquipment($category, $type, $other, $serial, $manufacturer, $model){
+        public function insertEquipment($equipment){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          if ($type == "-1"){
+          if ($equipment->getTipo() == -1){
             $sql = "INSERT INTO equipment (N_NAME, K_IDCATEGORIAE, N_OTROTIPO, N_SERIAL, N_MARCA, N_MODELO)
-              values ("."'',".$category.",'".$other."','".$serial."','".$manufacturer."','".$model."');";
-              $sql2 = "SELECT K_IDEQUIPMENT FROM equipment where K_IDCATEGORIAE = ".$category." and N_OTROTIPO = '".$other."' and N_SERIAL ='".$serial."' and N_MARCA = '".$manufacturer."' and N_MODELO = '".$model."';";
+              values ("."'',".$equipment->getCategoria().",'".$equipment->getOther()."','".$equipment->getSerial()."','".$equipment->getMarca()."','".$equipment->getModelo()."');";
+              $sql2 = "SELECT K_IDEQUIPMENT FROM equipment where K_IDCATEGORIAE = ".$equipment->getCategoria()." and N_OTROTIPO = '".$equipment->getOther()."' and N_SERIAL ='".$equipment->getSerial()."' and N_MARCA = '".$equipment->getMarca()."' and N_MODELO = '".$equipment->getModelo()."';";
           } else {
             $sql = "INSERT INTO equipment (N_NAME, K_IDCATEGORIAE, K_IDTIPOE, N_SERIAL, N_MARCA, N_MODELO)
-              values ("."'',".$category.",".$type.",'".$serial."','".$manufacturer."','".$model."');";
-            $sql2 = "SELECT K_IDEQUIPMENT FROM equipment where K_IDCATEGORIAE = ".$category." and K_IDTIPOE = ".$type." and N_SERIAL ='".$serial."' and N_MARCA = '".$manufacturer."' and N_MODELO = '".$model."';";
+              values ("."'',".$equipment->getCategoria().",".$equipment->getTipo().",'".$equipment->getSerial()."','".$equipment->getMarca()."','".$equipment->getModelo()."');";
+            $sql2 = "SELECT K_IDEQUIPMENT FROM equipment where K_IDCATEGORIAE = ".$equipment->getCategoria()." and K_IDTIPOE = ".$equipment->getTipo()." and N_SERIAL ='".$equipment->getSerial()."' and N_MARCA = '".$equipment->getMarca()."' and N_MODELO = '".$equipment->getModelo()."';";
           }
           if ($session != "false"){
             $session->query($sql);
@@ -101,8 +101,49 @@
             }
           }
           return $respuesta;
-
         }
 
+        public function getDamageById($id){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "SELECT * FROM damage where K_IDDAMAGE = ".$id.";";
+          if ($session != "false"){
+            $result = $session->query($sql);
+            if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              $respuesta['id'] = $row['K_IDDAMAGE'];
+              $respuesta['nombre'] = $row['N_NAME'];
+            }
+          } else {
+            $respuesta = "Error de informacion";
+          }
+          return $respuesta;
+        }
+
+        public function getEquipmentById($id){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "SELECT * FROM equipment where K_IDEQUIPMENT = ".$id.";";
+          if ($session != "false"){
+            $result = $session->query($sql);
+            if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              $sql = "SELECT * FROM categoria_equipo where K_IDCATEGORIAE = ".$row['K_IDCATEGORIAE'].";";
+              $result = $session->query($sql);
+              $row2 = $result->fetch_assoc();
+              $row['K_IDCATEGORIAE'] = $row2;
+              if($row['K_IDTIPOE'] != ""){
+                $sql = "SELECT * FROM tipo_equipo where K_IDTIPOE = ".$row['K_IDTIPOE'].";";
+                $result = $session->query($sql);
+                $row3 = $result->fetch_assoc();
+                $row['K_IDTIPOE'] = $row3;
+              }
+              $respuesta = $row;
+            }
+          } else {
+            $respuesta = "Error de informacion";
+          }
+          return $respuesta;
+        }
     }
 ?>

@@ -3,15 +3,20 @@
 
 	class equipment_model extends CI_Model{
 
+		protected $id;
 		protected $categoria;
 		protected $tipo;
 		protected $serial;
+		protected $other;
 		protected $marca;
     protected $modelo;
 
 		public function __construct(){
 
 		}
+		public function getId(){return $this->id;}
+
+		public function setId($id){$this->id = $id;}
 
 		public function getCategoria(){return $this->categoria;}
 
@@ -20,6 +25,10 @@
     public function getTipo(){return $this->tipo;}
 
     public function setTipo($tipo){$this->tipo = $tipo;}
+
+		public function getOther(){return $this->other;}
+
+		public function setOther($other){$this->other = $other;}
 
     public function getSerial(){return $this->serial;}
 
@@ -33,12 +42,14 @@
 
     public function setModelo($modelo){$this->modelo = $modelo;}
 
-		public function createEquipment($categoria, $tipo, $serial, $marca, $modelo){
+		public function createEquipment($id, $categoria, $tipo, $other,$serial, $marca, $modelo){
 			$newEquipment = new equipment_model();
+			$newEquipment->setId($id);
 			$newEquipment->setCategoria($categoria);
 			$newEquipment->setTipo($tipo);
-			$newEquipment->serSerial($serial);
-			$newEquipment->serMarca($marca);
+			$newEquipment->setOther($other);
+			$newEquipment->setSerial($serial);
+			$newEquipment->setMarca($marca);
       $newEquipment->setModelo($modelo);
 
 			return $newEquipment;

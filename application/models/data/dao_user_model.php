@@ -54,7 +54,7 @@
         public function getAllUsers(){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "SELECT * FROM USER;";
+          $sql = "SELECT * FROM user;";
           if ($session != "false"){
             $result = $session->query($sql);
             if ($result->num_rows > 0) {
@@ -68,6 +68,24 @@
             } else {
               $respuesta = "No Users";
               }
+          } else {
+            $respuesta = "Error en BD";
+          }
+          return $respuesta;
+        }
+
+        public function getUserById($id){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "SELECT * FROM user where K_IDUSER = ".$id.";";
+          if ($session != "false"){
+            $result = $session->query($sql);
+            if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              $user = new user_model();
+              $user = $user->createUser($row['K_IDUSER'], "", $row['N_NAME'], $row['N_LASTNAME']);
+              $respuesta = $user;
+            }
           } else {
             $respuesta = "Error en BD";
           }
