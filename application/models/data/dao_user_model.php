@@ -54,7 +54,7 @@
         public function getAllUsers(){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "SELECT * FROM user;";
+          $sql = "SELECT * FROM user ORDER BY N_NAME;";
           if ($session != "false"){
             $result = $session->query($sql);
             if ($result->num_rows > 0) {

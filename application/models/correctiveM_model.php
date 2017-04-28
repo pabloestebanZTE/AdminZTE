@@ -13,10 +13,25 @@
 		protected $idEquipment;
 		protected $description;
     protected $stuff;
+		protected $startDate;
+		protected $finishDate;
+		protected $status;
 
 		public function __construct(){
 
 		}
+
+		public function getStatus(){return $this->status;}
+
+		public function setStatus($status){$this->status = $status;}
+
+		public function getFDate(){return $this->finishDate;}
+
+		public function setFDate($finishDate){$this->finishDate = $finishDate;}
+
+		public function getSDate(){return $this->startDate;}
+
+		public function setSDate($startDate){$this->startDate = $startDate;}
 
 		public function getId(){return $this->id;}
 
@@ -38,7 +53,7 @@
 
     public function setPlace($idPlace){$this->idPlace = $idPlace;}
 
-    public function getQuiantity(){return $this->quantity;}
+    public function getQuantity(){return $this->quantity;}
 
     public function setQuantity($quantity){$this->quantity = $quantity;}
 
@@ -58,7 +73,7 @@
 
     public function setStuff($stuff){$this->stuff = $stuff;}
 
-		public function createMaintenance($id, $idTicket, $idUser, $idPVD, $idPlace, $quantity, $damage, $idEquipment, $description, $stuff){
+		public function createMaintenance($id, $idTicket, $idUser, $idPVD, $idPlace, $quantity, $damage, $idEquipment, $description, $stuff, $startDate, $finishDate, $status){
 			$newMaintenance= new correctiveM_model();
 			$newMaintenance->setId($id);
       $newMaintenance->setTicket($idTicket);
@@ -70,6 +85,9 @@
       $newMaintenance->setEquipment($idEquipment);
       $newMaintenance->setDescription($description);
       $newMaintenance->setStuff($stuff);
+			$newMaintenance->setSDate($startDate);
+			$newMaintenance->setFDate($finishDate);
+			$newMaintenance->setStatus($status);
 			return $newMaintenance;
     }
 	}

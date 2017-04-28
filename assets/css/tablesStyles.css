@@ -11,7 +11,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: table;
   display: block;
-  overflow: scroll;
+  overflow-x: scroll;
 }
 @media screen and (max-width: 580px) {
   .table {
@@ -27,6 +27,23 @@
 }
 @media screen and (max-width: 580px) {
   .table2 {
+    display: block;
+  }
+}
+
+
+.tableFix {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+  display: block;
+  overflow: scroll;
+  height: 400px;
+  overflow-y: scroll;
+}
+@media screen and (max-width: 580px) {
+  .tableFix {
     display: block;
   }
 }

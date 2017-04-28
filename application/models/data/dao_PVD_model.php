@@ -120,8 +120,8 @@
               if ($result->num_rows > 0) {
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
-                  $respuesta[$i]['idTIPO'] = $row['K_IDTYPEPVD'];
-                  $respuesta[$i]['idZONE'] = $row['K_IDZONE'];
+                  $respuesta[$i]['idTIPO'] = $row['K_IDPVDT'];
+                  $respuesta[$i]['idZONE'] = $row['K_IDPVDZONE'];
                   $i++;
                 }
               }

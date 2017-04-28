@@ -57,7 +57,7 @@
 									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][2] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][4] == 1){
 									echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";

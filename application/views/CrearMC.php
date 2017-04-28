@@ -29,14 +29,30 @@
         $('#field7').empty();
         var valorOption = $('#field6 option:selected').attr('value');
         for(var i = 0; i < categorias[valorOption-1].tipo.length; i++){
-          $("#field7").append("<option value='"+categorias[valorOption-1].tipo[i].tipoId+"'>"+categorias[valorOption-1].tipo[i].nombre+"</option>");
+          $("#field7").append("<option value='"+categorias[valorOption-1].tipo[i].id+"'>"+categorias[valorOption-1].tipo[i].nombre+"</option>");
         }
-        $("#field7").append("<option value='-1'>OTRO</option>");
+        cambiarSelect2(categorias);
+      }
+
+      function cambiarSelect2(categorias){
+        $('#field14').empty();
+        var valorOption = $('#field6 option:selected').attr('value');
+        var valorOption2 = $('#field7 option:selected').attr('value');
+        var j;
+        for(var i = 0; i < categorias[valorOption-1].tipo.length; i++){
+          if(valorOption2 == categorias[valorOption-1].tipo[i].id ){
+            j = i;
+          }
+        }
+        for(var i = 0; i < categorias[valorOption-1].tipo[j].tipo2.length; i++){
+          $("#field14").append("<option value='"+categorias[valorOption-1].tipo[j].tipo2[i].id2+"' value2='"+categorias[valorOption-1].tipo[j].tipo2[i].nombre+"'>"+categorias[valorOption-1].tipo[j].tipo2[i].nombre+"</option>");
+        }
+        mostrarFieldOtro();
       }
 
       function mostrarFieldOtro(){
-        var valorOption = $('#field7 option:selected').attr('value');
-        if (valorOption == "-1"){
+        var valorOption = $('#field14 option:selected').attr('value2');
+        if (valorOption == "Otro"){
           $("#fieldOtros").show();
           $("#fieldOtros").attr('required', true);
         } else {
@@ -52,6 +68,25 @@
         for(var i = 0; i < zonas.length; i++){
           if(zonas[i].idTIPO == tipo[1]){
             $("#field4").append("<option value='"+zonas[i].id.id+"'>"+zonas[i].id.name+"</option>");
+          }
+        }
+      }
+
+      function buscar(value, categorias){
+        caracteres=value.length;
+        var flag = 0;
+        for(var i = 0; i < categorias.length; i++){
+          for (var j = 0; j < categorias[i].tipo.length; j++){
+            for (var k = 0; k < categorias[i].tipo[j].tipo2.length; k++){
+              if(categorias[i].tipo[j].tipo2[k].nombre.slice(0,caracteres).toLowerCase()==value.toLowerCase()){
+                $('#textHelp').attr('value', categorias[i].nombre+" / "+categorias[i].tipo[j].nombre);
+                flag = 1;
+              } else {
+                if (flag == 0) {
+                  $('#textHelp').attr('value', 'Ninguna coincidencia');
+                }
+              }
+            }
           }
         }
       }
@@ -283,14 +318,21 @@
                       echo "<option value='".$categoriaE[$i]['id']."'>".$categoriaE[$i]['nombre']."</option>";
                     }
                   echo "</select>";
-                  echo "<label for='job'>Tipo de equipo:</label>";
-                  echo "<select id='field7' name='field7' onchange='mostrarFieldOtro()'>";
+                  echo "<label for='job'>Subcategoria 1:</label>";
+                  echo "<select id='field7' name='field7' onchange='cambiarSelect2(".$json.")'>";
                     for($i = 0; $i<count($categoriaE[0]['tipo']); $i++){
                       echo "<option value='".$categoriaE[0]['tipo'][$i]['tipoId']."'>".$categoriaE[0]['tipo'][$i]['nombre']."</option>";
                     }
-                    echo "<option value='-1'>OTRO</option>";
+                  echo "</select>";
+                  echo "<label for='job'>Subcategoria 2:</label>";
+                  echo "<select id='field14' name='field14' onchange='mostrarFieldOtro()'>";
+                    for($i = 0; $i<count($categoriaE[0]['tipo'][0]['tipo2']); $i++){
+                      echo "<option value='".$categoriaE[0]['tipo'][0]['tipo2'][$i]['id2']."' value2='".$categoriaE[0]['tipo'][0]['tipo2'][$i]['nombre']."'>".$categoriaE[0]['tipo'][0]['tipo2'][$i]['nombre']."</option>";
+                    }
                   echo "</select>";
                   echo  "<input type='text' name='fieldOtros' id='fieldOtros'  placeholder='Cual otro tipo *' hidden>";
+                  echo  "<input type='text' name='buscarCate' onKeyUp='buscar(this.value, ".$json.")'  placeholder='¿No encuentras la subcategoria 2? Digita aqui el nombre*'>";
+                  echo  "<input type='text' name='textHelp' id='textHelp' value = ''  disabled>";
                   echo "<input type='text' name='field8' placeholder='Serial *' required>";
                   echo "<input type='text' name='field9' placeholder='Marca *' required>";
                   echo "<input type='text' name='field10' placeholder='Modelo *' required>";

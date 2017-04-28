@@ -57,10 +57,10 @@
                     echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
                   }
                   if($_SESSION['permissions'][1] == 1){
-                    echo "<li id='nav4'><a>Preventivos<span>Mantenimientos</span></a></li>";
+                    echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][2] == 1){
-                    echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
+                    echo "<li id='nav4' class='active'><a >Correctivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][4] == 1){
                     echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
@@ -87,15 +87,10 @@
       <!-- tablas -->
             <?php
           //  echo "<select id='field4' name='field4' required>";
-
+            echo "<br><br><a href='/AdminZTE/index.php/MCorrectivos/formMC' class='btn btn-primary' role='button' >Crear Mto. Correctivo</a>";
 
   					echo "<div class='wrapper tabs'>";
-            for ($i = 0; $i < count($mc); $i++){
-            //  print_r($mc[$i]);
-            //      echo "<br>";
-              //    echo "<br>";
-            }
-              echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
+              echo "<h2 class='under'>"."Resumen mantenimientos correctivos".$meses[$p]."</h2>";
               echo "<div class='table2'>";
                 echo "<div class='row header green'>";
                 for ($i = 0; $i<count($titulosMCResumen); $i++){
@@ -104,15 +99,16 @@
                 echo "</div>";
                 for ($i = 1; $i<count($mc); $i++){
                   echo "<div class='row'>";
-                    echo "<div class='cell'>".$mc[$i]['K_IDCORRECTIVE_MAINTENANCE']."</div>";
-                    echo "<div class='cell'>".$mc[$i]['K_IDPVD']->getID()."</div>";
-                    echo "<div class='cell'>".$mc[$i]['K_IDPVD']->getRegion()."</div>";
-                    echo "<div class='cell'>".$mc[$i]['K_IDTICKET']."</div>";
-                    echo "<div class='cell'>"."FechaInicio"."</div>";
-                    echo "<div class='cell'>".$mc[$i]['K_IDUSER']->getName()." ".$mc[$i]['K_IDUSER']->getLastname()."</div>";
-                  echo "</div>";
+                    echo "<div class='cell'>".$mc[$i]->getId()."</div>";
+                    echo "<div class='cell'>".$mc[$i]->getPVD()->getId()."</div>";
+                    echo "<div class='cell'>".$mc[$i]->getPVD()->getRegion()."</div>";
+                    echo "<div class='cell'>".$mc[$i]->getTicket()."</div>";
+                    echo "<div class='cell'>".$mc[$i]->getSDate()."</div>";
+                    echo "<div class='cell'>".$mc[$i]->getUser()->getName()." ".$mc[$i]->getUser()->getLastname()."</div>";
+                    echo "</div>";
                 }
               echo "</div>";
+              echo "<a href='/AdminZTE/index.php/MCorrectivos/exportXL' class='btn btn-primary' role='button' >Actualizar Excel</a>";
             echo "</div>";
             ?>
 

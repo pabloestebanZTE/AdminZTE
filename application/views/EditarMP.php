@@ -42,17 +42,33 @@
             var dateField = document.getElementById(i+"-1");
             var dateField1 = document.getElementById(i+"-2");
             var dateField2 = document.getElementById(i+"-3");
-            var dateField3 = document.getElementById(i+"-4");
-            var dateField4 = document.getElementById(i+"-5");
-            var dateField5 = document.getElementById(i+"-6");
+            var dateField3 = document.getElementById(i+"-8");
+            var dateField4 = document.getElementById(i+"-9");
+            var dateField7 = document.getElementById(i+"-12");
+            var dateField8 = document.getElementById(i+"-13");
+            var dateField5 = document.getElementById(i+"-10");
+            var dateField6 = document.getElementById(i+"-11");
+            var dateField9 = document.getElementById(i+"-14");
+            var dateField10 = document.getElementById(i+"-15");
+
 
             if (dateField != null){
               dateField.removeAttribute('disabled');
-              dateField1.removeAttribute('disabled');
               dateField2.removeAttribute('disabled');
               dateField3.removeAttribute('disabled');
               dateField4.removeAttribute('disabled');
-              dateField5.removeAttribute('disabled');
+              dateField7.removeAttribute('disabled');
+              dateField8.removeAttribute('disabled');
+              try {
+                dateField1.removeAttribute('disabled');
+                dateField5.removeAttribute('disabled');
+                dateField6.removeAttribute('disabled');
+                dateField9.removeAttribute('disabled');
+                dateField10.removeAttribute('disabled');
+              }
+              catch(err) {
+                console.log("fieldNotFound");
+              }
             }
           }
           var buttonField = document.getElementById("BEditar"+f);
@@ -85,7 +101,7 @@
                     echo "<li id='nav4' ><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][2] == 1){
-                    echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
+                    echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][4] == 1){
                     echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
@@ -148,7 +164,7 @@
                   echo "<form method='post' name='formActualizar'>";
                     echo "<input type='submit' value='Actualizar M.P.' disabled='disabled' id='btnSubmit".$p."' name='btnSubmit".$p."' class='btn btn-success'  onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/updateMP' \">";
                     echo "<br><br><br>";
-                    echo "<div class='table'>";
+                    echo "<div class='tableFix'>";
                       echo "<div class='row header green'>";
                         echo "<div class='cell' style='font-size:13px'>Región</div>";
                         echo "<div class='cell' style='font-size:13px'>Departamento</div>";
@@ -157,8 +173,16 @@
                         echo "<div class='cell' style='font-size:13px'>Programado</div>";
                         echo "<div class='cell' style='font-size:13px'>Ticket</div>";
                         echo "<div class='cell' style='font-size:13px'>Estado</div>";
-                        echo "<div class='cell' style='font-size:13px'>Inicio</div>";
-                        echo "<div class='cell' style='font-size:13px'>Fin</div>";
+                        echo "<div class='cell' style='font-size:13px'>Inicio IT</div>";
+                        echo "<div class='cell' style='font-size:13px'>Fin IT</div>";
+                        echo "<div class='cell' style='font-size:13px'>NombreTécnicoIT</div>";
+                        echo "<div class='cell' style='font-size:13px'>NombreAuxiliarIT</div>";
+                        echo "<div class='cell' style='font-size:13px'>Inicio AA</div>";
+                        echo "<div class='cell' style='font-size:13px'>Fin AA</div>";
+                        echo "<div class='cell' style='font-size:13px'>NombreTécnicoAA</div>";
+                        echo "<div class='cell' style='font-size:13px'>NombreAuxiliarAA</div>";
+                        echo "<div class='cell' style='font-size:13px'>InicioM</div>";
+                        echo "<div class='cell' style='font-size:13px'>FinM</div>";
                         echo "<div class='cell' style='font-size:13px'>Duración</div>";
                       echo "</div>";
                       for ($i = 0; $i<count($PVDs); $i++){
@@ -173,23 +197,65 @@
                                 if($PVDs[$i]->getMaintenance() != NULL){
                                   echo "<div class='cell'><input style='font-size:12px' id='".$i."-1' size='9' type='date' name='".$i."-1' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getDate()."'></div>";
                                   if($PVDs[$i]->getMaintenance()[0]->getTicket() != "No Ticket"){
-                                    echo "<div class='cell'><input style='font-size:12px' id='".$i."-2' name='".$i."-2'  disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."'></div>";
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Cerrado"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Cerrado</option><option>En Progreso</option></select></div>";
+                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."</div>";
+                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Ejecutado"){
+                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
                                     }
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "En Progreso"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Cerrado</option><option selected>En Progreso</option></select></div>";
+                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option selected>En Progreso</option><option>Cancelado</option></select></div>";
                                     }
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-4'  name='".$i."-4' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateS()."'></div>";
-                                    echo "<div class='cell'><input style='font-size:12px' type='date' id='".$i."-5' size='9' name='".$i."-5'  disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateF()."'></div>";
-                                    echo "<div class='cell'><input size='7' style='font-size:12px' id='".$i."-6' name='".$i."-6'  disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDuracion()."'></div>";
+                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Cancelado"){
+                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option>Ejecutado</option><option selected>En Progreso</option><option selected>Cancelado</option></select></div>";
+                                    }
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSIT()."'></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFIT()."'></div>";
+                                    echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_LASTNAME']."</div>";
+                                    echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_LASTNAME']."</div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSAA()."'></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFAA()."'></div>";
+                                    echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_LASTNAME']."</div>";
+                                    echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_LASTNAME']."</div>";
+                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateS()."</div>";
+                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateF()."</div>";
+                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDuracion()."</div>";
                                   } else {
                                     echo "<div class='cell'><input style='font-size:12px' id='".$i."-2' name='".$i."-2' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option></option><option>Cerrado</option><option>En Progreso</option></select></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-4'  name='".$i."-4'  disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><input style='font-size:12px' type='date' id='".$i."-5' size='9' name='".$i."-5'  disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><input size='7' style='font-size:12px' id='".$i."-6' name='".$i."-6'  disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                  }
+                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option></option><option>Ejecutado</option><option>En Progreso</option></select></div>";
+
+
+
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value=''></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value=''></div>";
+                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-10' id='".$i."-10' name='".$i."-10' disabled='true' aria-describedby='basic-addon1'>";
+                                    echo "<option value='-1'></option>";
+                                    for($j = 0; $j<count($users); $j++){
+                                      echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
+                                    }
+                                    echo "</select></div>";
+                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-11' id='".$i."-11' name='".$i."-10' disabled='true' aria-describedby='basic-addon1'>";
+                                    echo "<option value='-1'></option>";
+                                    for($j = 0; $j<count($users); $j++){
+                                      echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
+                                    }
+                                    echo "</select></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value=''></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value=''></div>";
+                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-10' id='".$i."-10' name='".$i."-10' disabled='true' aria-describedby='basic-addon1'>";
+                                    echo "<option value='-1'></option>";
+                                    for($j = 0; $j<count($users); $j++){
+                                      echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
+                                    }
+                                    echo "</select></div>";
+                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-10' id='".$i."-10' name='".$i."-10' disabled='true' aria-describedby='basic-addon1'>";
+                                    echo "<option value='-1'></option>";
+                                    for($j = 0; $j<count($users); $j++){
+                                      echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
+                                    }
+                                    echo "</select></div>";
+                                    echo "<div class='cell'></div>";
+                                    echo "<div class='cell'></div>";
+                                    echo "<div class='cell'></div>";
+                                    }
                                   echo "<input id='idM".$i."' name='".$i."-7' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getId()."'>";
                                 }
                                 echo "<input id='cantidad' name='cantidad' type='hidden'  class='form-control' value='".count($PVDs)."'>";

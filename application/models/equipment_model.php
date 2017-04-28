@@ -5,7 +5,8 @@
 
 		protected $id;
 		protected $categoria;
-		protected $tipo;
+		protected $tipo1;
+		protected $tipo2;
 		protected $serial;
 		protected $other;
 		protected $marca;
@@ -22,9 +23,13 @@
 
 		public function setCategoria($categoria){$this->categoria = $categoria;}
 
-    public function getTipo(){return $this->tipo;}
+    public function getTipo1(){return $this->tipo1;}
 
-    public function setTipo($tipo){$this->tipo = $tipo;}
+    public function setTipo1($tipo1){$this->tipo1 = $tipo1;}
+
+		public function getTipo2(){return $this->tipo2;}
+
+		public function setTipo2($tipo2){$this->tipo2 = $tipo2;}
 
 		public function getOther(){return $this->other;}
 
@@ -42,11 +47,12 @@
 
     public function setModelo($modelo){$this->modelo = $modelo;}
 
-		public function createEquipment($id, $categoria, $tipo, $other,$serial, $marca, $modelo){
+		public function createEquipment($id, $categoria, $tipo1, $tipo2, $other,$serial, $marca, $modelo){
 			$newEquipment = new equipment_model();
 			$newEquipment->setId($id);
 			$newEquipment->setCategoria($categoria);
-			$newEquipment->setTipo($tipo);
+			$newEquipment->setTipo1($tipo1);
+			$newEquipment->setTipo2($tipo2);
 			$newEquipment->setOther($other);
 			$newEquipment->setSerial($serial);
 			$newEquipment->setMarca($marca);

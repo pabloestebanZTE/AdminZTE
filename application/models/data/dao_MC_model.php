@@ -13,8 +13,9 @@
         public function insertMC($maintenance){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "INSERT INTO corrective_maintenance (K_IDTICKET, K_IDUSER, K_IDPVD, K_IDPVDPLACE, Q_QUANTITY, K_IDFALLO, N_DESCRIPTION, N_STUFF, K_IDEQUIPMENT)
-          values ('".$maintenance->getTicket()."',".$maintenance->getUser().",".$maintenance->getPVD().",".$maintenance->getPlace().",".$maintenance->getQuiantity().",".$maintenance->getDamage().",'".$maintenance->getDescription()."','".$maintenance->getStuff()."',".$maintenance->getEquipment().");";
+          $sql = "INSERT INTO corrective_maintenance (K_IDTICKET, K_IDUSER, K_IDPVD, K_IDPVDZONE, Q_QUANTITY, K_IDDAMAGE, N_DESCRIPTION, N_STUFF, K_IDEQUIPMENT, K_IDSTATUSMC, D_STARTDATE)
+          values ('".$maintenance->getTicket()."',".$maintenance->getUser().",".$maintenance->getPVD().",".$maintenance->getPlace().",".$maintenance->getQuantity().",".$maintenance->getDamage().",'".
+            $maintenance->getDescription()."','".$maintenance->getStuff()."',".$maintenance->getEquipment().", ".$maintenance->getStatus().", STR_TO_DATE('".$maintenance->getSDate()."', '%m/%d/%Y'));";
           $session->query($sql);
         }
 
@@ -28,11 +29,14 @@
               $i = 0;
               while($row = $result->fetch_assoc()) {
                 $row['K_IDPVD'] = $this->dao_PVD_model->getPVDbyId($row['K_IDPVD']);
-                $row['K_IDPVDPLACE'] = $this->dao_PVD_model->getPVDZoneById($row['K_IDPVDPLACE']);
+                $row['K_IDPVDZONE'] = $this->dao_PVD_model->getPVDZoneById($row['K_IDPVDZONE']);
                 $row['K_IDUSER'] = $this->dao_user_model->getUserById($row['K_IDUSER']);
                 $row['K_IDFALLO'] = $this->dao_equipment_model->getDamageById($row['K_IDFALLO']);
-                $row['K_IDEQUIPMENT']=$this ->dao_equipment_model->getEquipmentById($row['K_IDEQUIPMENT'] );
-                $respuesta[$i] = $row;
+                $row['K_IDEQUIPMENT']=$this->dao_equipment_model->getEquipmentById($row['K_IDEQUIPMENT'] );
+                $row['K_STATUS']=$this->getStatusbyId($row['K_IDSTATUSMC']);
+                $maintenanceC = new correctiveM_model();
+                $maintenanceC = $maintenanceC->createMaintenance($row['K_IDCORRECTIVE_MAINTENANCE'], $row['K_IDTICKET'], $row['K_IDUSER'], $row['K_IDPVD'], $row['K_IDPVDZONE'], $row['Q_QUANTITY'], $row['K_IDFALLO'], $row['K_IDEQUIPMENT'], $row['N_DESCRIPTION'], $row['N_STUFF'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['K_STATUS']);
+                $respuesta[$i] = $maintenanceC;
                 $i++;
               }
             }
@@ -57,6 +61,18 @@
           return $respuesta;
         }
 
-
+        public function getStatusbyId($id){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "SELECT * FROM mc_status WHERE K_IDSTATUSMC = ".$id.";";
+          if ($session != "false"){
+            $result = $session->query($sql);
+            if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              $respuesta = $row;
+            }
+          }
+          return $respuesta;
+        }
     }
 ?>

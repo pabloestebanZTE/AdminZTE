@@ -45,11 +45,13 @@ class Mantenimientos extends CI_Controller {
           $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
         }
       }
+      $respuesta['users'] = $this->dao_user_model->getAllUsers();
       $respuesta['PVDs'] = $PVDs;
       $this->load->view('EditarMP', $respuesta);
     }
 
     function updateMP(){
+    //  print_r($_POST);
       $mantenimientos = $_POST['cantidad'];
       for($i = 0; $i<=$mantenimientos+1;$i++){
         if ($_POST[$i."-1"] != ""){
@@ -57,15 +59,63 @@ class Mantenimientos extends CI_Controller {
           $ticket =  new ticket_model();
           $mantenimiento = $mantenimiento->createMaintenance($_POST[$i."-7"],"","",$_POST[$i."-1"]);
           $this->dao_maintenance_model->updateDateManPre($mantenimiento);
-          if($_POST[$i."-3"] == "Cerrado" || $_POST[$i."-3"] == "En Progreso"){
-            $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $_POST[$i."-4"], $_POST[$i."-5"], $_POST[$i."-6"]);
+          if($_POST[$i."-3"] == "Ejecutado" || $_POST[$i."-3"] == "En Progreso" || $_POST[$i."-3"] == "Cancelado"){
+            if($_POST[$i."-8"] != "" && $_POST[$i."-12"] != ""){
+              $date1=date_create($_POST[$i."-8"]);
+              $date2=date_create($_POST[$i."-12"]);
+              $diff=date_diff($date1,$date2);
+              $diff = $diff->format("%R%a days")[0];
+              if($diff == "+" ){
+                $dateStart = $_POST[$i."-12"];
+              } else {
+                $dateStart = $_POST[$i."-8"];
+              }
+            }
+
+            if($_POST[$i."-9"] != "" && $_POST[$i."-13"] != ""){
+              $date1=date_create($_POST[$i."-9"]);
+              $date2=date_create($_POST[$i."-13"]);
+              $diff=date_diff($date1,$date2);
+              $diff = $diff->format("%R%a days")[0];
+              if($diff == "+" ){
+                $dateFinish = $_POST[$i."-13"];
+              } else {
+                $dateFinish = $_POST[$i."-9"];
+              }
+            }
+
+            if($_POST[$i."-8"] == "" && $_POST[$i."-12"] != ""){
+              $dateStart = $_POST[$i."-12"];
+            }
+            if($_POST[$i."-8"] != "" && $_POST[$i."-12"] == ""){
+              $dateStart = $_POST[$i."-8"];
+            }
+            if($_POST[$i."-9"] == "" && $_POST[$i."-13"] != ""){
+              $dateFinish = $_POST[$i."-13"];
+            }
+            if($_POST[$i."-9"] != "" && $_POST[$i."-13"] == ""){
+              $dateFinish = $_POST[$i."-9"];
+            }
+
+            $date1=$dateStart;
+            $date2=$dateFinish;
+            $diff=date_diff($date1,$date2);
+            print_r($diff);
+
+            if($diff != NULL){
+              echo "o.o";
+              $diff = $diff->format("%R%a days");
+            }
+
+            $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "");
+            /*
             $oldTicket = $this->dao_ticket_model->getTicketByID($ticket->getId());
             if($oldTicket == "No ticket"){
               $this->dao_ticket_model->insertTicket($ticket, $ticket->getStatus());
             } else {
               $this->dao_ticket_model->updateTicket($ticket, $ticket->getStatus());
             }
-            $mantenimiento->setTicket($ticket);
+            $mantenimiento->setTicket($ticket);*/
           }
         }
       }
@@ -151,7 +201,7 @@ class Mantenimientos extends CI_Controller {
             if($MP[$mes][$i]['mantenimiento']->getTicket() == "No Ticket"){
               $tabla2[$ciudades[$j]][1]++;
             } else {
-              if ($MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus() == "Cerrado"){
+              if ($MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus() == "Ejecutado"){
                 $tabla2[$ciudades[$j]][2]++;
                 $tabla2[$ciudades[$j]][1]++;
               } else {
@@ -385,7 +435,7 @@ class Mantenimientos extends CI_Controller {
         case 'En Progreso':
           $arregloEstado['Progreso']++;
           break;
-        case 'Cerrado':
+        case 'Ejecutado':
           $arregloEstado['Ejecutado']++;
           break;
         default:

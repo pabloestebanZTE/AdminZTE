@@ -2,7 +2,6 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-include 'excel_reader.php';       // include the class
 
 class fileManager extends CI_Controller{
 
