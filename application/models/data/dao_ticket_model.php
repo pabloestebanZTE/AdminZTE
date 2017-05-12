@@ -22,7 +22,7 @@
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
                     $ticket = new ticket_model();
-                    $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                    $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                     $result2 = $session->query($sql2);
                     $row2 = $result2->fetch_assoc();
 
@@ -71,10 +71,10 @@
                 if ($result->num_rows > 0) {
                   $row = $result->fetch_assoc();
                   $ticket = new ticket_model();
-                  $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                  $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                   $result2 = $session->query($sql2);
                   $row2 = $result2->fetch_assoc();
-                  $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
+                  $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "");
                   $respuesta = $ticket;
                 } else {
                   $respuesta = "No ticket";
@@ -95,7 +95,7 @@
                   $i = 0;
                   while($row = $result->fetch_assoc()) {
                       $ticket = new ticket_model();
-                      $sql2 = "SELECT n_name from TICKET_STATUS where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                      $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                       $result2 = $session->query($sql2);
                       $row2 = $result2->fetch_assoc();
                       $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
@@ -117,30 +117,93 @@
               $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
               $result = $session->query($sql);
               $row = $result->fetch_assoc();
-
-             if ($tipo == "Ejecutado"){
-                $sql = "insert into TICKET (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE, D_FINISHDATE, I_DURATION)
-                  values ('".$ticket->getId()."',".$ticket->getIdM().",".$row['K_IDSTATUSTICKET'].",STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'),STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'),".$ticket->getDuracion().");";
-              } else {
-                $sql = "insert into TICKET (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE)
-                  values ('".$ticket->getId()."',".$ticket->getIdM().",".$row['K_IDSTATUSTICKET'].",STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'));";
-              }
-              $session->query($sql);
+              $sql = "insert into ticket (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE)
+                values ('".$ticket->getId()."',".$ticket->getIdM().",".$row['K_IDSTATUSTICKET'].",STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'));";
+                $session->query($sql);
+                if ($ticket->getDateS() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATE=STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateF() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATE=STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDuracion() != NULL){
+                  $sql = "UPDATE ticket SET I_DURATION=".$ticket->getDuracion()." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateSAA() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATEAA=STR_TO_DATE('".$ticket->getDateSAA()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateFAA() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATEAA=STR_TO_DATE('".$ticket->getDateFAA()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateSIT() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATEIT=STR_TO_DATE('".$ticket->getDateSIT()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateFIT() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATEIT=STR_TO_DATE('".$ticket->getDateFIT()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getColor() != NULL){
+                  $sql = "UPDATE ticket SET N_COLOR='".$ticket->getColor()."' WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
             }
 
             public function updateTicket($ticket, $tipo){
+                $dbConnection = new configdb_model();
+                $session = $dbConnection->openSession();
+                $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
+                $result = $session->query($sql);
+                $row = $result->fetch_assoc();
+                $sql = "UPDATE ticket SET K_IDSTATUSTICKET=".$row['K_IDSTATUSTICKET']." WHERE K_IDTICKET='".$ticket->getId()."';";
+                $session->query($sql);
+                if ($ticket->getDateS() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATE=STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateF() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATE=STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDuracion() != NULL){
+                  $sql = "UPDATE ticket SET I_DURATION=".$ticket->getDuracion()." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateSAA() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATEAA=STR_TO_DATE('".$ticket->getDateSAA()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateFAA() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATEAA=STR_TO_DATE('".$ticket->getDateFAA()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateSIT() != NULL){
+                  $sql = "UPDATE ticket SET D_STARTDATEIT=STR_TO_DATE('".$ticket->getDateSIT()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getDateFIT() != NULL){
+                  $sql = "UPDATE ticket SET D_FINISHDATEIT=STR_TO_DATE('".$ticket->getDateFIT()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getColor() != NULL){
+                  $sql = "UPDATE ticket SET N_COLOR='".$ticket->getColor()."' WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+            }
+
+            public function insertTech($ticket, $user, $type){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
-              $result = $session->query($sql);
-              $row = $result->fetch_assoc();
-
-             if ($tipo == "Ejecutado"){
-                $sql = "UPDATE TICKET SET K_IDSTATUSTICKET=".$row['K_IDSTATUSTICKET'].", D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'), D_FINISHDATE= STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'), I_DURATION=".$ticket->getDuracion()." WHERE K_IDTICKET='".$ticket->getId()."';";
-             } else {
-                $sql = "UPDATE TICKET SET D_STARTDATE = STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
-             }
-            $session->query($sql);
+              $sql = "insert into ticket_user (K_IDTICKET, K_IDUSER, N_TYPE)
+                values ('".$ticket."',".$user.",'".$type."');";
+                echo $sql;
+              $session->query($sql);
             }
+
         }
 ?>

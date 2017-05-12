@@ -26,6 +26,7 @@
 
           try {
             $connection = new mysqli('localhost', $user, $pass, $db);
+            $connection->set_charset("utf8");
           } catch (Exception $e ) {
              $connection = "false";
           }

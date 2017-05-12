@@ -11,12 +11,15 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
+    <link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Teko:400,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
@@ -28,12 +31,59 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
     <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 
-    <script type="text/javascript" charset="utf-8" async defer>
+    <script type="text/javascript" charset="utf-8">
         function showMessage(){
             var a = "<?php echo $msg[0]; ?>";
             var b = "<?php echo $msg[1]; ?>";
             var c = "<?php echo $msg[2]; ?>";
             sweetAlert(a, b, c);
+        }
+
+        function modalEditar(idpvd, city, deparment, region, direction, tipo, idT, estado, fechaI, fechaF, fechaIIT, fechaIAA, fechaFIT, fechaFAA, duracion, color, users){
+          $('#idpvd').val("");
+          $('#ciudad').val("");
+          $('#departamento').val("");
+          $('#region').val("");
+          $('#direccion').val("");
+          $('#tipo').val("");
+          $('#idticket').val("");
+          $('#estado').val("");
+          $('#fechai').val("");
+          $('#fechaf').val("");
+          $('#duracion').val("");
+          $('#fechaiit').val("");
+          $('#fechafit').val("");
+          $('#fechaiaa').val("");
+          $('#fechafaa').val("");
+          $('#tit').val("");
+          $('#ait').val("");
+          $('#taa').val("");
+          $('#aaa').val("");
+
+          $('#idpvd').val(idpvd);
+          $('#ciudad').val(city);
+          $('#departamento').val(deparment);
+          $('#region').val(region);
+          $('#direccion').val(direction);
+          $('#tipo').val(tipo);
+          $('#idticket').val(idT);
+          $('#estado').val(estado);
+          $('#fechai').val(fechaI);
+          $('#fechaf').val(fechaF);
+          $('#duracion').val(duracion);
+          $('#fechaiit').val(fechaIIT);
+          $('#fechafit').val(fechaFIT);
+          $('#fechaiaa').val(fechaFAA);
+          $('#fechafaa').val(fechaFAA);
+          try {
+              $('#tit').val(users.users.IT_T.N_NAME+" "+users.users.IT_T.N_LASTNAME);
+              $('#ait').val(users.users.IT_A.N_NAME+" "+users.users.IT_A.N_LASTNAME);
+              $('#taa').val(users.users.AA_T.N_NAME+" "+users.users.AA_T.N_LASTNAME);
+              $('#aaa').val(users.users.AA_A.N_NAME+" "+users.users.AA_A.N_LASTNAME);
+          } catch (e) {
+            console.log("no users");
+          }
+          $('#myModal').modal('show');
         }
     </script>
 
@@ -66,7 +116,7 @@
                     echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
                   }
                   if($_SESSION['permissions'][5] == 1){
-                    echo "<li id='nav5'><a href='#''>ZTE<span>Plataforma</span></a></li>";
+                    echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
                   }
                 }
               ?>
@@ -116,86 +166,288 @@
       <!-- tablas -->
   					<div class="wrapper tabs">
               <?php
-              if (isset($tablas)){
-                $meses[1] = 'Enero';
-                $meses[2] = 'Febrero';
-                $meses[3] = 'Marzo';
-                $meses[4] = 'Abril';
-                $meses[5] = 'Mayo';
-                $meses[6] = 'Junio';
-                $meses[7] = 'Julio';
+              if($_SESSION['permissions'][1] == 1){
+                if (isset($tablas)){
+                  $meses[1] = 'Enero';
+                  $meses[2] = 'Febrero';
+                  $meses[3] = 'Marzo';
+                  $meses[4] = 'Abril';
+                  $meses[5] = 'Mayo';
+                  $meses[6] = 'Junio';
+                  $meses[7] = 'Julio';
 
-                echo "<br><br><br>";
-                echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
-                echo "<ul class='nav'>";
-                  echo "<center>";
-                  for ($p = 1; $p <= count($meses); $p++){
-                    if ($p == 1){
-                      echo "<li class='selected'><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
-
-                    } else {
-                      echo "<li><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
+                  echo "<br><br><br>";
+                  echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
+                  echo "<ul class='nav'>";
+                    echo "<center>";
+                    for ($p = 1; $p <= count($meses); $p++){
+                      if ($p == 1){
+                        echo "<li class='selected'><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
+                      } else {
+                        echo "<li><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
+                      }
                     }
-                  }
-                  echo "</center>";
-                echo "</ul>";
+                    echo "</center>";
+                  echo "</ul>";
 
-                for ($p = 1; $p <= count($meses); $p++){
-                  echo "<div class='tab-content' id='tab".$p."'>";
-                    echo "<div class='wrapperTable'>";
-                      //Tabla 1
-                      echo "<h2 class='under'>"."Porcentaje de avance por zonas mes de ".$meses[$p]."</h2>";
-                      echo "<div class='table'>";
-                        echo "<div class='row header'>";
-                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla1']['Titulos']); $i++){
-                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['Titulos'][$i]."</div>";
-                        }
-                        echo "</div>";
-                        for ($i = 1; $i<count($tablas[$meses[$p]]['tabla1']); $i++){
-                          echo "<div class='row'>";
-                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla1']['linea'.$i]); $j++){
-                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['linea'.$i][$j]."</div>";
-                            }
+                  for ($p = 1; $p <= count($meses); $p++){
+                    echo "<div class='tab-content' id='tab".$p."'>";
+                    echo "<br><br><br><ul class='nav'>";
+                      echo "<center>";
+                      echo "<li><a href='#tab".$p."'><center>"."Todos"."</center></a></li>";
+                      echo "<li><a href='#tabRegion1-".$p."'><center>"."Región 1"."</center></a></li>";
+                      echo "<li><a href='#tabRegion2-".$p."'><center>"."Región 4"."</center></a></li>";
+                      echo "</center>";
+                    echo "</ul>";
+                      echo "<div class='wrapperTable'>";
+                        //Tabla 1
+                        echo "<h2 class='under'>"."Porcentaje de avance por zonas mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla1']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['Titulos'][$i]."</div>";
+                          }
                           echo "</div>";
-                        }
-                      echo "</div>";
+                          for ($i = 1; $i<count($tablas[$meses[$p]]['tabla1']); $i++){
+                            echo "<div class='row'>";
+                              for ($j = 0; $j<count($tablas[$meses[$p]]['tabla1']['linea'.$i]); $j++){
+                                echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['linea'.$i][$j]."</div>";
+                              }
+                            echo "</div>";
+                          }
+                        echo "</div>";
 
-                      //Tabla 2
-                      echo "<h2 class='under'>"."Avance Departamentos zonas 1 y 4 mes de ".$meses[$p]."</h2>";
-                      echo "<div class='table'>";
-                        echo "<div class='row header green'>";
-                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['Titulos']); $i++){
-                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['Titulos'][$i]."</div>";
-                        }
-                        echo "</div>";
-                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['ciudades']); $i++){
-                          echo "<div class='row'>";
-                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['ciudades'][$i]."</div>";
-                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]]); $j++){
-                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][$j]."</div>";
-                            }
+                        //Tabla 2
+                        echo "<h2 class='under'>"."Avance Departamentos zonas 1 y 4 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header green'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['Titulos'][$i]."</div>";
+                          }
                           echo "</div>";
-                        }
-                      echo "</div>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['ciudades']); $i++){
+                            echo "<div class='row'>";
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['ciudades'][$i]."</div>";
+                              for ($j = 0; $j<count($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]]); $j++){
+                                echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][$j]."</div>";
+                              }
+                            echo "</div>";
+                          }
+                        echo "</div>";
 
-                      //Tabla 3
-                      echo "<h2 class='under'>"."Detalle de tickets zona 1 y 4 mes de ".$meses[$p]."</h2>";
-                      echo "<div class='table'>";
-                        echo "<div class='row header blue'>";
-                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
-                          echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</div>";
-                        }
-                        echo "</div>";
-                        for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
-                          echo "<div class='row'>";
-                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
-                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</div>";
-                            }
+                        //Tabla 3
+                        echo "<h2 class='under'>"."Detalle de tickets zona 1 y 4 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header blue'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</div>";
+                          }
                           echo "</div>";
-                        }
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
+                            echo "<div class='row'>";
+                              for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
+                                if ($j == 6){
+                                  for($l = 0; $l < count($PVDs); $l++){
+                                    if($tablas[$meses[$p]]['tabla3']['lineas'][$i][4] == $PVDs[$l]->getId()){
+                                      echo "<div class='cell' ><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+                                      json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
+                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
+                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
+                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></div>";
+                                    }
+                                  }
+                                } else {
+                                  if($j == 0){
+                                    if($tablas[$meses[$p]]['tabla3']['lineas'][$i][$j] != null){
+                                      echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."; '>&nbsp;</div></div>";
+                                    } else {
+                                      echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF; border: solid black 1px;'>&nbsp;</div></div>";
+                                    }
+                                  }else{
+                                    echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</div>";
+                                  }
+                                }
+                              }
+                            echo "</div>";
+                          }
+                        echo "</div>";
                       echo "</div>";
                     echo "</div>";
-                  echo "</div>";
+                  }
+
+                  for ($p = 1; $p <= count($meses); $p++){
+                    echo "<div class='tab-content' id='tabRegion1-".$p."'>";
+                    echo "<br><br><br><ul class='nav'>";
+                      echo "<center>";
+                      echo "<li><a href='#tab".$p."'><center>"."Todos"."</center></a></li>";
+                      echo "<li><a href='#tabRegion1-".$p."'><center>"."Región 1"."</center></a></li>";
+                      echo "<li><a href='#tabRegion2-".$p."'><center>"."Región 4"."</center></a></li>";
+                      echo "</center>";
+                    echo "</ul>";
+                      echo "<div class='wrapperTable'>";
+                        //Tabla 1
+                        echo "<h2 class='under'>"."Porcentaje de avance región 1 ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla1']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          echo "<div class='row'>";
+                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla1']['linea'."1"]); $j++){
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['linea'."1"][$j]."</div>";
+                            }
+                          echo "</div>";
+                        echo "</div>";
+
+                        //Tabla 2
+                        echo "<h2 class='under'>"."Avance Departamentos región 1 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header green'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['ciudades']); $i++){
+                            if($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][0] == "Zona 1"){
+                              echo "<div class='row'>";
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['ciudades'][$i]."</div>";
+                                for ($j = 0; $j<count($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]]); $j++){
+                                  echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][$j]."</div>";
+                                }
+                              echo "</div>";
+                            }
+                          }
+                        echo "</div>";
+
+                        //Tabla 3
+                        echo "<h2 class='under'>"."Detalle de tickets región 1 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header blue'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
+                            if ($tablas[$meses[$p]]['tabla3']['lineas'][$i][2] == "Zona 1" ){
+                              echo "<div class='row'>";
+                                for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
+                                  if ($j == 6){
+                                    for($l = 0; $l < count($PVDs); $l++){
+                                      if($tablas[$meses[$p]]['tabla3']['lineas'][$i][4] == $PVDs[$l]->getId()){
+                                        echo "<div class='cell' ><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+                                        json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></div>";
+                                      }
+                                    }
+                                  } else {
+                                    if($j == 0){
+                                      if($tablas[$meses[$p]]['tabla3']['lineas'][$i][$j] != null){
+                                        echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."; '>&nbsp;</div></div>";
+                                      } else {
+                                        echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF; border: solid black 1px;'>&nbsp;</div></div>";
+                                      }
+                                    }else{
+                                      echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</div>";
+                                    }
+                                  }
+                                }
+                              echo "</div>";
+                            }
+                          }
+                        echo "</div>";
+                      echo "</div>";
+                    echo "</div>";
+                  }
+
+                  for ($p = 1; $p <= count($meses); $p++){
+                    echo "<div class='tab-content' id='tabRegion2-".$p."'>";
+                    echo "<br><br><br><ul class='nav'>";
+                      echo "<center>";
+                      echo "<li><a href='#tab".$p."'><center>"."Todos"."</center></a></li>";
+                      echo "<li><a href='#tabRegion1-".$p."'><center>"."Región 1"."</center></a></li>";
+                      echo "<li><a href='#tabRegion2-".$p."'><center>"."Región 4"."</center></a></li>";
+                      echo "</center>";
+                    echo "</ul>";
+                      echo "<div class='wrapperTable'>";
+                        //Tabla 1
+                        echo "<h2 class='under'>"."Porcentaje de avance región 4 ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla1']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          echo "<div class='row'>";
+                            for ($j = 0; $j<count($tablas[$meses[$p]]['tabla1']['linea'."2"]); $j++){
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla1']['linea'."2"][$j]."</div>";
+                            }
+                          echo "</div>";
+                        echo "</div>";
+
+                        //Tabla 2
+                        echo "<h2 class='under'>"."Avance Departamentos región 4 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header green'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla2']['ciudades']); $i++){
+                            if($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][0] == "Zona 4"){
+                              echo "<div class='row'>";
+                              echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2']['ciudades'][$i]."</div>";
+                                for ($j = 0; $j<count($tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]]); $j++){
+                                  echo "<div class='cell'>".$tablas[$meses[$p]]['tabla2'][$tablas[$meses[$p]]['tabla2']['ciudades'][$i]][$j]."</div>";
+                                }
+                              echo "</div>";
+                            }
+                          }
+                        echo "</div>";
+
+                        //Tabla 3
+                        echo "<h2 class='under'>"."Detalle de tickets región 4 mes de ".$meses[$p]."</h2>";
+                        echo "<div class='table'>";
+                          echo "<div class='row header blue'>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
+                            echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</div>";
+                          }
+                          echo "</div>";
+                          for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
+                            if ($tablas[$meses[$p]]['tabla3']['lineas'][$i][2] == "Zona 4" ){
+                              echo "<div class='row'>";
+                                for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
+                                  if ($j == 6){
+                                    for($l = 0; $l < count($PVDs); $l++){
+                                      if($tablas[$meses[$p]]['tabla3']['lineas'][$i][4] == $PVDs[$l]->getId()){
+                                        echo "<div class='cell' ><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+                                        json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></div>";
+                                      }
+                                    }
+                                  } else {
+                                    if($j == 0){
+                                      if($tablas[$meses[$p]]['tabla3']['lineas'][$i][$j] != null){
+                                        echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."; '>&nbsp;</div></div>";
+                                      } else {
+                                        echo "<div class='cell'><div style='width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF; border: solid black 1px;'>&nbsp;</div></div>";
+                                      }
+                                    }else{
+                                      echo "<div class='cell'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</div>";
+                                    }
+                                  }
+                                }
+                              echo "</div>";
+                            }
+                          }
+                        echo "</div>";
+                      echo "</div>";
+                    echo "</div>";
+                  }
                 }
               }
               ?>
@@ -219,6 +471,8 @@
       <!-- Fin tablas -->
 
     <?php
+    if($_SESSION['permissions'][1] == 1){
+      if(isset($MP)){
         echo "<script type='text/javascript'>PGEMP(".json_encode($MP).");</script>";
         echo "<script type='text/javascript'>PEMP(".json_encode($MP).");</script>";
         echo "<script type='text/javascript'>PGEMPln(".json_encode($MP).");</script>";
@@ -226,6 +480,8 @@
         if ($msg != ""){
           echo "<script type='text/javascript'>showMessage();</script>";
         }
+      }
+    }
     ?>
 
   	<div class="body4">
@@ -238,6 +494,107 @@
   <!-- content end -->
   		</div>
   	</div>
+
+
+        <!-- MODAL MP -->
+        <div id="myModal" class="modal fade" role="dialog">
+          <section id="contact">
+          			<div class="contact-section">
+          			<div class="container">
+          				<form>
+          					<div class="col-md-6 form-line">
+          			  			<div class="form-group">
+          			  				<label for="exampleInputUsername">Id PVD :</label>
+          					    	<input type="text" class="form-control" id="idpvd" name="idPVD" disabled="disabled">
+          				  		</div>
+          				  		<div class="form-group">
+          					    	<label for="exampleInputEmail">Región :</label>
+          					    	<input type="email" class="form-control" id="region" name="region" disabled="disabled">
+          					  	</div>
+          					  	<div class="form-group">
+          					    	<label for="telephone">Departamento :</label>
+          					    	<input type="tel" class="form-control" id="departamento" name="dep" disabled="disabled">
+          			  			</div>
+          					  	<div class="form-group">
+          					    	<label for="telephone">Ciudad :</label>
+          					    	<input type="tel" class="form-control" id="ciudad" name="ciudad" disabled="disabled">
+          			  			</div>
+          					  	<div class="form-group">
+          					    	<label for="telephone">Dirección :</label>
+          					    	<input type="tel" class="form-control" id="direccion" name="direccion" disabled="disabled">
+          			  			</div>
+          					  	<div class="form-group">
+          					    	<label for="telephone">Tipologia :</label>
+          					    	<input type="tel" class="form-control" id="tipo" name="tipo" disabled="disabled">
+          			  			</div>
+          			  	</div>
+                    <div class="col-md-6 form-line">
+          			  			<div class="form-group">
+          			  				<label for="exampleInputUsername">Id Ticket :</label>
+          					    	<input type="text" class="form-control" id="idticket" name="idticket" disabled="disabled">
+          				  		</div>
+          				  		<div class="form-group">
+          					    	<label for="exampleInputEmail">Estado :</label>
+          					    	<input type="email" class="form-control" id="estado" name="estado" disabled="disabled">
+          					  	</div>
+          					  	<div class="form-group">
+          					    	<label for="telephone">Fecha Inicio :</label>
+          					    	<input type="tel" class="form-control" id="fechai" name="fechai" disabled="disabled">
+          			  			</div>
+          					    <div class="form-group">
+          					    	<label for="telephone">Fecha Fin :</label>
+          					    	<input type="tel" class="form-control" id="fechaf" name="fechaf" disabled="disabled">
+          			  			</div>
+                        <div class="form-group">
+          					    	<label for="telephone">Duración :</label>
+          					    	<input type="tel" class="form-control" id="duracion" name="duracion" disabled="disabled">
+          			  			</div>
+          			  	</div>
+                    <div class="col-md-6 form-line">
+                        <div class="form-group">
+                          <label for="exampleInputUsername">Técnico IT :</label>
+                          <input type="text" class="form-control" id="tit" name="tit" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputEmail">Auxiliar IT :</label>
+                          <input type="email" class="form-control" id="ait" name="ait" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                          <label for="telephone">Fecha Inicio IT :</label>
+                          <input type="tel" class="form-control" id="fechaiit" name="fechaiit" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                          <label for="telephone">Fecha Fin IT :</label>
+                          <input type="tel" class="form-control" id="fechafit" name="fechafit" disabled="disabled">
+                        </div>
+                    </div>
+          			  	<div class="col-md-6">
+                      <div class="form-group">
+                        <label for="exampleInputUsername">Técnico AA :</label>
+                        <input type="text" class="form-control" id="taa" name="taa" disabled="disabled">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail">Auxiliar AA :</label>
+                        <input type="email" class="form-control" id="aaa" name="aaa" disabled="disabled">
+                      </div>
+                      <div class="form-group">
+                        <label for="telephone">Fecha Inicio AA :</label>
+                        <input type="tel" class="form-control" id="fechaiaa" name="fechaiaa" disabled="disabled">
+                      </div>
+                      <div class="form-group">
+                        <label for="telephone">Fecha Fin AA :</label>
+                        <input type="tel" class="form-control" id="fechafaa" name="fechafaa" disabled="disabled">
+                      </div>
+                      <br><br><br><br><br><br>
+                        <button type="button" class="btn btn-default submit" data-dismiss="modal"><i class="fa fa-paper-plane" aria-hidden="true"></i> Volver</button>
+          					</div>
+          				</form>
+          			</div>
+              </div>
+
+          		</section>
+            </div>
+
     <script type="text/javascript"> Cufon.now(); </script>
     <script>
     	$(document).ready(function() {

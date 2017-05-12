@@ -1,8 +1,8 @@
 
 .wrapperTable {
   margin: 0 auto;
-  padding: 40px;
-  max-width: 800px;
+  padding: 1px;
+  max-width: 900px;
 }
 
 .table {
@@ -10,10 +10,9 @@
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: table;
-  display: block;
-  overflow-x: scroll;
 }
-@media screen and (max-width: 580px) {
+
+@media screen and (max-width: 900px) {
   .table {
     display: block;
   }

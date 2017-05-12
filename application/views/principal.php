@@ -63,7 +63,7 @@
 									echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
 								}
 								if($_SESSION['permissions'][5] == 1){
-									echo "<li id='nav5'><a href='#''>ZTE<span>Plataforma</span></a></li>";
+									echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
 								}
 							}
             ?>
@@ -76,8 +76,9 @@
 					<div class="slider">
 					  	<div class="rslides_container">
 							<ul class="rslides" id="slider">
-								<li><img src="/AdminZTE/assets/images/imagenRotativa1.gif" alt=""></li>
+								<li><img src="/AdminZTE/assets/images/imagenRotativa4.png" alt=""></li>
 								<li><img src="/AdminZTE/assets/images/imagenRotativa3.png" alt=""></li>
+								<li><img src="/AdminZTE/assets/images/imagenRotativa5.png" alt=""></li>
 							</ul>
 						</div>
 					</div>

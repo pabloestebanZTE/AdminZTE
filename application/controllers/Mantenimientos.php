@@ -29,6 +29,7 @@ class Mantenimientos extends CI_Controller {
             $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
           }
         }
+        $respuesta['PVDs'] = $PVDs;
         $respuesta['MP'] = $this->arregloGraficasMP($PVDs);
         $respuesta['tablas'] = $this->arregloTablas($respuesta['MP']);
         if ($GLOBALS['$msgJS'] != ""){
@@ -51,76 +52,117 @@ class Mantenimientos extends CI_Controller {
     }
 
     function updateMP(){
-    //  print_r($_POST);
-      $mantenimientos = $_POST['cantidad'];
-      for($i = 0; $i<=$mantenimientos+1;$i++){
-        if ($_POST[$i."-1"] != ""){
-          $mantenimiento = new maintenance_model();
-          $ticket =  new ticket_model();
-          $mantenimiento = $mantenimiento->createMaintenance($_POST[$i."-7"],"","",$_POST[$i."-1"]);
-          $this->dao_maintenance_model->updateDateManPre($mantenimiento);
-          if($_POST[$i."-3"] == "Ejecutado" || $_POST[$i."-3"] == "En Progreso" || $_POST[$i."-3"] == "Cancelado"){
-            if($_POST[$i."-8"] != "" && $_POST[$i."-12"] != ""){
-              $date1=date_create($_POST[$i."-8"]);
-              $date2=date_create($_POST[$i."-12"]);
-              $diff=date_diff($date1,$date2);
-              $diff = $diff->format("%R%a days")[0];
-              if($diff == "+" ){
-                $dateStart = $_POST[$i."-12"];
-              } else {
-                $dateStart = $_POST[$i."-8"];
-              }
-            }
-
-            if($_POST[$i."-9"] != "" && $_POST[$i."-13"] != ""){
-              $date1=date_create($_POST[$i."-9"]);
-              $date2=date_create($_POST[$i."-13"]);
-              $diff=date_diff($date1,$date2);
-              $diff = $diff->format("%R%a days")[0];
-              if($diff == "+" ){
-                $dateFinish = $_POST[$i."-13"];
-              } else {
-                $dateFinish = $_POST[$i."-9"];
-              }
-            }
-
-            if($_POST[$i."-8"] == "" && $_POST[$i."-12"] != ""){
+    $mantenimientos = $_POST['cantidad'];
+    for($i = 0; $i<=$mantenimientos+1;$i++){
+      if ($_POST[$i."-1"] != ""){
+        $mantenimiento = new maintenance_model();
+        $ticket =  new ticket_model();
+        $mantenimiento = $mantenimiento->createMaintenance($_POST[$i."-7"],"","",$_POST[$i."-1"]);
+        $this->dao_maintenance_model->updateDateManPre($mantenimiento);
+        $dateStart = NULL;
+        $dateFinish = NULL;
+        if($_POST[$i."-3"] == "Ejecutado" || $_POST[$i."-3"] == "En Progreso" || $_POST[$i."-3"] == "Cancelado"){
+          if($_POST[$i."-8"] != "" && $_POST[$i."-12"] != ""){
+            $date1=date_create($_POST[$i."-8"]);
+            $date2=date_create($_POST[$i."-12"]);
+            $diff=date_diff($date1,$date2);
+            $diff = $diff->format("%R%a days")[0];
+            if($diff == "+" ){
+              $dateStart = $_POST[$i."-8"];
+            } else {
               $dateStart = $_POST[$i."-12"];
             }
-            if($_POST[$i."-8"] != "" && $_POST[$i."-12"] == ""){
-              $dateStart = $_POST[$i."-8"];
-            }
-            if($_POST[$i."-9"] == "" && $_POST[$i."-13"] != ""){
+          }
+
+          if($_POST[$i."-9"] != "" && $_POST[$i."-13"] != ""){
+            $date1=date_create($_POST[$i."-9"]);
+            $date2=date_create($_POST[$i."-13"]);
+            $diff=date_diff($date1,$date2);
+            $days = $diff->format("%R%a days");
+            $diff = $diff->format("%R%a days")[0];
+            if($diff == "+" ){
               $dateFinish = $_POST[$i."-13"];
-            }
-            if($_POST[$i."-9"] != "" && $_POST[$i."-13"] == ""){
+            } else {
               $dateFinish = $_POST[$i."-9"];
             }
+          }
 
-            $date1=$dateStart;
-            $date2=$dateFinish;
-            $diff=date_diff($date1,$date2);
-            print_r($diff);
+          if($_POST[$i."-8"] == "" && $_POST[$i."-12"] != ""){
+            $dateStart = $_POST[$i."-12"];
+          }
+          if($_POST[$i."-8"] != "" && $_POST[$i."-12"] == ""){
+            $dateStart = $_POST[$i."-8"];
+          }
 
-            if($diff != NULL){
-              echo "o.o";
-              $diff = $diff->format("%R%a days");
+          if ($_POST[$i."-3"] == "Cancelado"){
+            $color = "000000";
+          }
+          if ($_POST[$i."-3"] == "Ejecutado"){
+            $color = "3399FF";
+          }
+          if ($_POST[$i."-3"] == "En Progreso"){
+
+            $color = "00CC00";
+          }
+
+
+          $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "");
+          $duration = $ticket->calculateDuration();
+          $ticket->setDuracion($duration);
+          $color = "FFFFFF";
+          if ($_POST[$i."-3"] == "Cancelado"){
+            $color = "000000";
+          }
+          if ($_POST[$i."-3"] == "Ejecutado"){
+            $color = "3399FF";
+          }
+          if ($_POST[$i."-3"] == "En Progreso"){
+            if($duration <=  2){
+              $color = "00CC00";
             }
-
-            $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "");
-            /*
-            $oldTicket = $this->dao_ticket_model->getTicketByID($ticket->getId());
-            if($oldTicket == "No ticket"){
-              $this->dao_ticket_model->insertTicket($ticket, $ticket->getStatus());
-            } else {
-              $this->dao_ticket_model->updateTicket($ticket, $ticket->getStatus());
+            if($duration > 2 && $duracion <= 4){
+              $color = "FFFF00";
             }
-            $mantenimiento->setTicket($ticket);*/
+            if($duration > 4 && $duracion <= 6){
+              $color = "660066";
+            }
+            if($duration > 6){
+              $color = "FF0000";
+            }
+          }
+          $ticket->setColor($color);
+          $oldTicket = $this->dao_ticket_model->getTicketByID($ticket->getId());
+          if($oldTicket == "No ticket"){
+            $this->dao_ticket_model->insertTicket($ticket, $ticket->getStatus());
+          } else {
+            $this->dao_ticket_model->updateTicket($ticket, $ticket->getStatus());
+          }
+          $mantenimiento->setTicket($ticket);
+        }
+        if($_POST[$i."-10"] != -1){
+          if($_POST[$i."-10"] != ""){
+            $this->dao_ticket_model->insertTech($ticket->getId(), explode("/",$_POST[$i."-10"])[1], "IT-T");
+          }
+        }
+        if($_POST[$i."-11"] != -1){
+          if($_POST[$i."-11"] != ""){
+            $this->dao_ticket_model->insertTech($ticket->getId(), explode("/",$_POST[$i."-11"])[1], "IT-A");
+          }
+        }
+        if($_POST[$i."-14"] != -1){
+          if($_POST[$i."-14"] != ""){
+            $this->dao_ticket_model->insertTech($ticket->getId(), explode("/",$_POST[$i."-14"])[1], "AA-T");
+          }
+        }
+        if($_POST[$i."-15"] != -1){
+          if($_POST[$i."-15"] != ""){
+            $this->dao_ticket_model->insertTech($ticket->getId(), explode("/",$_POST[$i."-15"])[1], "AA-A");
           }
         }
       }
-      $this->editarMP();
     }
+    $this->editarMP();
+  }
 
     function actualizarMP(){
         $excel = new fileManager;
@@ -164,7 +206,7 @@ class Mantenimientos extends CI_Controller {
       $tabla2['Titulos'][3] = "Ejecutado";
       $tabla2['Titulos'][4] = "En Progreso";
       $tabla2['Titulos'][5] = "Ejecutado + Progreso";
-      $tabla2['Titulos'][6] = "% En Progreso";
+      $tabla2['Titulos'][6] = "% Ejecución";
       $tabla2['Titulos'][7] = "%(Ejec.+Prog.)";
 
       $counter = 0;
@@ -217,7 +259,7 @@ class Mantenimientos extends CI_Controller {
       for ($i = 0; $i<count($MP[$mes])-2;$i++){
         for($j = 0; $j < count($ciudades); $j++){
           $tabla2[$ciudades[$j]][4] = $tabla2[$ciudades[$j]][3] + $tabla2[$ciudades[$j]][2];
-          $tabla2[$ciudades[$j]][5] = number_format((float) 100/$tabla2[$ciudades[$j]][1]*$tabla2[$ciudades[$j]][3], $precision, '.', '');
+          $tabla2[$ciudades[$j]][5] = number_format((float) 100/$tabla2[$ciudades[$j]][1]*$tabla2[$ciudades[$j]][2], $precision, '.', '');
           $tabla2[$ciudades[$j]][6] = number_format((float) 100/$tabla2[$ciudades[$j]][1]*$tabla2[$ciudades[$j]][4], $precision, '.', '');
         }
       }
@@ -225,30 +267,32 @@ class Mantenimientos extends CI_Controller {
     }
 
     function detalleTickets($MP, $mes){
-      $tabla3['Titulos'][0] = "Item";
-      $tabla3['Titulos'][1] = "Región ";
-      $tabla3['Titulos'][2] = "Departamento / Ciudad";
-      $tabla3['Titulos'][3] = "PVD";
-      $tabla3['Titulos'][4] = "Tipo";
-      $tabla3['Titulos'][5] = "Ticket";
-      $tabla3['Titulos'][6] = "Inicio";
-      $tabla3['Titulos'][7] = "Fin";
-      $tabla3['Titulos'][8] = "Días";
-      $tabla3['Titulos'][9] = "Estado";
+      $tabla3['Titulos'][0] = "";
+      $tabla3['Titulos'][1] = "Item";
+      $tabla3['Titulos'][2] = "Región ";
+      $tabla3['Titulos'][3] = "Departamento / Ciudad";
+      $tabla3['Titulos'][4] = "PVD";
+      $tabla3['Titulos'][5] = "Tipo";
+      $tabla3['Titulos'][6] = "Ticket";
+      $tabla3['Titulos'][8] = "Inicio";
+      $tabla3['Titulos'][9] = "Fin";
+      $tabla3['Titulos'][10] = "Días";
+      $tabla3['Titulos'][7] = "Estado";
 
       $contador = 0;
       for ($i = 0; $i<count($MP[$mes])-2;$i++){
         if ($MP[$mes][$i]['mantenimiento']->getTicket() != 'No Ticket'){
-            $tabla3['lineas'][$contador][0] = $contador+1;
-            $tabla3['lineas'][$contador][6] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDateS();
-            $tabla3['lineas'][$contador][7] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDateF();
-            $tabla3['lineas'][$contador][8] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDuracion();
-            $tabla3['lineas'][$contador][1] = $MP[$mes][$i]['region'];
-            $tabla3['lineas'][$contador][9] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus();
-            $tabla3['lineas'][$contador][5] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getId();
-            $tabla3['lineas'][$contador][3] = $MP[$mes][$i]['idPVD'];
-            $tabla3['lineas'][$contador][4] = $MP[$mes][$i]['tipologia'];
-            $tabla3['lineas'][$contador][2] = $MP[$mes][$i]['departamento']." / ".$MP[$mes][$i]['ciudad'];
+            $tabla3['lineas'][$contador][1] = $contador+1;
+            $tabla3['lineas'][$contador][8] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDateS();
+            $tabla3['lineas'][$contador][9] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDateF();
+            $tabla3['lineas'][$contador][10] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getDuracion();
+            $tabla3['lineas'][$contador][2] = $MP[$mes][$i]['region'];
+            $tabla3['lineas'][$contador][7] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus();
+            $tabla3['lineas'][$contador][6] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getId();
+            $tabla3['lineas'][$contador][4] = $MP[$mes][$i]['idPVD'];
+            $tabla3['lineas'][$contador][5] = $MP[$mes][$i]['tipologia'];
+            $tabla3['lineas'][$contador][3] = $MP[$mes][$i]['departamento']." / ".$MP[$mes][$i]['ciudad'];
+            $tabla3['lineas'][$contador][0] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getColor();
             $contador++;
         }
       }
@@ -256,14 +300,13 @@ class Mantenimientos extends CI_Controller {
     }
 
     function resumenPreventivosMes($MP, $mes){
-
       $precision = 2;
       $tabla1['Titulos'][0] = "Región";
       $tabla1['Titulos'][1] = "Planeado";
       $tabla1['Titulos'][2] = "Ejecutado";
       $tabla1['Titulos'][3] = "En Progreso";
       $tabla1['Titulos'][4] = "Ejecutado + Progreso";
-      $tabla1['Titulos'][5] = "% de Ejecución";
+      $tabla1['Titulos'][5] = "% Ejecución";
       $tabla1['Titulos'][6] = "% (Ejecución + Progreso)";
 
       $tabla1['linea1'][0]='Región 1';
@@ -287,7 +330,8 @@ class Mantenimientos extends CI_Controller {
       $tabla1['linea3'][2]= $tabla1['linea2'][2]+$tabla1['linea1'][2];
       $tabla1['linea3'][3]= $tabla1['linea2'][3]+$tabla1['linea1'][3];
       $tabla1['linea3'][4]= $tabla1['linea2'][4]+$tabla1['linea1'][4];
-
+      $tabla1['linea3'][5]= number_format((float) (100/($tabla1['linea2'][1]+$tabla1['linea1'][1]))*($tabla1['linea2'][2]+$tabla1['linea1'][2]), $precision, '.', '');
+      $tabla1['linea3'][6]= number_format((float) (100/($tabla1['linea2'][1]+$tabla1['linea1'][1]))*($tabla1['linea2'][2]+$tabla1['linea1'][2]+$tabla1['linea1'][3]+$tabla1['linea2'][3]), $precision, '.', '');
 
       return $tabla1;
     }

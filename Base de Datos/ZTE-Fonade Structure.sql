@@ -278,7 +278,7 @@ create table TICKET
    K_IDTICKET           varchar(14) not null,
    K_IDMAINTENANCE      int,
    K_IDSTATUSTICKET     int,
-   D_STARTDATE          date not null,
+   D_STARTDATE          date,
    D_FINISHDATE         date,
    I_DURATION           numeric(2,0),
    D_STARTDATEAA        date,
