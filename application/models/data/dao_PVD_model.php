@@ -45,6 +45,10 @@
                     $row2 = $result2->fetch_assoc();
                     $PVD = new PVD_model();
                     $PVD = $PVD->createPVD($row['K_IDPVD'], $row2['cn'], $row2['dn'], $row2['rn'], $row['N_DIRECCION'], $row['N_FASE]'], $row['N_TIPOLOGIA']);
+                    $sql3 = "SELECT * from admin_pvd where K_IDADMIN =". $row['K_IDADMIN'].";";
+                    $result3 = $session->query($sql3);
+                    $row3 = $result3->fetch_assoc();
+                    $PVD->setAdmin($row3);
                     $respuesta[$i] = $PVD;
                     $i++;
                   }

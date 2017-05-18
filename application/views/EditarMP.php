@@ -270,10 +270,13 @@
                                 echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getCity()."</div>";
                                 echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getId()."</div>";
                                 if($PVDs[$i]->getMaintenance() != NULL){
+
+
                                   echo "<div class='cell'><input style='font-size:12px' id='".$i."-1' size='9' type='date' name='".$i."-1' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getDate()."'></div>";
                                   if($PVDs[$i]->getMaintenance()[0]->getTicket() != "No Ticket"){
                                     echo "<input id='".$i."-2' name='".$i."-2' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."'>";
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."</div>";
+                              
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Ejecutado"){
                                       echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
                                     }
@@ -282,6 +285,9 @@
                                     }
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Cancelado"){
                                       echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option>Ejecutado</option><option selected>En Progreso</option><option selected>Cancelado</option></select></div>";
+                                    }
+                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Abierto"){
+                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Abierto</option><option>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
                                     }
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSIT()."'></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFIT()."'></div>";

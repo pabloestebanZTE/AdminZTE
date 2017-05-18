@@ -100,29 +100,34 @@
                     echo "<label data-wheelnav-navitemtext='Procedimientos'>Elemento 2</label><br/>";
                     echo "<button data-wheelnav-navitemtext='Calidad' >Elemento 1</button>";
                 echo "</div>";
-                echo "<br><br>";
-                if($_SESSION['permissions'][10] == 1){
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/downloadFile' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar</button></form></form></td>";
-                }
-                echo "<a href='/AdminZTE/index.php/KPI/getKPIperSource' class='btn btn-primary' role='button' > Calificar KPI´s</a>";
-                if (isset($KPIsPP)){
+                if (isset($kpis)){
+                  echo "<a href='/AdminZTE/index.php/KPI/exportXL' class='btn btn-primary' role='button' >Ver KPI´s </a>";
+
                   echo "<div class='wrapper tabs'>";
                     echo "<br>";
-                    echo "<h2 class='under'>"."Lista de KPI´s para evaluar"."</h2>";
+                    echo "<h2 class='under'>"."Lista de KPI´s"."</h2>";
                     echo "<div class='table'>";
                       echo "<div class='row header'>";
                         echo "<div class='cell'>Nombre</div>";
                         echo "<div class='cell'>Descripcion</div>";
                       echo "</div>";
-                      for ($i = 0; $i<count($KPIsPP); $i++){
+                      for ($i = 1; $i<count($kpis); $i++){
                         echo "<div class='row'>";
-                          echo "<div class='cell'><a href='/AdminZTE/index.php/KPI/evaluateKPI?k_kpi=".$KPIsPP[$i]['K_IDKPI']."'>".$KPIsPP[$i]['N_NAME']."</a></div>";
-                          echo "<div class='cell'>".$KPIsPP[$i]['N_DESCRIPTION']."</div>";
+                          echo "<div class='cell'><a href='/AdminZTE/index.php/KPI/evaluateKPI?k_kpi=".$kpis[$i]['K_IDKPI']."'>".$kpis[$i]['N_NAME']."</a></div>";
+                          echo "<div class='cell'>".$kpis[$i]['N_DESCRIPTION']."</div>";
                         echo "</div>";
                       }
                     echo "</div>";
                   echo "</div>";
                 }
+
+
+                for($i = 0; $i< count($kpis); $i++){
+                  print_r($kpis[$i]);
+                  echo "<br><br>";
+                }
+
+
               }
               if ($msj != ""){
                 echo "<script type='text/javascript'>showMessage();</script>";

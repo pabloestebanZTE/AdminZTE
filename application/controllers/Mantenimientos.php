@@ -61,7 +61,7 @@ class Mantenimientos extends CI_Controller {
         $this->dao_maintenance_model->updateDateManPre($mantenimiento);
         $dateStart = NULL;
         $dateFinish = NULL;
-        if($_POST[$i."-3"] == "Ejecutado" || $_POST[$i."-3"] == "En Progreso" || $_POST[$i."-3"] == "Cancelado"){
+        if($_POST[$i."-3"] == "Ejecutado" || $_POST[$i."-3"] == "En Progreso" || $_POST[$i."-3"] == "Cancelado" || $_POST[$i."-3"] == "Abierto"){
           if($_POST[$i."-8"] != "" && $_POST[$i."-12"] != ""){
             $date1=date_create($_POST[$i."-8"]);
             $date2=date_create($_POST[$i."-12"]);

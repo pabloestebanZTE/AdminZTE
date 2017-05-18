@@ -12,7 +12,6 @@
         }
 
         public function getTicketsPerMaintenance($id){
-
             $dbConnection = new configdb_model();
             $session = $dbConnection->openSession();
             $sql = "SELECT * FROM ticket where K_IDMAINTENANCE = ".$id.";";
@@ -23,9 +22,9 @@
                 while($row = $result->fetch_assoc()) {
                     $ticket = new ticket_model();
                     $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+
                     $result2 = $session->query($sql2);
                     $row2 = $result2->fetch_assoc();
-
                     $sql3 = "SELECT * FROM ticket_user where K_IDTICKET = '".$row['K_IDTICKET']."';";
                     $result3 = $session->query($sql3);
                     while($row3 = $result3->fetch_assoc()) {
@@ -201,8 +200,17 @@
               $session = $dbConnection->openSession();
               $sql = "insert into ticket_user (K_IDTICKET, K_IDUSER, N_TYPE)
                 values ('".$ticket."',".$user.",'".$type."');";
-                echo $sql;
               $session->query($sql);
+            }
+
+            public function ticketQuantity(){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT COUNT(K_IDTICKET) from ticket;";
+              $result = $session->query($sql);
+              $row = $result->fetch_assoc();
+              print_r($row['COUNT(K_IDTICKET)']);
+              return $row['COUNT(K_IDTICKET)'];
             }
 
         }

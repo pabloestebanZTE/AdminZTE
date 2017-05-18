@@ -2,6 +2,7 @@
 
 $msj = "";
 defined('BASEPATH') OR exit('No direct script access allowed');
+include 'PHPExcel-1.8/Classes/PHPExcel.php';       // include the class
 
 class KPI extends CI_Controller {
 
@@ -17,10 +18,8 @@ class KPI extends CI_Controller {
     public function KPIList(){
       echo "o.o";
       $KPIs = $this->dao_kpi_model->getAllKPI();
-      for($i = 0; $i< count($KPIs); $i++){
-        print_r($KPIs[$i]);
-        echo "<br><br>";
-      }
+      $respuesta['kpis'] = $KPIs;
+      $this->load->view('kpiAdmin', $respuesta);
     }
 
     public function getKPIperSource(){
@@ -39,11 +38,17 @@ class KPI extends CI_Controller {
 
     public function updateKPI(){
       $index = 0;
+      $cell['cell1'] = $_POST['cell1']."<br>";
+      $cell['cell2'] = $_POST['cell2']."<br>";
+      $cell['cell3'] = $_POST['cell3']."<br>";
+      $cell['kpi'] = $_POST['kpi']."<br>";
+
       for($i = 0; $i < $_POST['cantidadY']; $i++){
         for($j = 0; $j < 12; $j++){
           for($k = 0; $k < $_POST['cantidadU']; $k++){
             if($_POST['idKPI-'.$i."-".$j."-".$k]){
               $kpi[$index]['id'] = $_POST['idKPI-'.$i."-".$j."-".$k];
+              $kpi[$index]['name'] = $_POST['name-'.$i."-".$j."-".$k];
               if($_POST['field-'.$i."-".$j."-".$k."-1"] != null){
                 $kpi[$index]['value1'] = $_POST['field-'.$i."-".$j."-".$k."-1"]."<br>";
               }
@@ -58,7 +63,7 @@ class KPI extends CI_Controller {
           }
         }
       }
-
+      $respuesta = $this->exportXL($kpi, $cell);
       $respuesta = $this->dao_kpi_model->updateKPIResuelto($kpi);
       if ($respuesta == "false"){
         $GLOBALS['$msj'][0] = "Algo salio mal";
@@ -71,6 +76,75 @@ class KPI extends CI_Controller {
       }
       $this->getKPIperSource();
     }
+
+    public function exportXL($kpi, $cell){
+      for ($i = 0; $cell['kpi'][$i] != "<"; $i++){
+        $q = $q.$cell['kpi'][$i];
+      }
+      $objPHPExcel = PHPExcel_IOFactory::load("archivos/KPI.xlsx");
+      $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(0, 1,  'nombre');
+      $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(1, 1, $cell['cell1']." ");
+      $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(2, 1, $cell['cell2']." ");
+      $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(3, 1, $cell['cell3']." ");
+      for($i = 0; $i < count($kpi); $i++){
+        $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(0, $i+2, $kpi[$i]['name']);
+
+        if($kpi[$i]['value1'] != NULL){
+          $m = "";
+          for ($x = 0; $kpi[$i]['value1'][$x] != "<"; $x++){
+            $m = $m.$kpi[$i]['value1'][$x];
+          }
+          $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(1, $i+2, $m);
+        }
+        if($kpi[$i]['value2'] != NULL){
+          $m = "";
+          for ($x = 0; $kpi[$i]['value2'][$x] != "<"; $x++){
+            $m = $m.$kpi[$i]['value2'][$x];
+          }
+          $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(2, $i+2, $m);
+        }
+        if($kpi[$i]['value3'] != NULL){
+          $m = "";
+          for ($x = 0; $kpi[$i]['value3'][$x] != "<"; $x++){
+            $m = $m.$kpi[$i]['value3'][$x];
+          }
+          $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(3, $i+2, $m);
+        }
+      }
+      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+      $objWriter->save("archivos/KPI.xlsx");
+    }
+
+
+    function downloadFile() {
+      $path = "archivos/"; // change the path to fit your websites document structure
+      $dl_file = preg_replace("([^\w\s\d\-_~,;:\[\]\(\).]|[\.]{2,})", '', 'KPI.xlsx'); // simple file name validation
+      $fullPath = "archivos/KPI.xlsx";
+
+      if ($fd = fopen ($fullPath, "r")) {
+          $fsize = filesize($fullPath);
+          $path_parts = pathinfo($fullPath);
+          $ext = strtolower($path_parts["extension"]);
+          switch ($ext) {
+              case "pdf":
+              header("Content-type: application/pdf");
+              header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\""); // use 'attachment' to force a file download
+              break;
+              default;
+              header("Content-type: application/octet-stream");
+              header("Content-Disposition: filename=\"".$path_parts["basename"]."\"");
+              break;
+          }
+          header("Content-length: $fsize");
+          header("Cache-control: private"); //use this to open files directly
+          while(!feof($fd)) {
+              $buffer = fread($fd, 2048);
+              echo $buffer;
+          }
+      }
+      fclose ($fd);
+      exit;
+  }
 
 }
 

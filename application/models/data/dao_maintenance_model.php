@@ -11,8 +11,24 @@
             $this->load->model('data/configdb_model');
         }
 
-        public function getManPrePerPVD($id){
+        public function createMaintenance($maintenance){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
 
+          $sql = "INSERT into maintenance (K_IDPVD, K_IDMAINTENANCET, D_STARTDATE) values (".$maintenance->getIdPVD().",1,STR_TO_DATE('".$maintenance->getDate()."', '%Y-%m-%d'));";
+          $session->query($sql);
+
+          $sql2= "SELECT * from maintenance where K_IDPVD = ".$maintenance->getIdPVD().";";
+          $result = $session->query($sql2);
+          if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+              $maint = $row;
+            }
+          }
+          return $maint['K_IDMAINTENANCE'];
+        }
+
+        public function getManPrePerPVD($id){
             $dbConnection = new configdb_model();
             $session = $dbConnection->openSession();
             $sql = "SELECT * FROM maintenance where K_IDMAINTENANCET = 1 and K_IDPVD = ".$id.";";
