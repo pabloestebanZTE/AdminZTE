@@ -12,6 +12,7 @@ class KPI extends CI_Controller {
     }
 
     public function KPIPrincial(){
+      echo "hola";
       $this->load->view('viewKPI');
     }
 

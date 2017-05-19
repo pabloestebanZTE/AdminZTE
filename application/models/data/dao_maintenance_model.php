@@ -14,17 +14,23 @@
         public function createMaintenance($maintenance){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
+          if ($session != "false"){
+            $sql = "INSERT into maintenance (K_IDPVD, K_IDMAINTENANCET, D_STARTDATE) values (".$maintenance->getIdPVD().",1,STR_TO_DATE('".$maintenance->getDate()."', '%Y-%m-%d'));";
+            $session->query($sql);
 
-          $sql = "INSERT into maintenance (K_IDPVD, K_IDMAINTENANCET, D_STARTDATE) values (".$maintenance->getIdPVD().",1,STR_TO_DATE('".$maintenance->getDate()."', '%Y-%m-%d'));";
-          $session->query($sql);
-
-          $sql2= "SELECT * from maintenance where K_IDPVD = ".$maintenance->getIdPVD().";";
-          $result = $session->query($sql2);
-          if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-              $maint = $row;
+            $sql2= "SELECT * from maintenance where K_IDPVD = ".$maintenance->getIdPVD().";";
+            $result = $session->query($sql2);
+            if ($result->num_rows > 0) {
+              while($row = $result->fetch_assoc()) {
+                $maint = $row;
+              }
+            } else {
+                $maint['K_IDMAINTENANCE'] = "No existe mantenimiento";
             }
+          } else {
+            $maint['K_IDMAINTENANCE'] = "Error de informacion";
           }
+
           return $maint['K_IDMAINTENANCE'];
         }
 

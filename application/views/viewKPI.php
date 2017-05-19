@@ -96,9 +96,11 @@
             <?php
               if($_SESSION['permissions'][5] == 1){
                 echo "<div id='divWheelnav' class='wheelNav' data-wheelnav data-wheelnav-slicepath='PieArrowSlice' data-wheelnav-colors='#00A3EE,#F5D908,#9C1A5B' data-wheelnav-navangle='90'>";
-                    echo "<div data-wheelnav-navitemtext='KPIs'><a href='/AdminZTE/index.php/KPI/KPIPrincial'>href</a></div>";
+                    echo "<div data-wheelnav-navitemtext='Tickets'><a href='/AdminZTE/index.php/Ticket/TicketPrincial'>href</a></div>";
                     echo "<label data-wheelnav-navitemtext='Procedimientos'>Elemento 2</label><br/>";
-                    echo "<button data-wheelnav-navitemtext='Calidad' >Elemento 1</button>";
+                    echo "<div data-wheelnav-navitemtext='Tickets'><a href='/AdminZTE/index.php/Ticket/TicketPrincial'>href</a></div>";
+                    echo "<div data-wheelnav-navitemtext='KPIs'><a href='/AdminZTE/index.php/KPI/KPIPrincial'>href</a></div>";
+
                 echo "</div>";
                 echo "<br><br>";
                 if($_SESSION['permissions'][10] == 1){

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/styleMenu.css">
     <link href="/AdminZTE/assets/css/index.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet">
@@ -41,7 +40,6 @@
         window.onload = function () {
             new wheelnav("divWheelnav");
         };
-
     </script>
 
   </head>
@@ -96,7 +94,7 @@
             <?php
               if($_SESSION['permissions'][5] == 1){
                 echo "<div id='divWheelnav' class='wheelNav' data-wheelnav data-wheelnav-slicepath='PieArrowSlice' data-wheelnav-colors='#9C1A5B,#F5D908,#00A3EE' data-wheelnav-navangle='90'>";
-                  echo "<label data-wheelnav-navitemtext='Procedimientos'>Elemento 2</label><br />";
+                  echo "<div data-wheelnav-navitemtext='Tickets'><a href='/AdminZTE/index.php/Ticket/TicketPrincial'>href</a></div>";
                   echo "<div data-wheelnav-navitemtext='Tickets'><a href='/AdminZTE/index.php/Ticket/TicketPrincial'>href</a></div>";
                   echo "<div data-wheelnav-navitemtext='KPIs'><a href='/AdminZTE/index.php/KPI/KPIPrincial'>href</a></div>";
                 echo "</div>";
@@ -116,7 +114,6 @@
   <!-- content end -->
   		</div>
   	</div>
-    <script type="text/javascript" src="/AdminZTE/assets/js/index.js"></script>
     <script type="text/javascript"> Cufon.now(); </script>
     <script>
     	$(document).ready(function() {

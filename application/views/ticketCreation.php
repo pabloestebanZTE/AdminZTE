@@ -28,6 +28,8 @@
 <script type="text/javascript" src="/AdminZTE/assets/js/dist/wheelnav.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
 <link href="/AdminZTE/assets/css/index.css" rel="stylesheet">
+<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
 
     window.onload = function () {
@@ -37,6 +39,15 @@
 </script>
 
 <script>
+
+    function showMessage(){
+
+        var a = "<?php echo $msj[0]; ?>";
+        var b = "<?php echo $msj[1]; ?>";
+        var c = "<?php echo $msj[2]; ?>";
+        sweetAlert(a, b, c);
+    }
+
     function fillInputs(){
       var e = document.getElementById("pvd");
       var valorOption = e.options[e.selectedIndex].value;
@@ -212,6 +223,10 @@
                 echo "<div data-wheelnav-navitemtext='KPIs'><a href='/AdminZTE/index.php/KPI/KPIPrincial'>href</a></div>";
                 echo "<label data-wheelnav-navitemtext='Procedimientos'>Elemento 2</label><br />";
               echo "</div>";
+
+              if ($msj != ""){
+                echo "<script type='text/javascript'>showMessage();</script>";
+              }
             }
            ?>
           <section class="col-4-4">
@@ -282,7 +297,7 @@
                         }
                       echo "</select>";
                     ?>
-                    <input type="submit" value="Enviar" onclick = "this.form.action = 'http://localhost/AdminZTE/index.php/Ticket/createTicket'"/>
+                    <input type="submit" value="Enviar" onclick = "this.form.action = 'http://localhost/AdminZTE/index.php/Ticket/createTicketMP'"/>
                   </form>
                 </div>
               </div>

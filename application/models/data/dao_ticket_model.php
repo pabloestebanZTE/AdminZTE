@@ -114,6 +114,7 @@
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
               $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
+
               $result = $session->query($sql);
               $row = $result->fetch_assoc();
               $sql = "insert into ticket (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE)
@@ -209,7 +210,6 @@
               $sql = "SELECT COUNT(K_IDTICKET) from ticket;";
               $result = $session->query($sql);
               $row = $result->fetch_assoc();
-              print_r($row['COUNT(K_IDTICKET)']);
               return $row['COUNT(K_IDTICKET)'];
             }
 
