@@ -12,12 +12,18 @@ class Ticket extends CI_Controller {
         $this->load->model('data/dao_user_model');
     }
 
-    public function TicketPrincial(){
-      $respuesta['pvds'] = $this->dao_PVD_model->getPVDs();
-      $respuesta['users'] = $this->dao_user_model->getAllUsers();
-      $respuesta['msj'] = $GLOBALS['$msj'];
-      $this->load->view('ticketCreation', $respuesta);
+    public function TicketPrincipal(){
+      $this->load->view('ticketsPrincipal');
     }
+
+    public function TicketCreation(){
+        $respuesta['pvds'] = $this->dao_PVD_model->getPVDs();
+        $respuesta['users'] = $this->dao_user_model->getAllUsers();
+        $respuesta['msj'] = $GLOBALS['$msj'];
+        $this->load->view('ticketCreation', $respuesta);
+    }
+
+
 
     public function createTicketMP(){
       $date = explode("-",$_POST['date']);
@@ -33,8 +39,9 @@ class Ticket extends CI_Controller {
         }
         $idNewTicket = "TPM-".$pvd[0]."-".$count;
         $ticket = new ticket_model;
-        $ticket = $ticket->createTicket($idNewTicket, $idMiantenance, "Abierto", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        $ticket = $ticket->createTicket($idNewTicket, $idMiantenance, "Abierto", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,$_POST['Observaciones']);
         $this->dao_ticket_model->insertTicket($ticket, 1);
+
         $id = $this->dao_ticket_model->getTicketByID($idNewTicket);
         if($id != "No ticket" && $id != "Error en BD"){
           if($_POST['TIT'] != -1){
@@ -64,7 +71,6 @@ class Ticket extends CI_Controller {
       }
 
       $this->TicketPrincial();
-      //  if()
     }
 }
 

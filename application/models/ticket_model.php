@@ -15,6 +15,7 @@
 		protected $techs;
 		protected $duracion;
 		protected $color;
+		protected $observacionesInicio;
 
 		public function __construct(){
 
@@ -68,7 +69,11 @@
 
 		public function setColor($color){$this->color = $color;}
 
-		public function createTicket($id, $idMaintenance, $status, $dateStart, $dateFinish, $duracion, $dateStartIT, $dateFinishIT, $dateStartAA, $dateFinishAA, $techs, $color){
+		public function getObservacionesI(){return $this->observacionesInicio;}
+
+		public function setObservacionesI($observacionesInicio){$this->observacionesInicio = $observacionesInicio;}
+
+		public function createTicket($id, $idMaintenance, $status, $dateStart, $dateFinish, $duracion, $dateStartIT, $dateFinishIT, $dateStartAA, $dateFinishAA, $techs, $color, $observacionesInicio){
       $newTicket= new ticket_model();
 			$newTicket->setId($id);
 			$newTicket->setIdM($idMaintenance);
@@ -82,6 +87,7 @@
 			$newTicket->setDateFAA($dateFinishAA);
 			$newTicket->setTechs($techs);
 			$newTicket->setColor($color);
+			$newTicket->setObservacionesI($observacionesInicio);
 			return $newTicket;
     }
 

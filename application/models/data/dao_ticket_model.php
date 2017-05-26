@@ -46,7 +46,7 @@
                         }
                       }
                     }
-                    $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], $row['D_STARTDATEIT'], $row['D_FINISHDATEIT'], $row['D_STARTDATEAA'], $row['D_FINISHDATEAA'], $users, $row['N_COLOR']);
+                    $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], $row['D_STARTDATEIT'], $row['D_FINISHDATEIT'], $row['D_STARTDATEAA'], $row['D_FINISHDATEAA'], $users, $row['N_COLOR'], $row['K_OBSERVATION_I']);
                     $respuesta[$i] = $ticket;
                     $i++;
                 }
@@ -73,7 +73,7 @@
                   $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                   $result2 = $session->query($sql2);
                   $row2 = $result2->fetch_assoc();
-                  $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "");
+                  $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "",$row['K_OBSERVATION_I']);
                   $respuesta = $ticket;
                 } else {
                   $respuesta = "No ticket";
@@ -150,6 +150,10 @@
                 }
                 if ($ticket->getColor() != NULL){
                   $sql = "UPDATE ticket SET N_COLOR='".$ticket->getColor()."' WHERE K_IDTICKET='".$ticket->getId()."';";
+                  $session->query($sql);
+                }
+                if ($ticket->getObservacionesI() != NULL){
+                  $sql = "UPDATE ticket SET K_OBSERVATION_I='".$ticket->getObservacionesI()."' WHERE K_IDTICKET='".$ticket->getId()."';";
                   $session->query($sql);
                 }
             }

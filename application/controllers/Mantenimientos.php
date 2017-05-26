@@ -21,6 +21,23 @@ class Mantenimientos extends CI_Controller {
         $this->load->model('ticket_model');
     }
 
+    public function preventivosPrincipal(){
+      $PVDs = $this->dao_PVD_model->getPVDs();
+      for($i = 0; $i < count($PVDs); $i++){
+        $PVDs[$i]->setMaintenance($this->dao_maintenance_model->getManPrePerPVD($PVDs[$i]->getId()));
+        for($j = 0; $j < count($PVDs[$i]->getMaintenance()); $j++){
+          $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
+        }
+      }
+      $respuesta['PVDs'] = $PVDs;
+      $respuesta['MP'] = $this->arregloGraficasMP($PVDs);
+      $respuesta['tablas'] = $this->arregloTablas($respuesta['MP']);
+      if ($GLOBALS['$msgJS'] != ""){
+        $respuesta['msg'] = $GLOBALS['$msgJS'];
+      }
+      $this->load->view('preventivosP', $respuesta);
+    }
+
     function loadMPView(){
         $PVDs = $this->dao_PVD_model->getPVDs();
         for($i = 0; $i < count($PVDs); $i++){
@@ -106,7 +123,7 @@ class Mantenimientos extends CI_Controller {
           }
 
 
-          $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "");
+          $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "", "");
           $duration = $ticket->calculateDuration();
           $ticket->setDuracion($duration);
           $color = "FFFFFF";

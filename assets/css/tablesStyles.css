@@ -82,3 +82,58 @@
     display: block;
   }
 }
+
+
+
+.table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+
+@media screen and (max-width: 900px) {
+  .table {
+    display: block;
+  }
+}
+
+.table2 {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+@media screen and (max-width: 580px) {
+  .table2 {
+    display: block;
+  }
+}
+
+
+.tableFix {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+  display: block;
+  overflow: scroll;
+  height: 400px;
+  overflow-y: scroll;
+}
+@media screen and (max-width: 580px) {
+  .tableFix {
+    display: block;
+  }
+}
+
+thead {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+}
+
+td {
+  padding: 6px 12px;
+  display: table-cell;
+}

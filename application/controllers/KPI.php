@@ -12,12 +12,10 @@ class KPI extends CI_Controller {
     }
 
     public function KPIPrincial(){
-      echo "hola";
       $this->load->view('viewKPI');
     }
 
     public function KPIList(){
-      echo "o.o";
       $KPIs = $this->dao_kpi_model->getAllKPI();
       $respuesta['kpis'] = $KPIs;
       $this->load->view('kpiAdmin', $respuesta);

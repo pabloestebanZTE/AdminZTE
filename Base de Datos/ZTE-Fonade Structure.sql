@@ -428,3 +428,4 @@ alter table USER_PERMISSION add constraint FK_USER_PERMISSION2 foreign key (K_ID
 ALTER TABLE ticket MODIFY K_IDTICKET varchar(20) not null;
 ALTER TABLE ticket_user MODIFY K_IDTICKET varchar(20) not null;
 ALTER TABLE corrective_maintenance MODIFY K_IDTICKET varchar(20) not null;
+ALTER TABLE ticket add K_OBSERVATION_I varchar(500);

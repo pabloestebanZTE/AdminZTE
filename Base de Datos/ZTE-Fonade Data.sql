@@ -17,7 +17,9 @@ insert into PERMISSION (K_IDPERMISSION, N_NAME, N_DESCRIPTION)
          (7, 'editar MC','Puede editar mantenimientos correctivos'),
          (8, 'editar HV','Puede editar hoja de vida sitios'),
          (9, 'editar FC','Puede editar facturas'),
-         (10, 'editar PT','Puede editar plataforma interna');
+         (10, 'editar PT','Puede editar plataforma interna'),
+         (11, 'Crear Tickets','Puede Crear Tickets');
+
 
 
 /*Table type_user*/
@@ -55,7 +57,9 @@ insert into USER_PERMISSION (K_IDTYPEUSER, K_IDPERMISSION)
          (4,3),
          (4,4),
          (4,5),
-         (4,6);
+         (4,6),
+         (1,11),
+         (4,11);
 
 /*Table users*/
 insert into user (K_IDUSER, K_IDTYPEUSER, N_PASSWORD, N_NAME, N_LASTNAME)
@@ -3462,7 +3466,12 @@ insert into users_kpi(K_IDKPI, K_IDUSER)
   (1014295226,20,4,2017, 'Retraso'),
   (1023000199,20,4,2017, 'Retraso'),
   (1014295226,21,4,2017, 'Retraso/Calidad'),
-  (1013596161,26,4,2017, 'Solicitud Incorrecta'),
+  (80871696,26,4,2017, 'Solicitud Incorrecta'),
+  (1023000199,26,4,2017, 'Solicitud Incorrecta'),
+  (1014295226,26,4,2017, 'Solicitud Incorrecta'),
+  (1030533656,26,4,2017, 'Solicitud Incorrecta'),
+  (79882887,26,4,2017, 'Solicitud Incorrecta'),
+  (1022376582,26,4,2017, 'Solicitud Incorrecta'),
   (1053777790,28,4,2017, 'Días Retraso'),
   (1053777790,29,4,2017, 'Días Retraso'),
   (1053777790,30,4,2017, 'Días Retraso'),
@@ -3635,6 +3644,8 @@ insert into kpi_resuelto (K_IDUSER, K_IDKPI, Q_MES, Q_ANO, N_NOMBREVALOR1, N_NOM
   (80871696,16,4,2017, 'Devoluciones','Días Retraso'),
   (80871696,17,4,2017, 'Devoluciones','Días Retraso'),
   (80871696,18,4,2017, 'Profit','Meta'),
+  (1014295226,22,4,2017, 'Correcciones', 'Revisitas'),
+  (1023000199,22,4,2017, 'Correcciones', 'Revisitas'),
   (1013596161,23,4,2017, 'Ticket no Creado', 'Ticket no Documentado'),
   (1022376582,23,4,2017, 'Ticket no Creado', 'Ticket no Documentado'),
   (1013596161,24,4,2017, 'Ticket no Creado', 'Gestion off Time'),
