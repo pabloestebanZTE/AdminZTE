@@ -124,7 +124,9 @@ insert into user (K_IDUSER, K_IDTYPEUSER, N_PASSWORD, N_NAME, N_LASTNAME)
   (142532, 2, 'GAR1abc123' , 'Andrea' , 'Chaves Sanchez'),
   (142533, 2, 'GAR1abc123' , 'Nicolas' , 'Rodriguez'),
   (1024577712, 2, 'NARD6183000960', 'Nelson Andres', 'Rios Díaz'),
-  (1075221107, 2, 'NARD6183000960', 'Yeison', 'Bonilla'), //cambiar contraseña
+  (1075221107, 2, 'NARD6183000960', 'Yeison', 'Bonilla'),
+  (8064865, 2, 'NARD6183000960', 'Daniel Armando', 'Herrera'),
+  (1097398513, 2, 'NARD6183000960', 'Carlos Andres', 'Vargas Ruiz'), //cambiar contraseña
   (14102016, 1, 'LJDP6183000936', 'Laura Jackelinne', 'Delgado Pinilla');}
 /*Table Region*/
 insert into REGION (K_IDREGION, N_NAME)

@@ -41,6 +41,13 @@
 <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
 
 <script>
+    $(document).ready(function(){
+      $(".wheel-button").wheelmenu({
+        trigger: "hover",
+        animation: "fly",
+        animationSpeed: "fast"
+      });
+    });
 
     function showMessage(){
 
@@ -115,11 +122,11 @@
             if($_SESSION['permissions'][5] == 1){
               echo "<div class='wrapperWheel'>";
                 echo "<div class='mainWheel'>";
-                  echo "<a href='/AdminZTE/index.php/Ticket/TicketPrincial' class='wheel-button nw'>";
-                    echo "<span><img src='/AdminZTE/assets/images/ticket2.png' /></span>";
+                  echo "<a href='#wheel1' class='wheel-button nw'>";
+                    echo "<span><img src='/AdminZTE/assets/images/plus.ico' /></span>";
                   echo "</a>";
-                  echo "<div class='pointer'><center>Tickets</center></div>";
-                  echo "<ul id='wheel'  data-angle='all'>";
+                  echo "<ul id='wheel1'  data-angle='all'>";
+                    echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
                   echo "</ul>";
                 echo "</div>";
               echo "</div>";
@@ -132,14 +139,7 @@
                 echo "<div class='wrap-col'>";
                   echo "<h2 class='under'>Creación de Tickets</h2>";
                     echo "<div class='wrapper tabs'>";
-                      echo "<ul class='nav'>";
-                        echo "<center>";
-                          echo "<li><a href='#tabPreventivos'><center>+ Prev.</center></a></li>";
-                          echo "<li><a href='#tabCorrectivos'><center>+ Corr.</center></a></li>";
-                          echo "<li><a href='#tabOtros'><center>+ Otros</center></a></li>";
-                        echo "</center>";
-                      echo "</ul><br><br>";
-                    echo "<div class='tab-content' id='tabPreventivos'>";
+                    echo "<div id='tabPreventivos'>";
                     echo "<div class='form-style-5'>";
                       echo "<form  name='formulario' id='formulario' method='post' accept-charset='utf-8'>";
                         echo "<fieldset>";
@@ -194,7 +194,7 @@
                           echo "</select>";
                           echo "<label for='job'>Observaciones :</label>";
                           echo "<textarea name='Observaciones' id='Observaciones' placeholder='Máximo 500 caracteres *'></textarea>";
-                        echo "<input type='submit' value='Crear Ticket' class='btn btn-success' onclick =\"this.form.action = 'http://localhost/AdminZTE/index.php/Ticket/createTicketMP'\" >";
+                        echo "<input type='submit' value='Crear Ticket' class='btn btn-success' onclick =\"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/createTicketMP'\" >";
                       echo "</form>";
                     echo "</div>";
                   echo "</div>";

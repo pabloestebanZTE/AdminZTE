@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
+    <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -27,8 +28,16 @@
     <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
     <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
 
     <script type="text/javascript" charset="utf-8" async defer>
+        $(document).ready(function(){
+          $(".wheel-button").wheelmenu({
+            trigger: "hover",
+            animation: "fly",
+            animationSpeed: "fast"
+          });
+        });
         function showMessage(){
             var a = "<?php echo $msg[0]; ?>";
             var b = "<?php echo $msg[1]; ?>";
@@ -192,10 +201,24 @@
   		<div class="main zerogrid">
         <!-- content -->
   			<article id="content">
-          <h2 class='under'>Mantenimientos Preventivos </h2>
           <div class="wrapper tabs">
             <?php
-
+            if($_SESSION['permissions'][5] == 1){
+              echo "<div class='wrapperWheel'>";
+                echo "<div class='mainWheel'>";
+                  echo "<a href='#wheel1' class='wheel-button nw'>";
+                    echo "<span><img src='/AdminZTE/assets/images/edit.png' /></span>";
+                  echo "</a>";
+                  echo "<ul id='wheel1'  data-angle='all'>";
+                    echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                  echo "</ul>";
+                echo "</div>";
+              echo "</div>";
+              if ($msj != ""){
+                echo "<script type='text/javascript'>showMessage();</script>";
+              }
+            }
+            echo "<h2 class='under'>Mantenimientos Preventivos </h2>";
             echo "<select type='hidden' style='font-size:12px' name='prueba' id='prueba' disabled='disabled'  aria-describedby='basic-addon1'>";
             echo "<option value='-1'></option>";
             for($j = 0; $j<count($users); $j++){
@@ -276,7 +299,7 @@
                                   if($PVDs[$i]->getMaintenance()[0]->getTicket() != "No Ticket"){
                                     echo "<input id='".$i."-2' name='".$i."-2' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."'>";
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."</div>";
-                              
+
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Ejecutado"){
                                       echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
                                     }

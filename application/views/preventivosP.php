@@ -42,9 +42,9 @@
       });
 
       function showMessage(){
-          var a = "<?php echo $msj[0]; ?>";
-          var b = "<?php echo $msj[1]; ?>";
-          var c = "<?php echo $msj[2]; ?>";
+          var a = "<?php echo $msg[0]; ?>";
+          var b = "<?php echo $msg[1]; ?>";
+          var c = "<?php echo $msg[2]; ?>";
           sweetAlert(a, b, c);
       }
     </script>
@@ -146,7 +146,7 @@
                           for ($p = 1; $p <= count($meses); $p++){
                            for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
                              echo "<tr>";
-                               echo "<td><a>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
+                               echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][2]."</td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][4]."</td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][3]."</td>";
@@ -160,6 +160,9 @@
                       echo "</table>";
                     echo "</div>";
                   echo "</div>";
+                 }
+                 if ($msg != ""){
+                   echo "<script type='text/javascript'>showMessage();</script>";
                  }
                }
                ?>
