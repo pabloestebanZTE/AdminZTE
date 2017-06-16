@@ -289,6 +289,34 @@ create table TICKET
    primary key (K_IDTICKET)
 );
 
+
+/*==============================================================*/
+/* Table: TICKET_OTHERS                                         */
+/*==============================================================*/
+create table ticket_others
+(
+   K_IDTICKETOTHERS     varchar(14) not null,
+   D_STARTDATE          date,
+   D_FINISHDATE         date,
+   I_DURATION           numeric(2,0),
+   K_IDPVD              int,
+   K_IDTICKET           int,
+   N_OBSERVATION_F      varchar(500),
+   primary key (K_IDTICKETOTHERS)
+);
+
+
+/*==============================================================*/
+/* Table: TICKET_OTHER_STATUS                                         */
+/*==============================================================*/
+create table ticket_other_status
+(
+   K_IDSTATUSTICKETO     int not null,
+   N_NAME               varchar(200) not null,
+   N_DESCRIPTION        varchar(300) not null,
+   primary key (K_IDSTATUSTICKETO)
+);
+
 /*==============================================================*/
 /* Table: TICKET_STATUS                                         */
 /*==============================================================*/
@@ -308,7 +336,17 @@ create table TICKET_USER
    K_IDTICKET           varchar(14) not null,
    K_IDUSER             int not null,
    N_TYPE               varchar(5) not null,
+   Q_ESTADIA            int;
+   Q_ALMUERZOS          int;
+   N_OBSERVATION_F      varchar(500);
    primary key (K_IDTICKET, K_IDUSER)
+);
+
+create table ticketo_user
+(
+   K_IDTICKETO          varchar(14) not null,
+   K_IDUSER             int not null,
+   primary key (K_IDTICKETO, K_IDUSER)
 );
 
 /*==============================================================*/
@@ -344,6 +382,121 @@ create table USER_PERMISSION
    K_IDTYPEUSER         int not null,
    K_IDPERMISSION       int not null,
    primary key (K_IDTYPEUSER, K_IDPERMISSION)
+);
+
+
+/*==============================================================*/
+/* Table: Phase                                                  */
+/*==============================================================*/
+create table phase
+(
+   K_IDPHASE             int not null,
+   N_NAME               varchar(200) not null,
+   primary key (K_IDPHASE)
+);
+
+
+/*==============================================================*/
+/* Table: TYPOLOGY                                              */
+/*==============================================================*/
+create table typology
+(
+   K_IDTYPOLOGY             int not null,
+   N_NAME                   varchar(200) not null,
+   primary key (K_IDTYPOLOGY)
+);
+
+
+/*==============================================================*/
+/* Table: TYPOLOGY                                              */
+/*==============================================================*/
+create table equipment_generic
+(
+   K_IDEQUIPMENT_GENERIC             int not null,
+   N_NAME                   varchar(200) not null,
+   primary key (K_IDEQUIPMENT_GENERIC)
+);
+
+/*==============================================================*/
+/* Table: equipment_type                                        */
+/*==============================================================*/
+create table equipment_type
+(
+   K_IDEQUIPMENTTYPE        int not null,
+   N_NAME                   varchar(200) not null,
+   K_IDTYPOLOGY             int not null,
+   K_IDPHASE                int not null,
+   I_QUANTITY               int not null,
+   primary key (K_IDEQUIPMENTTYPE)
+);
+
+
+/*==============================================================*/
+/* Table: Manufacturer                                          */
+/*==============================================================*/
+create table manufacturer
+(
+   K_IDMANUFACTURER                int not null,
+   N_NAME                          varchar(200) not null,
+   primary key (K_IDMANUFACTURER)
+);
+
+/*==============================================================*/
+/* Table: Model                                          */
+/*==============================================================*/
+create table model
+(
+   K_IDMODEL                int not null,
+   N_NAME                   varchar(200) not null,
+   K_IDMANUFACTURER         int not null,
+   primary key (K_IDMODEL)
+);
+
+/*==============================================================*/
+/* Table: item_checklist                                        */
+/*==============================================================*/
+create table item_checklist
+(
+   K_IDITEM_CHECKLIST       int not null,
+   N_NAME                   varchar(200) not null,
+   primary key (K_IDITEM_CHECKLIST)
+);
+
+
+/*==============================================================*/
+/* Table: stuff_category                                        */
+/*==============================================================*/
+create table stuff_category
+(
+   K_IDSTUFF_CATEGORY       int not null,
+   N_NAME                   varchar(200) not null,
+   K_IDEQUIPMENTTYPE        int not null,
+   primary key (K_IDSTUFF_CATEGORY)
+);
+
+/*==============================================================*/
+/* Table: checklist                                             */
+/*==============================================================*/
+create table checklist
+(
+   K_IDCHECKLIST            int not null,
+   K_IDSTUFF_CATEGORY       int not null,
+   K_IDITEM_CHECKLIST       int not null,
+   primary key (K_IDCHECKLIST)
+);
+
+/*==============================================================*/
+/* Table: stuff                                                  */
+/*==============================================================*/
+create table stuff
+(
+   K_IDSTUFF                int not null,
+   N_NAME                   varchar(200) not null,
+   K_IDMODEL                int not null,
+   N_SERIAL                 varchar(200) not null,
+   N_ESTADO                 varchar(200) not null,
+   K_IDSTUFF_CATEGORY       int not null,
+   primary key (K_IDEQUIPMENTTYPE)
 );
 
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
@@ -409,6 +562,20 @@ alter table TICKET add constraint FK_MAINTENANCE_TICKET foreign key (K_IDMAINTEN
 alter table TICKET add constraint FK_TICKET_STATUS foreign key (K_IDSTATUSTICKET)
       references TICKET_STATUS (K_IDSTATUSTICKET) on delete restrict on update restrict;
 
+alter table ticket_others add constraint FK_TICKETO_TYPE foreign key (K_IDTICKETT)
+      references ticket_other_status (K_IDSTATUSTICKETO) on delete restrict on update restrict;
+
+alter table ticket_others add constraint FK_TICKETO_PVD foreign key (K_IDPVD)
+      references pvd (K_IDPVD) on delete restrict on update restrict;
+
+alter table ticketo_user add constraint FK_TOUSER_TICKETO foreign key (K_IDTICKETO)
+      references ticket_others (K_IDTICKETOTHERS) on delete restrict on update restrict;
+
+alter table ticketo_user add constraint FK_TOUSER_USER foreign key (K_IDUSER)
+            references user (K_IDUSER) on delete restrict on update restrict;
+
+alter table TICKET_USER add constraint FK_TICKET_USER2 foreign key (K_IDUSER)
+            references USER (K_IDUSER) on delete restrict on update restrict;
 
 alter table TICKET_USER add constraint FK_TICKET_USER foreign key (K_IDTICKET)
       references TICKET (K_IDTICKET) on delete restrict on update restrict;
@@ -429,3 +596,7 @@ ALTER TABLE ticket MODIFY K_IDTICKET varchar(20) not null;
 ALTER TABLE ticket_user MODIFY K_IDTICKET varchar(20) not null;
 ALTER TABLE corrective_maintenance MODIFY K_IDTICKET varchar(20) not null;
 ALTER TABLE ticket add K_OBSERVATION_I varchar(500);
+ALTER TABLE ticket_user add Q_ESTADIA int;
+ALTER TABLE ticket_user add Q_ALMUERZOS int;
+ALTER TABLE kpi add N_ESTANDARES varchar(20);
+ALTER TABLE ticket_user add N_OBSERVATION_F varchar(500);

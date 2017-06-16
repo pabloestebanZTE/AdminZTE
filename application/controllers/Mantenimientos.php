@@ -170,8 +170,7 @@ class Mantenimientos extends CI_Controller {
             $color = "00CC00";
           }
 
-
-          $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"],  $_POST[$i."-12"],  $_POST[$i."-13"], "", "", "");
+          $ticket = $ticket->createTicket($_POST[$i."-2"], $_POST[$i."-7"],$_POST[$i."-3"], $dateStart, $dateFinish, "", $_POST[$i."-8"], $_POST[$i."-9"], $_POST[$i."-12"], $_POST[$i."-13"], "", "", $_POST[$i."-observacionesInicio"]);
           $duration = $ticket->calculateDuration();
           $ticket->setDuracion($duration);
           $color = "FFFFFF";
@@ -305,10 +304,10 @@ class Mantenimientos extends CI_Controller {
       for ($i = 0; $i<count($MP[$mes])-2;$i++){
         for($j = 0; $j < count($ciudades); $j++){
           if($ciudades[$j] == $MP[$mes][$i]['departamento']){
-            if($MP[$mes][$i]['mantenimiento']->getTicket() == "No Ticket"){
+            if($MP[$mes][$i]['mantenimiento']->getTicket() == "No Ticket" || $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus() == "Abierto"){
               $tabla2[$ciudades[$j]][1]++;
             } else {
-              if ($MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus() == "Ejecutado"){
+              if ($MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus() == "Ejecutado" ){
                 $tabla2[$ciudades[$j]][2]++;
                 $tabla2[$ciudades[$j]][1]++;
               } else {

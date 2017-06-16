@@ -151,7 +151,6 @@
                           echo "</center>";
                         echo "</div>";
                       echo "</ul>";
-
                     }
 
                     for ($p = 0; $p < count($dates['years']); $p++){
@@ -180,6 +179,8 @@
                                           echo "<div class='cell'>".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['N_NOMBREVALOR2']."</div>";
                                         if($kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['N_NOMBREVALOR3'] != NULL)
                                           echo "<div class='cell'>".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['N_NOMBREVALOR3']."</div>";
+                                        echo "<div class='cell'>"."Valor Esperado"."</div>";
+                                        echo "<div class='cell'>"."Valor Real"."</div>";
                                       echo "</div>";
                                     }
                                   }
@@ -194,6 +195,32 @@
                                           echo "<div class='cell'><input  style='font-size:12px' id='field-".$p."-".$i."-".$j."-2'  name='field-".$p."-".$i."-".$j."-2' disabled='true' aria-describedby='basic-addon1' value='".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL2']."'></div>";
                                         if($kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['N_NOMBREVALOR3'] != NULL)
                                           echo "<div class='cell'><input style='font-size:12px'id='field-".$p."-".$i."-".$j."-3' name='field-".$p."-".$i."-".$j."-3' disabled='true' aria-describedby='basic-addon1' value='".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL3']."'></div>";
+
+
+                                          echo "<div class='cell'>".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['KPI']['Q_VALORESPERADO']."% "."</div>";
+                                          $acumulado = $kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['KPI']['Q_VALORESPERADO'];
+                                          $indicators = explode(",",$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['KPI']['N_ESTANDARES']);
+                                          for($flag = 0; $flag < count($indicators); $flag++){
+                                            if($flag == 0){
+                                              $acumulado = $acumulado -($indicators[$flag] * $kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL1']);
+                                            }
+                                            if($flag == 1){
+                                              if($indicators[$flag-1] == 0){
+                                                $acumulado = $acumulado -(($indicators[$flag]) * ($kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL1']-$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL2']));
+                                              } else {
+                                                $acumulado = $acumulado -($indicators[$flag] * $kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL2']);
+                                              }
+                                            }
+                                            if($flag == 2){
+                                              $acumulado = $acumulado -($indicators[$flag] * $kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['Q_VALORREAL3']);
+                                            }
+                                          }
+                                          if ($acumulado <0){
+                                            $acumulado = 0;
+                                          }
+                                          echo "<div class='cell'>".$acumulado."% "."</div>";
+
+
                                         echo "<input id='idKPI-".$p."-".$i."-".$j."' name='idKPI-".$p."-".$i."-".$j."' type='hidden'  class='form-control' value='".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['K_IDKPI_RESUELTO']."'>";
                                         echo "<input id='name-".$p."-".$i."-".$j."' name='name-".$p."-".$i."-".$j."' type='hidden'  class='form-control' value='".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['user']['N_NAME']." ".$kpis[$dates['years'][$p]['Q_ANO']][$i]['users'][$j]['user']['N_LASTNAME']."'>";
                                       echo "</div>";

@@ -116,8 +116,6 @@
                 echo "<br><br><br><br><br><br>";
               }
              ?>
-
-
              <div class="wrapper tabs">
                <?php
                if($_SESSION['permissions'][1] == 1){

@@ -58,9 +58,7 @@
           select2.name = i+"-"+field;
           iDiv.appendChild(select2);
           fila.appendChild(iDiv);
-          console.log(fila);
-          console.log(select);
-          console.log(select2);
+
         }
 
         function cambiarAtributo(x, f){
@@ -76,7 +74,7 @@
             var dateField6 = document.getElementById(i+"-11");
             var dateField9 = document.getElementById(i+"-14");
             var dateField10 = document.getElementById(i+"-15");
-
+            var dateField11 = document.getElementById(i+"-observacionesInicio");
 
             if (dateField != null){
               try {
@@ -144,6 +142,12 @@
               }
               catch(err) {
                 console.log("fieldNotFound 10");
+              }
+              try {
+                dateField11.removeAttribute('disabled');
+              }
+              catch(err) {
+                console.log("fieldNotFound 11");
               }
             }
           }
@@ -282,6 +286,7 @@
                         echo "<div class='cell' style='font-size:13px'>InicioM</div>";
                         echo "<div class='cell' style='font-size:13px'>FinM</div>";
                         echo "<div class='cell' style='font-size:13px'>Duración</div>";
+                        echo "<div class='cell' style='font-size:13px'>Observaciones</div>";
                       echo "</div>";
                       for ($i = 0; $i<count($PVDs); $i++){
                         $mes = explode("-",$PVDs[$i]->getMaintenance()[0]->getDate());
@@ -339,6 +344,7 @@
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateS()."</div>";
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateF()."</div>";
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDuracion()."</div>";
+                                    echo "<div class='cell'><input style='font-size:12px' type='text' id='".$i."-observacionesInicio'  name='".$i."-observacionesInicio' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getObservacionesI()."'></div>";
                                   } else {
                                     echo "<div class='cell'><input style='font-size:12px' id='".$i."-2' name='".$i."-2' disabled='true' aria-describedby='basic-addon1' value=''></div>";
                                     echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option></option><option>Ejecutado</option><option>En Progreso</option><option>Abierto</option><option>Cancelado</option></select></div>";
@@ -353,6 +359,7 @@
                                     echo "<div class='cell'></div>";
                                     echo "<div class='cell'></div>";
                                     echo "<div class='cell'></div>";
+                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-observacionInicio'  name='".$i."-observacionInicio' disabled='true' aria-describedby='basic-addon1' value=''></div>";
                                     }
                                   echo "<input id='idM".$i."' name='".$i."-7' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getId()."'>";
                                 }

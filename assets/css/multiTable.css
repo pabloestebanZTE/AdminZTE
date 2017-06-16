@@ -16,6 +16,18 @@
 	position: relative;
 }
 
+#pricing-table .plan2 {
+	font: 12px 'Lucida Sans', 'trebuchet MS', Arial, Helvetica;
+	text-shadow: 0 1px rgba(255,255,255,.8);
+	background: #fff;
+	border: 1px solid #ddd;
+	color: #333;
+	padding: 20px;
+	width: 445px; /* plan width = 400 + 20 + 20 + 1 + 1 = 442px */
+	float: center;
+	position: relative;
+}
+
 #pricing-table #most-popular {
 	z-index: 2;
 	top: -13px;

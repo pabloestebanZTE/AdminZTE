@@ -76,6 +76,19 @@ class KPI extends CI_Controller {
       $this->getKPIperSource();
     }
 
+
+
+    public function dw(){
+      $objPHPExcel = PHPExcel_IOFactory::load("archivos/KPI.xlsx");
+      //  $objPHPExcel->getActiveSheet()->setCellValue('A1', 'hello world!');
+      //  $objPHPExcel->getActiveSheet()->setTitle('Chesse1');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="KPI.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+      }
+
     public function exportXL($kpi, $cell){
       for ($i = 0; $cell['kpi'][$i] != "<"; $i++){
         $q = $q.$cell['kpi'][$i];
@@ -113,6 +126,39 @@ class KPI extends CI_Controller {
       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
       $objWriter->save("archivos/KPI.xlsx");
     }
+
+    function download(){
+          $filename = $_GET['n_name'];
+          echo $filename;
+          if(!empty($filename)){
+            // Specify file path.
+            $path = 'archivos/'; // '/uplods/'
+            $download_file =  $path.$filename;}
+            echo $download_file;
+            // Check file is exists on given path.
+            if(file_exists($download_file))
+            {
+              // Getting file extension.
+              $extension = explode('.',$filename);
+              $extension = $extension[count($extension)-1];
+              // For Gecko browsers
+              // Supports for download resume
+              header('Accept-Ranges: bytes');
+              // Calculate File size
+              header('Content-Length: ' . filesize($download_file));
+              header('Content-Encoding: none');
+              // Change the mime type if the file is not PDF
+              header('Content-Type: application/octet-stream');
+              // Make the browser display the Save As dialog
+              header('Content-Disposition: attachment; filename=' . $filename);
+              readfile($download_file);
+              exit;
+            }
+            else
+            {
+              echo 'File does not exists on given path';
+            }
+         }
 
 
     function downloadFile() {

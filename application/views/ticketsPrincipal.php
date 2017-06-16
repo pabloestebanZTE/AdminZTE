@@ -114,9 +114,8 @@
                     echo "</a>";
                     echo "<div class='pointer'><center>Clic sobre mi</center></div>";
                     echo "<ul id='wheel'  data-angle='all'>";
-                      echo "<li class='item'><a href='#'><img src='/AdminZTE/assets/images/certificaciones.png' /></a></li>";
                       echo "<li class='item'><a href='#'><img src='/AdminZTE/assets/images/correctivos.ico' /></a></li>";
-                      echo "<li class='item'><a href='#'><img src='/AdminZTE/assets/images/otros.png' /></a></li>";
+                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/OtherTicketsPrincipal'><img src='/AdminZTE/assets/images/otros.png' /></a></li>";
                       echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/preventivos.ico' /></a></li>";
                     echo "</ul>";
                   echo "</div>";

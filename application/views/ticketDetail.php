@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
 <link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/forms.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
 <link href="/AdminZTE/assets/css/index.css" rel="stylesheet">
@@ -120,8 +119,22 @@
 			<article id="content">
         <div class="wrapper row">
           <?php
-          if($_SESSION['permissions'][11] == 1){
+          if(isset($ticket)){
             echo "<section class='col-4-4'>";
+
+
+            echo "<div class='wrapperWheel'>";
+              echo "<div class='mainWheel'>";
+                echo "<a href='#wheel1' class='wheel-button nw'>";
+                  echo "<span><img src='/AdminZTE/assets/images/ticket2.png' /></span>";
+                echo "</a>";
+                echo "<ul id='wheel1'  data-angle='all'>";
+                  echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                echo "</ul>";
+              echo "</div>";
+            echo "</div>";
+
+
             echo "<h2 class='under'>Página principal Tickets Número: ".$ticket->getId()."</h2>";
               echo "<div class='wrap-col'>";
                 echo "<div id='pricing-table' class='clear'>";
@@ -160,12 +173,6 @@
                         $bandera = 1;
                       }
                     }
-
-
-
-
-
-
                     echo "<div class='plan' id='most-popular'>";
                         echo "<h3>Fechas<span><img src='/AdminZTE/assets/images/dates.png'/></span></h3>";
                         echo "<ul>";
@@ -184,24 +191,42 @@
                             echo "<li><b>Auxiliar AA: </b> ".$ticket->getTechs()['users']['AA_A']['N_NAME']." ".$ticket->getTechs()['users']['AA_A']['N_LASTNAME']."</li>";
                         echo "</ul>";
                     echo "</div>";
-
-
                 echo "</div>";
-
-
-
-
+                echo "<h2 class='under'>Información de cierre</h2>";
+                echo "<div id='pricing-table' class='clear'>";
+                  for($i = 0; $i < count($viaticos); $i++){
+                    echo "<div class='plan' id='most-popular'>";
+                        echo "<h3>Viáticos : ".$viaticos[$i]['N_NAME']." ".$viaticos[$i]['N_LASTNAME']."<span><img src='/AdminZTE/assets/images/viatico.png'/></span></h3>";
+                        echo "<ul>";
+                            echo "<li><b>Noches estadia: </b> ".$viaticos[$i]['Estadias']."</li>";
+                            echo "<li><b>Cantidad almuerzos: </b> ".$viaticos[$i]['Almuerzos']."</li>";
+                            echo "<li><b>Observaciones: </b> ".$viaticos[$i]['Observaciones']."</li>";
+                        echo "</ul>";
+                        if($_SESSION['permissions'][6] == 1 and $ticket->getStatus() == "Ejecutado"){
+                          echo "<div class='form-style-5'>";
+                            echo "<form  name='formulario' id='formulario' method='post' accept-charset='utf-8'>";
+                              echo "<fieldset>";
+                                echo "<input value='".$ticket->getId()."' name='id'  id='id' hidden>";
+                                echo "<input value='".$viaticos[$i]['K_IDUSER']."' name='user'  id='id' hidden>";
+                                echo "<legend><span class='number'>A</span>Actualizar Info</legend>";
+                                echo "<input type='number' name='almuerzo'  id='almuerzo' placeholder='Cantidad Almuerzos *'>";
+                                echo "<input type='number' name='estadia'  id='estadia' placeholder='Noches estadia *'>";
+                                echo "<textarea name='Observaciones' id='Observaciones' placeholder='Observaciones : Máximo 500 caracteres *'></textarea>";
+                              echo "<input type='submit' value='Guardar Cambios' class='btn btn-success' onclick =\"this.form.action = 'http://localhost/AdminZTE/index.php/Ticket/updateTicketDetail'\" >";
+                            echo "</form>";
+                          echo "</div>";
+                        }
+                    echo "</div>";
+                  }
+                echo "</div>";
               echo "</div>";
             echo "</section>";
-          } else {
-            echo "<h2 class='under'>No tienes permisos para acceder a esta area</h2>";
           }
         ?>
         </div>
 			</article>
 		</div>
 	</div>
-
 		<div class="main zerogrid">
 <!-- footer -->
 <!-- footer end -->

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <html lang="en">
   <head>
-    <title>ZTE KPIs</title>
+    <title>Preventivos Principal</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -33,11 +33,19 @@
     <script type="text/javascript" src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
     <script>
+      $(document).ready(function(){
+        $(".wheel-button").wheelmenu({
+          trigger: "hover",
+          animation: "fly",
+          animationSpeed: "fast"
+        });
+      });
+
       function showMessage(){
-        var a = "<?php echo $msj[0]; ?>";
-        var b = "<?php echo $msj[1]; ?>";
-        var c = "<?php echo $msj[2]; ?>";
-        sweetAlert(a, b, c);
+          var a = "<?php echo $msg[0]; ?>";
+          var b = "<?php echo $msg[1]; ?>";
+          var c = "<?php echo $msg[2]; ?>";
+          sweetAlert(a, b, c);
       }
     </script>
   </head>
@@ -94,46 +102,58 @@
               if($_SESSION['permissions'][5] == 1){
                 echo "<div class='wrapperWheel'>";
                   echo "<div class='mainWheel'>";
-                    echo "<a href='/AdminZTE/index.php/KPI/KPIPrincial' class='wheel-button nw'>";
-                      echo "<span><img src='/AdminZTE/assets/images/KPI.png' /></span>";
+                    echo "<a href='#wheel1' class='wheel-button ne'>";
+                      echo "<span><img src='/AdminZTE/assets/images/otros.png' /></span>";
                     echo "</a>";
-                    echo "<div class='pointer'><center>KPIs</center></div>";
-                    echo "<ul id='wheel'  data-angle='all'>";
+                    echo "<ul id='wheel1'  data-angle='NE' class='wheel'>";
+                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/OtherTicketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a></li>";
                     echo "</ul>";
+                    echo "<br><br><br><br>";
                   echo "</div>";
                 echo "</div>";
-                echo "<br>";
-                if($_SESSION['permissions'][10] == 1){
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/download?n_name=KPI.xlsx' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar</button></form></form></td>";
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/downloadFile' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar 1</button></form></form></td>";
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/dw' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar 1</button></form></form></td>";
-
-                }
-                echo "<a href='/AdminZTE/index.php/KPI/getKPIperSource' class='btn btn-primary' role='button' > Calificar KPI´s</a>";
-                if (isset($KPIsPP)){
-                  echo "<div class='wrapper tabs'>";
-                    echo "<br>";
-                    echo "<h2 class='under'>"."Lista de KPI´s para evaluar"."</h2>";
-                    echo "<div class='table'>";
-                      echo "<div class='row header'>";
-                        echo "<div class='cell'>Nombre</div>";
-                        echo "<div class='cell'>Descripcion</div>";
-                      echo "</div>";
-                      for ($i = 0; $i<count($KPIsPP); $i++){
-                        echo "<div class='row'>";
-                          echo "<div class='cell'><a href='/AdminZTE/index.php/KPI/evaluateKPI?k_kpi=".$KPIsPP[$i]['K_IDKPI']."'>".$KPIsPP[$i]['N_NAME']."</a></div>";
-                          echo "<div class='cell'>".$KPIsPP[$i]['N_DESCRIPTION']."</div>";
-                        echo "</div>";
-                      }
+                echo "<br><br><br><br><br><br>";
+              }
+             ?>
+             <div class="wrapper tabs">
+               <?php
+               if($_SESSION['permissions'][1] == 1){
+                 if (isset($tickets) and count($tickets) > 1){
+                   echo "<div id='tab"."1"."'>";
+                     echo "<div class='wrapperTable'>";
+                      echo "<table id='table'>";
+                        echo "<thead>";
+                          echo "<tr>";
+                            echo "<th>ID</th>";
+                            echo "<th>Tipo</th>";
+                            echo "<th>PVD</th>";
+                            echo "<th>Fecha Inicio</th>";
+                            echo "<th>Fecha Fin</th>";
+                            echo "<th>Duración</th>";
+                          echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                          for ($p = 0; $p < count($tickets); $p++){
+                             echo "<tr>";
+                               echo "<td>".$tickets[$p]->getId()."</td>";
+                               echo "<td>".$tickets[$p]->getStatus()."</td>";
+                               echo "<td>".$tickets[$p]->getIdM()."</td>";
+                               echo "<td>".$tickets[$p]->getDateS()."</td>";
+                               echo "<td>".$tickets[$p]->getDateF()."</td>";
+                               echo "<td>".$tickets[$p]->getDuracion()."</td>";
+                             echo "</tr>";
+                          }
+                        echo "</tbody>";
+                      echo "</table>";
                     echo "</div>";
                   echo "</div>";
-                }
-              }
-              if ($msj != ""){
-                echo "<script type='text/javascript'>showMessage();</script>";
-              }
-              echo "<br><br><br>"
-             ?>
+                 }
+               }
+               if ($msg != ""){
+                 echo "<script type='text/javascript'>showMessage();</script>";
+               }
+               ?>
+             </div>
           </div>
   			</article>
   		</div>
@@ -153,6 +173,21 @@
     	$(document).ready(function() {
     		tabs.init();
     	})
+    </script>
+    <script src="/AdminZTE/assets/js/tablefilter.js"></script>
+    <link rel="stylesheet" type="text/css" href="/AdminZTE/assets/css/style/tablefilter.css">
+    <script data-config>
+      var filtersConfig = {
+        base_path: '/AdminZTE/assets/css/',
+        filters_row_index: 1,
+        alternate_rows: true,
+        grid_cont_css_class: 'grd-main-cont',
+        grid_tblHead_cont_css_class: 'grd-head-cont',
+        grid_tbl_cont_css_class: 'grd-cont',
+		    loader: true
+      };
+        var tf1 = new TableFilter('table', filtersConfig);
+        tf1.init();
     </script>
   </body>
 </html>

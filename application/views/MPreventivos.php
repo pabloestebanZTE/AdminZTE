@@ -74,6 +74,9 @@
           $('#fechafit').val(fechaFIT);
           $('#fechaiaa').val(fechaFAA);
           $('#fechafaa').val(fechaFAA);
+
+          $("#link").attr("href", "/AdminZTE/index.php/Ticket/ticketDetails?k_ticket="+idT);
+
           try {
               $('#tit').val(users.users.IT_T.N_NAME+" "+users.users.IT_T.N_LASTNAME);
           } catch (e) {
@@ -386,6 +389,8 @@
                           <label for="telephone">Fecha Fin IT :</label>
                           <input type="tel" class="form-control" id="fechafit" name="fechafit" disabled="disabled">
                         </div>
+                        <br><br><br><br><br><br>
+                        <a href="#" class="btn btn-success" role="button" id="link" name="link">Más detalles</a>
                     </div>
           			  	<div class="col-md-6">
                       <div class="form-group">
@@ -406,7 +411,7 @@
                       </div>
                       <br><br><br><br><br><br>
                         <button type="button" class="btn btn-default submit" data-dismiss="modal"><i class="fa fa-paper-plane" aria-hidden="true"></i> Volver</button>
-          					</div>
+                    </div>
           				</form>
           			</div>
               </div>

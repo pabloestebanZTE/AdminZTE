@@ -16,6 +16,10 @@
 		protected $duracion;
 		protected $color;
 		protected $observacionesInicio;
+		protected $observacionesFinal;
+		protected $estadia;
+		protected $almuerzos;
+
 
 		public function __construct(){
 
@@ -73,6 +77,18 @@
 
 		public function setObservacionesI($observacionesInicio){$this->observacionesInicio = $observacionesInicio;}
 
+		public function getObservacionesF(){return $this->observacionesFinal;}
+
+		public function setObservacionesF($observacionesFinal){$this->observacionesFinal = $observacionesFinal;}
+
+		public function getAlmuerzos(){return $this->almuerzos;}
+
+		public function setAlmuerzos($almuerzos){$this->almuerzos = $almuerzos;}
+
+		public function getEstadia(){return $this->estadia;}
+
+		public function setEstadia($estadia){$this->estadia = $estadia;}
+
 		public function createTicket($id, $idMaintenance, $status, $dateStart, $dateFinish, $duracion, $dateStartIT, $dateFinishIT, $dateStartAA, $dateFinishAA, $techs, $color, $observacionesInicio){
       $newTicket= new ticket_model();
 			$newTicket->setId($id);
@@ -108,6 +124,9 @@
 				} else {
 					$diff = NULL;
 				}
+			}
+			if ($diff == 0){
+				$diff = 1;
 			}
 			return $diff;
 		}
