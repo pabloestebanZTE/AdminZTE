@@ -496,6 +496,8 @@ create table stuff
    N_NAME                   varchar(200),
    K_IDMODEL                int,
    N_SERIAL                 varchar(200),
+   N_PLACAINVENTARIO        varchar(200),
+   N_PARTE                  varchar(200),
    N_ESTADO                 varchar(200),
    K_IDEQUIPMENTTYPE        int not null,
    K_IDPVD                  int not null,
@@ -635,4 +637,6 @@ ALTER TABLE ticket add K_OBSERVATION_I varchar(500);
 ALTER TABLE ticket_user add Q_ESTADIA int;
 ALTER TABLE ticket_user add Q_ALMUERZOS int;
 ALTER TABLE kpi add N_ESTANDARES varchar(20);
-ALTER TABLE ticket_user add N_OBSERVATION_F varchar(500);
+ALTER TABLE ticket_user add N_OBSERVATION_F varchar(200);
+ALTER TABLE stuff add N_PLACAINVENTARIO varchar(200);
+ALTER TABLE stuff add N_PARTE varchar(200);

@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/tablesInventory.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/multiTable.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
@@ -222,6 +223,40 @@ var checklist;
 	<div class="body3">
 <!-- content -->
 			<article id="content">
+
+
+
+
+
+        <?php
+        echo "<div id='pricing-table' class='clear'>";
+
+          echo "<center>";
+                echo "<div class='plan' id='most-popular'>";
+                    echo "<h3>PVD<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
+                    echo "<ul>";
+                        echo "<li><b>ID: </b> O.o</li>";
+                        echo "<li><b>Región: </b> O.o</li>";
+                        echo "<li><b>Departamento: </b> O.o</li>";
+                        echo "<li><b>Ciudad: </b> O.o</li>";
+                        echo "<li><b>Dirección: </b> O.o</li>";
+                        echo "<li><b>Tipologia: </b> O.o</li>";
+                        echo "<li><b>Fase: </b> O.o</li>";
+                    echo "</ul>";
+                echo "</div>";
+                echo "</div>";
+                echo "</center>";
+
+
+
+         ?>
+
+
+
+
+
+
+
           <table class="container">
           <?php
             if (isset($inventory)){
@@ -243,7 +278,7 @@ var checklist;
                     echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
                     echo "<td></td>";
                     echo "<td></td>";
-                    echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
+                    echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'><i class='fa fa-search' aria-hidden='true'></i> Expandir</button></td>";
                   echo "</tr>";
                 }
              echo "</tbody>";
@@ -264,77 +299,79 @@ var checklist;
     <div id="modal-02" class="modal fade">
       <div class="modal-content">
         <div id="main" class="container">
-          <div class="linea 200%">
-            <div class="12u">
-              <!-- Features -->
-              <h2 class="major"><span>Elementos funcionales</span></h2>
-              <div>
-                <div class="linea">
-                <!-- content -->
-                  <?php
-                    echo "<center><div class='btn-group'>";
-                      echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElemento()'>Añadir Elemento</button>";
-                      echo "<button type='button' class='btn btn-info btn-sm' onclick='añadirElemento()'>Guardar Cambios</button>";
-                      echo "<button type='button' class='btn btn-danger btn-sm' onclick='añadirElemento()'>Salir</button>";
-                    echo "</div></center>";
+          <form method='post' name='formActualizar'>
+            <div class="linea 200%">
+              <div class="12u">
+                <!-- Features -->
+                <h2 class="major"><span>Elementos funcionales</span></h2>
+                <div>
+                  <div class="linea">
+                  <!-- content -->
+                    <?php
+                      echo "<center><div class='btn-group'>";
+                        echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElemento()'><i class='fa fa-plus-square' aria-hidden='true'></i> Añadir Elemento</button>";
+                        echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateInventory' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                        echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
+                      echo "</div></center>";
 
-                    if (isset($inventory)){
-                      echo "<article id='content'>";
-                        echo "<table class='container' id='tableInventory' name='tableInventory'>";
-                          echo "<thead>";
-                            echo "<tr>";
-                              echo "<th><h1>Elemento </h1></th>";
-                              echo "<th><h1>Marca</h1></th>";
-                              echo "<th><h1>Modelo</h1></th>";
-                              echo "<th><h1>Serial</h1></th>";
-                              echo "<th><h1>Placa de inventario</h1></th>";
-                              echo "<th><h1>Número de parte</h1></th>";
-                              echo "<th><h1>Estado</h1></th>";
-                            echo "</tr>";
-                          echo "</thead>";
-                          echo "<tbody id='inventory' name='inventory'>";
+                      if (isset($inventory)){
+                        echo "<article id='content'>";
+                          echo "<table class='container' id='tableInventory' name='tableInventory'>";
+                            echo "<thead>";
+                              echo "<tr>";
+                                echo "<th><h1>Elemento </h1></th>";
+                                echo "<th><h1>Marca</h1></th>";
+                                echo "<th><h1>Modelo</h1></th>";
+                                echo "<th><h1>Serial</h1></th>";
+                                echo "<th><h1>Placa de inventario</h1></th>";
+                                echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Estado</h1></th>";
+                              echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody id='inventory' name='inventory'>";
 
-                         echo "</tbody>";
-                       echo "</table>";
-                      echo "</article>";
-                    }
-                   ?>
+                           echo "</tbody>";
+                         echo "</table>";
+                        echo "</article>";
+                      }
+                     ?>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="linea 100%">
-            <div class="12u">
-              <!-- Features -->
-              <h2 class="major"><span>Elementos en mantenimiento correctivo</span></h2>
-              <div>
-                <div class="linea">
-                  <?php
-                    if (isset($inventory)){
-                      echo "<article id='content'>";
-                        echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
-                          echo "<thead>";
-                            echo "<tr>";
-                              echo "<th><h1>Elemento </h1></th>";
-                              echo "<th><h1>Marca</h1></th>";
-                              echo "<th><h1>Modelo</h1></th>";
-                              echo "<th><h1>Serial</h1></th>";
-                              echo "<th><h1>Placa de inventario</h1></th>";
-                              echo "<th><h1>Número de parte</h1></th>";
-                              echo "<th><h1>Estado</h1></th>";
-                            echo "</tr>";
-                          echo "</thead>";
-                          echo "<tbody id='corrective' name='corrective'>";
+            <div class="linea 100%">
+              <div class="12u">
+                <!-- Features -->
+                <h2 class="major"><span>Elementos en mantenimiento correctivo</span></h2>
+                <div>
+                  <div class="linea">
+                    <?php
+                      if (isset($inventory)){
+                        echo "<article id='content'>";
+                          echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
+                            echo "<thead>";
+                              echo "<tr>";
+                                echo "<th><h1>Elemento </h1></th>";
+                                echo "<th><h1>Marca</h1></th>";
+                                echo "<th><h1>Modelo</h1></th>";
+                                echo "<th><h1>Serial</h1></th>";
+                                echo "<th><h1>Placa de inventario</h1></th>";
+                                echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Estado</h1></th>";
+                              echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody id='corrective' name='corrective'>";
 
-                         echo "</tbody>";
-                       echo "</table>";
-                      echo "</article>";
-                    }
-                   ?>
+                           echo "</tbody>";
+                         echo "</table>";
+                        echo "</article>";
+                      }
+                     ?>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </form>
           <div class="linea 200%">
             <div class="12u">
               <!-- Features -->

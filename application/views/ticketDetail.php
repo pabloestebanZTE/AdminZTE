@@ -159,7 +159,6 @@
                         echo "</div>";
                         $bandera = 0;
                       } else {
-                        print_r($PVD);
                         echo "<div class='plan' id='most-popular'>";
                             echo "<h3>PVD<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
                             echo "<ul>";
@@ -169,6 +168,7 @@
                                 echo "<li><b>Ciudad: </b> ".$PVD->getCity()."</li>";
                                 echo "<li><b>Dirección: </b> ".$PVD->getDireccion()."</li>";
                                 echo "<li><b>Tipologia: </b> ".$PVD->getTipologia()."</li>";
+                                echo "<li><b>Fase: </b> ".$PVD->getFase()."</li>";
                             echo "</ul>";
                         echo "</div>";
                         $bandera = 1;

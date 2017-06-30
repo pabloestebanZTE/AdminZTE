@@ -17,8 +17,10 @@ class Equipment extends CI_Controller {
     //  echo $_GET['k_pvd'];
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
-
-
       $this->load->view('PmaintenanceProcedure', $respuesta);
+    }
+
+    public function updateInventory(){
+      print_r($_POST);
     }
 }
