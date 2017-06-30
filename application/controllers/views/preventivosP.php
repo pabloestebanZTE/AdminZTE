@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/layout.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/zerogrid.css">
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/responsive.css">
+    <link rel="stylesheet" href="/assets/css/tablesStyles.css">
+    <link rel="stylesheet" href="/assets/css/wheelmenu.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/sweetalert/dist/sweetalert.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,15 +23,15 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_700.font.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
+    <script type="text/javascript" src="/assets/js/cufon-yui.js"></script>
+    <script type="text/javascript" src="/assets/js/cufon-replace.js"></script>
+    <script type="text/javascript" src="/assets/js/Swis721_Cn_BT_400.font.js"></script>
+    <script type="text/javascript" src="/assets/js/Swis721_Cn_BT_700.font.js"></script>
+    <script type="text/javascript" src="/assets/js/tabs.js"></script>
+    <script type="text/javascript" src="/assets/js/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="/assets/css/canvasJS/canvasjs.min.js"></script>
+    <script type="text/javascript" src="/assets/css/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.wheelmenu.js"></script>
     <script>
       $(document).ready(function(){
         $(".wheel-button").wheelmenu({
@@ -60,30 +60,30 @@
   			<header>
           <br>
   				<div class="wrapper rơw">
-          <h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
+          <h1><a id="logo"><img src="/assets/images/logo.png" /></a></h1>
   				<nav>
   					<ul id="menu">
               <?php
                 if ($_SESSION['permissions'] != NULL){
-                  echo "<li id='nav1'><a href='/AdminZTE/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
+                  echo "<li id='nav1'><a href='/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
                   if($_SESSION['permissions'][3] == 1){
                     echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
                   }
                   if($_SESSION['permissions'][1] == 1){
-                    echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
+                    echo "<li id='nav4'><a href='/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][2] == 1){
-                    echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
+                    echo "<li id='nav4'><a href='/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
                   }
                   if($_SESSION['permissions'][4] == 1){
                     echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
                   }
                   if($_SESSION['permissions'][5] == 1){
-                    echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
+                    echo "<li id='nav5'><a href='/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
                   }
                 }
               ?>
-              <li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
+              <li id="nav6"><a href="/index.php/welcome/index">Salir<span>Logout</span></a></li>
   					</ul>
   				</nav>
   				</div>
@@ -103,12 +103,12 @@
                 echo "<div class='wrapperWheel'>";
                   echo "<div class='mainWheel'>";
                     echo "<a href='#wheel1' class='wheel-button ne'>";
-                      echo "<span><img src='/AdminZTE/assets/images/ticket2.png' /></span>";
+                      echo "<span><img src='/assets/images/ticket2.png' /></span>";
                     echo "</a>";
                     echo "<ul id='wheel1'  data-angle='NE' class='wheel'>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/editarMP'><img src='/AdminZTE/assets/images/edit.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/ticketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a></li>";
+                      echo "<li class='item'><a href='/index.php/Ticket/TicketPrincipal'><img src='/assets/images/return.png' /></a></li>";
+                      echo "<li class='item'><a href='/index.php/Mantenimientos/editarMP'><img src='/assets/images/edit.png' /></a></li>";
+                      echo "<li class='item'><a href='/index.php/Ticket/ticketCreation'><img src='/assets/images/plus.ico' /></a></li>";
                     echo "</ul>";
                     echo "<br><br><br><br>";
                   echo "</div>";
@@ -116,6 +116,8 @@
                 echo "<br><br><br><br><br><br>";
               }
              ?>
+
+
              <div class="wrapper tabs">
                <?php
                if($_SESSION['permissions'][1] == 1){
@@ -144,7 +146,7 @@
                           for ($p = 1; $p <= count($meses); $p++){
                            for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
                              echo "<tr>";
-                               echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
+                               echo "<td><a href='/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][2]."</td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][4]."</td>";
                                echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][3]."</td>";
@@ -159,9 +161,9 @@
                                } else {
                                 echo "<td></td>";
                                }
-                               echo "</tr>";
-                            }
+                            echo "</tr>";
                           }
+                        }
                         echo "</tbody>";
                       echo "</table>";
                     echo "</div>";
@@ -193,11 +195,11 @@
     		tabs.init();
     	})
     </script>
-    <script src="/AdminZTE/assets/js/tablefilter.js"></script>
-    <link rel="stylesheet" type="text/css" href="/AdminZTE/assets/css/style/tablefilter.css">
+    <script src="/assets/js/tablefilter.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/style/tablefilter.css">
     <script data-config>
       var filtersConfig = {
-        base_path: '/AdminZTE/assets/css/',
+        base_path: '/assets/js/',
         filters_row_index: 1,
         alternate_rows: true,
         grid_cont_css_class: 'grd-main-cont',

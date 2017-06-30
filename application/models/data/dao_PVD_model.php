@@ -20,7 +20,7 @@
               if ($result2->num_rows > 0) {
                 $row2 = $result2->fetch_assoc();
                 $PVD = new PVD_model();
-                $PVD = $PVD->createPVD($row['K_IDPVD'], $row2['cn'], $row2['dn'], $row2['rn'], $row['N_DIRECCION'], $row['N_FASE]'], $row['N_TIPOLOGIA']);
+                $PVD = $PVD->createPVD($row['K_IDPVD'], $row2['cn'], $row2['dn'], $row2['rn'], $row['N_DIRECCION'], $row['N_FASE'], $row['N_TIPOLOGIA']);
                 $respuesta = $PVD;
               }
             }

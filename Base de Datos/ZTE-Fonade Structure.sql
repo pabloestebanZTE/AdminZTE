@@ -336,9 +336,9 @@ create table TICKET_USER
    K_IDTICKET           varchar(14) not null,
    K_IDUSER             int not null,
    N_TYPE               varchar(5) not null,
-   Q_ESTADIA            int;
-   Q_ALMUERZOS          int;
-   N_OBSERVATION_F      varchar(500);
+   Q_ESTADIA            int,
+   Q_ALMUERZOS          int,
+   N_OBSERVATION_F      varchar(500),
    primary key (K_IDTICKET, K_IDUSER)
 );
 
@@ -413,7 +413,7 @@ create table typology
 create table equipment_generic
 (
    K_IDEQUIPMENT_GENERIC             int not null,
-   N_NAME                   varchar(200) not null,
+   N_NAME                   varchar(500) not null,
    primary key (K_IDEQUIPMENT_GENERIC)
 );
 
@@ -423,10 +423,11 @@ create table equipment_generic
 create table equipment_type
 (
    K_IDEQUIPMENTTYPE        int not null,
-   N_NAME                   varchar(200) not null,
+   N_NAME                   varchar(500) not null,
    K_IDTYPOLOGY             int not null,
    K_IDPHASE                int not null,
    I_QUANTITY               int not null,
+   K_IDEQUIPMENT_GENERIC    int not null,
    primary key (K_IDEQUIPMENTTYPE)
 );
 
@@ -447,8 +448,9 @@ create table manufacturer
 create table model
 (
    K_IDMODEL                int not null,
-   N_NAME                   varchar(200) not null,
+   N_NAME                   varchar(500) not null,
    K_IDMANUFACTURER         int not null,
+   K_IDSTUFF_CATEGORY       int not null,
    primary key (K_IDMODEL)
 );
 
@@ -458,7 +460,7 @@ create table model
 create table item_checklist
 (
    K_IDITEM_CHECKLIST       int not null,
-   N_NAME                   varchar(200) not null,
+   N_NAME                   varchar(500) not null,
    primary key (K_IDITEM_CHECKLIST)
 );
 
@@ -468,9 +470,9 @@ create table item_checklist
 /*==============================================================*/
 create table stuff_category
 (
-   K_IDSTUFF_CATEGORY       int not null,
-   N_NAME                   varchar(200) not null,
-   K_IDEQUIPMENTTYPE        int not null,
+   K_IDSTUFF_CATEGORY           int not null,
+   N_NAME                       varchar(500) not null,
+   K_IDEQUIPMENT_GENERIC        int not null,
    primary key (K_IDSTUFF_CATEGORY)
 );
 
@@ -480,7 +482,7 @@ create table stuff_category
 create table checklist
 (
    K_IDCHECKLIST            int not null,
-   K_IDSTUFF_CATEGORY       int not null,
+   K_IDEQUIPMENT_GENERIC    int not null,
    K_IDITEM_CHECKLIST       int not null,
    primary key (K_IDCHECKLIST)
 );
@@ -491,13 +493,47 @@ create table checklist
 create table stuff
 (
    K_IDSTUFF                int not null,
-   N_NAME                   varchar(200) not null,
-   K_IDMODEL                int not null,
-   N_SERIAL                 varchar(200) not null,
-   N_ESTADO                 varchar(200) not null,
-   K_IDSTUFF_CATEGORY       int not null,
-   primary key (K_IDEQUIPMENTTYPE)
+   N_NAME                   varchar(200),
+   K_IDMODEL                int,
+   N_SERIAL                 varchar(200),
+   N_ESTADO                 varchar(200),
+   K_IDEQUIPMENTTYPE        int not null,
+   K_IDPVD                  int not null,
+   primary key (K_IDSTUFF)
 );
+
+alter table equipment_type add constraint FK_PHASE_ET foreign key (K_IDPHASE)
+      references phase (K_IDPHASE) on delete restrict on update restrict;
+
+alter table equipment_type add constraint FK_TYPOLOGY_ET foreign key (K_IDTYPOLOGY)
+      references typology (K_IDTYPOLOGY) on delete restrict on update restrict;
+
+alter table equipment_type add constraint FK_EG_ET foreign key (K_IDEQUIPMENT_GENERIC)
+      references equipment_generic (K_IDEQUIPMENT_GENERIC) on delete restrict on update restrict;
+
+alter table stuff_category add constraint FK_SC_EG foreign key (K_IDEQUIPMENT_GENERIC)
+      references equipment_generic (K_IDEQUIPMENT_GENERIC) on delete restrict on update restrict;
+
+alter table checklist add constraint FK_CH_SC foreign key (K_IDEQUIPMENT_GENERIC)
+      references equipment_generic (K_IDEQUIPMENT_GENERIC) on delete restrict on update restrict;
+
+alter table checklist add constraint FK_CH_ITCH foreign key (K_IDITEM_CHECKLIST)
+      references item_checklist (K_IDITEM_CHECKLIST) on delete restrict on update restrict;
+
+alter table model add constraint FK_MODEL_MANUFACTURER foreign key (K_IDMANUFACTURER)
+      references manufacturer (K_IDMANUFACTURER) on delete restrict on update restrict;
+
+alter table model add constraint FK_MODEL_SC foreign key (K_IDSTUFF_CATEGORY)
+      references stuff_category (K_IDSTUFF_CATEGORY) on delete restrict on update restrict;
+
+alter table stuff add constraint FK_STUFF_MODEL foreign key (K_IDMODEL)
+      references  model (K_IDMODEL) on delete restrict on update restrict;
+
+alter table stuff add constraint FK_STUFF_ET foreign key (K_IDEQUIPMENTTYPE)
+      references equipment_type (K_IDEQUIPMENTTYPE) on delete restrict on update restrict;
+
+alter table stuff add constraint FK_STUFF_PVD foreign key (K_IDPVD)
+      references pvd (K_IDPVD) on delete restrict on update restrict;
 
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
       references DEPARTMENT (K_IDDEPARTMENT) on delete restrict on update restrict;

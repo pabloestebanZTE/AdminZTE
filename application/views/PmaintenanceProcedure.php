@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Creacion Tickets</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/AdminZTE/assets/css/mainModalWindow2.css" type="text/css" media="all">
+<link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
+<link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
+<link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/tablesInventory.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
+<script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_700.font.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/tms-0.3.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/tms_presets.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/jcarousellite.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/script.js"></script>
+<script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
+<script src="/AdminZTE/assets/js/responsiveslides.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
+<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
+
+<script>
+var newElementQuantity = 0;
+var equipmentType;
+var inventory;
+var category;
+var checklist;
+
+    function showMessage(){
+        var a = "<?php echo $msj[0]; ?>";
+        var b = "<?php echo $msj[1]; ?>";
+        var c = "<?php echo $msj[2]; ?>";
+        sweetAlert(a, b, c);
+    }
+
+    function showModal(idEquipo, inventario, name, categorias, rutina){
+    //  console.log(idEquipo);
+      //console.log(inventario);
+      //console.log(name);
+      //console.log(categorias);
+      checklist = rutina;
+      equipmentType = idEquipo;
+      inventory = inventario;
+      category = categorias;
+      $('#chk').remove();
+      $('#inventory').remove();
+      $('#tableInventory').append("<tbody id='inventory' name='inventory'></tbody>");
+
+      $('#todo-list').empty();
+      var check = "";
+      for (var i = 0; i < checklist.length; i++){
+        check = check + "<span class='todo-wrap'><input type='checkbox' id='"+i+"'/><label for='"+i+"' class='todo'><i class='fa fa-check'></i>"+checklist[i].K_IDITEM_CHECKLIST.N_NAME+"</label></span>";
+      }
+      $('#todo-list').append(check);
+      $('#modal-02').modal('show');
+    }
+
+    function cambiarSelectMarca(equipo_categoria){
+      var equipo = $("#selectElement"+equipo_categoria+" option:selected").attr('value');
+      for(var i = 0;i <category.length; i++){
+        if(category[i].K_IDSTUFF_CATEGORY == equipo){
+          var manufacturersTotal = [];
+          for(var j = 0; j< category[i].model.length; j++){
+            manufacturersTotal[j] = category[i].model[j].K_IDMANUFACTURER;
+          }
+          unique = [...new Set(manufacturersTotal.map(a => a.K_IDMANUFACTURER))];
+          unique2 = [...new Set(manufacturersTotal.map(a => a.N_NAME))];
+          var manufacturers = "";
+          for(var j = 0; j< unique2.length; j++){
+            manufacturers = manufacturers+"<option value='"+unique[j]+"'>"+unique2[j]+"</option>";
+          }
+
+          var models = "";
+          for(var j = 0; j < category[i].model.length; j++){
+            if(category[i].model[j].K_IDMANUFACTURER.K_IDMANUFACTURER == unique[0]){
+              models = models+"<option value='"+category[i].model[j].K_IDMODEL+"'>"+category[i].model[j].N_NAME+"</option>";
+            }
+          }
+        }
+        $("#selectMarca"+equipo_categoria).empty();
+        $("#selectModelo"+equipo_categoria).empty();
+        $("#selectMarca"+equipo_categoria).append(manufacturers);
+        $("#selectModelo"+equipo_categoria).append(models);
+      }
+    }
+
+    function cambiarSelectModelo(equipo_categoria){
+      var equipo = $("#selectElement"+equipo_categoria+" option:selected").attr('value');
+      var marca = $("#selectMarca"+equipo_categoria+" option:selected").attr('value');
+      var models = "";
+      for(var i = 0; i<category.length;i++){
+        if(category[i].K_IDSTUFF_CATEGORY == equipo){
+          for(var j = 0; j<category[i].model.length; j++){
+            if(category[i].model[j].K_IDMANUFACTURER.K_IDMANUFACTURER == marca){
+              models = models+"<option value='"+category[i].model[j].K_IDMODEL+"'>"+category[i].model[j].N_NAME+"</option>";
+            }
+          }
+        }
+      }
+      $("#selectModelo"+equipo_categoria).empty();
+      $("#selectModelo"+equipo_categoria).append(models);
+    }
+
+    function cambioTabla(equipo_categoria){
+      var estado = $("#selectEstados"+equipo_categoria+" option:selected").attr('value');
+      var linea = document.getElementById("linea"+equipo_categoria);
+
+      if(estado == "Averiado"){
+        $("#tableCorrective").append(linea);
+      }
+      if(estado == "Funcional"){
+        $("#tableInventory").append(linea);
+      }
+    }
+
+    function añadirElemento(){
+      var options = "<td><select onchange='cambiarSelectMarca("+newElementQuantity+")' style='font-size:10px' name='selectElement"+newElementQuantity+"' id='selectElement"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      for(var i = 0; i < category.length; i++){
+        options = options+"<option value='"+category[i].K_IDSTUFF_CATEGORY+"'>"+category[i].N_NAME+"</option>";
+      }
+      options = options + "</select></td>";
+
+      var manufacturersTotal = [];
+      for(var i = 0; i< category[0].model.length; i++){
+        manufacturersTotal[i] = category[0].model[i].K_IDMANUFACTURER;
+      }
+      unique = [...new Set(manufacturersTotal.map(a => a.K_IDMANUFACTURER))];
+      unique2 = [...new Set(manufacturersTotal.map(a => a.N_NAME))];
+      var manufacturers = "<td><select onchange='cambiarSelectModelo("+newElementQuantity+")' style='font-size:10px' name='selectMarca"+newElementQuantity+"' id='selectMarca"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      for(var i = 0; i< unique2.length; i++){
+        manufacturers = manufacturers+"<option value='"+unique[i]+"'>"+unique2[i]+"</option>";
+      }
+      manufacturers = manufacturers + "</select></td>";
+
+      var models = "<td><select style='font-size:10px' name='selectModelo"+newElementQuantity+"' id='selectModelo"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      for(var i = 0; i < category[0].model.length; i++){
+        if(category[0].model[i].K_IDMANUFACTURER.K_IDMANUFACTURER == unique[0]){
+          models = models+"<option value='"+category[0].model[i].K_IDMODEL+"'>"+category[0].model[i].N_NAME+"</option>";
+        }
+      }
+      models = models + "</select></td>";
+
+      var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
+      var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
+      var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
+
+      var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
+      estados = estados+"</select></td>";
+
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+estados+"</tr>" );
+      newElementQuantity++;
+    }
+
+</script>
+
+</head>
+<body id="page1">
+<div class="body1">
+	<div class="body2">
+  <div class="body5">
+		<div class="main zerogrid">
+<!-- header -->
+			<header>
+				<div class="wrapper row">
+				<h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
+				<nav>
+					<ul id="menu">
+          	<?php
+							if ($_SESSION['permissions'] != NULL){
+                echo "<li id='nav1'><a href='/AdminZTE/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
+								if($_SESSION['permissions'][3] == 1){
+									echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
+								}
+								if($_SESSION['permissions'][1] == 1){
+									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
+								}
+								if($_SESSION['permissions'][2] == 1){
+									echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
+								}
+								if($_SESSION['permissions'][4] == 1){
+									echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
+								}
+								if($_SESSION['permissions'][5] == 1){
+                  echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
+								}
+							}
+            ?>
+						<li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
+					</ul>
+				</nav>
+				</div>
+			</header>
+<!-- header end-->
+    </div>
+		</div>
+	</div>
+</div>
+	<div class="body3">
+<!-- content -->
+			<article id="content">
+          <table class="container">
+          <?php
+            if (isset($inventory)){
+              echo "<thead>";
+                echo "<tr>";
+                  echo "<th><h1>Item</h1></th>";
+                  echo "<th><h1>Valor Unitario Incluido IVA</h1></th>";
+                  echo "<th><h1>Cantidad Tipologia</h1></th>";
+                  echo "<th><h1>Cantidad Reportada</h1></th>";
+                  echo "<th><h1>Valor Total</h1></th>";
+                  echo "<th><h1>Expandir</h1></th>";
+                echo "</tr>";
+              echo "</thead>";
+              echo "<tbody>";
+                for ($i = 0; $i < count($inventory); $i++){
+                  echo "<tr>";
+                    echo "<td>".$inventory[$i]['N_NAME']."</td>";
+                    echo "<td></td>";
+                    echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                    echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
+                  echo "</tr>";
+                }
+             echo "</tbody>";
+            }
+           ?>
+          </table>
+			</article>
+	</div>
+		<div class="main zerogrid">
+<!-- footer -->
+<!-- footer end -->
+		</div>
+
+
+
+
+    <!--DEMO02-->
+    <div id="modal-02" class="modal fade">
+      <div class="modal-content">
+        <div id="main" class="container">
+          <div class="linea 200%">
+            <div class="12u">
+              <!-- Features -->
+              <h2 class="major"><span>Elementos funcionales</span></h2>
+              <div>
+                <div class="linea">
+                <!-- content -->
+                  <?php
+                    echo "<center><div class='btn-group'>";
+                      echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElemento()'>Añadir Elemento</button>";
+                      echo "<button type='button' class='btn btn-info btn-sm' onclick='añadirElemento()'>Guardar Cambios</button>";
+                      echo "<button type='button' class='btn btn-danger btn-sm' onclick='añadirElemento()'>Salir</button>";
+                    echo "</div></center>";
+
+                    if (isset($inventory)){
+                      echo "<article id='content'>";
+                        echo "<table class='container' id='tableInventory' name='tableInventory'>";
+                          echo "<thead>";
+                            echo "<tr>";
+                              echo "<th><h1>Elemento </h1></th>";
+                              echo "<th><h1>Marca</h1></th>";
+                              echo "<th><h1>Modelo</h1></th>";
+                              echo "<th><h1>Serial</h1></th>";
+                              echo "<th><h1>Placa de inventario</h1></th>";
+                              echo "<th><h1>Número de parte</h1></th>";
+                              echo "<th><h1>Estado</h1></th>";
+                            echo "</tr>";
+                          echo "</thead>";
+                          echo "<tbody id='inventory' name='inventory'>";
+
+                         echo "</tbody>";
+                       echo "</table>";
+                      echo "</article>";
+                    }
+                   ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="linea 100%">
+            <div class="12u">
+              <!-- Features -->
+              <h2 class="major"><span>Elementos en mantenimiento correctivo</span></h2>
+              <div>
+                <div class="linea">
+                  <?php
+                    if (isset($inventory)){
+                      echo "<article id='content'>";
+                        echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
+                          echo "<thead>";
+                            echo "<tr>";
+                              echo "<th><h1>Elemento </h1></th>";
+                              echo "<th><h1>Marca</h1></th>";
+                              echo "<th><h1>Modelo</h1></th>";
+                              echo "<th><h1>Serial</h1></th>";
+                              echo "<th><h1>Placa de inventario</h1></th>";
+                              echo "<th><h1>Número de parte</h1></th>";
+                              echo "<th><h1>Estado</h1></th>";
+                            echo "</tr>";
+                          echo "</thead>";
+                          echo "<tbody id='corrective' name='corrective'>";
+
+                         echo "</tbody>";
+                       echo "</table>";
+                      echo "</article>";
+                    }
+                   ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="linea 200%">
+            <div class="12u">
+              <!-- Features -->
+              <h2 class="major"><span>Checklist</span></h2>
+              <div class="linea" id="checklist" name="checklist">
+                <form id="todo-list">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script type="text/javascript"> Cufon.now(); </script>
+  <script>
+    $(document).ready(function() {
+      tabs.init();
+    })
+  </script>
+</body>
+</html>
