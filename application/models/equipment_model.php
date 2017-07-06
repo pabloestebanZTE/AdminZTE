@@ -11,10 +11,14 @@
 		protected $other;
 		protected $marca;
     protected $modelo;
+		protected $placa;
+		protected $parte;
+		protected $estado;
+		protected $progress;
 
 		public function __construct(){
-
 		}
+
 		public function getId(){return $this->id;}
 
 		public function setId($id){$this->id = $id;}
@@ -47,7 +51,23 @@
 
     public function setModelo($modelo){$this->modelo = $modelo;}
 
-		public function createEquipment($id, $categoria, $tipo1, $tipo2, $other,$serial, $marca, $modelo){
+		public function getPlaca(){return $this->placa;}
+
+		public function setPlaca($placa){$this->placa = $placa;}
+
+		public function getParte(){return $this->parte;}
+
+    public function setParte($parte){$this->parte = $parte;}
+
+		public function getEstado(){return $this->estado;}
+
+    public function setEstado($estado){$this->estado = $estado;}
+
+		public function getProgress(){return $this->progress;}
+
+    public function setProgress($progress){$this->progress = $progress;}
+
+		public function createEquipment($id, $categoria, $tipo1, $tipo2, $other,$serial, $marca, $modelo, $placa, $parte, $estado, $progress){
 			$newEquipment = new equipment_model();
 			$newEquipment->setId($id);
 			$newEquipment->setCategoria($categoria);
@@ -57,6 +77,10 @@
 			$newEquipment->setSerial($serial);
 			$newEquipment->setMarca($marca);
       $newEquipment->setModelo($modelo);
+			$newEquipment->setPlaca($placa);
+			$newEquipment->setParte($parte);
+			$newEquipment->setEstado($estado);
+			$newEquipment->setProgress($progress);
 
 			return $newEquipment;
     }

@@ -58,17 +58,64 @@ var checklist;
     }
 
     function showModal(idEquipo, inventario, name, categorias, rutina){
+      newElementQuantity = 0;
     //  console.log(idEquipo);
-      //console.log(inventario);
+      console.log(inventario);
       //console.log(name);
-      //console.log(categorias);
+      console.log(categorias);
       checklist = rutina;
       equipmentType = idEquipo;
       inventory = inventario;
       category = categorias;
       $('#chk').remove();
       $('#inventory').remove();
+      $('#corrective').remove();
+
       $('#tableInventory').append("<tbody id='inventory' name='inventory'></tbody>");
+      $('#tableCorrective').append("<tbody id='corrective' name='corrective'></tbody>");
+      if(inventario != "NI"){
+        for(var i = 0; i<inventario.length; i++){
+          for (var j = 0; j<categorias.length; j++){
+            if (categorias[j].K_IDSTUFF_CATEGORY == inventario[i].K_IDSTUFF_CATEGORY){
+              var elemento =  "<td>"+categorias[j].N_NAME+"</td>";
+              for(k = 0; k<categorias[j].model.length; k++){
+                if(categorias[j].model[k].K_IDMODEL == inventario[i].K_IDMODEL){
+                  var modelo =  "<td>"+categorias[j].model[k].N_NAME+"</td>";
+                  var marca =  "<td>"+categorias[j].model[k].K_IDMANUFACTURER.N_NAME+"</td>";
+                }
+              }
+            }
+          }
+          var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
+          var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
+          var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
+
+          console.log(inventario[i].Q_PROGRESS);
+          if(inventario[i].Q_PROGRESS == "0"){
+            var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+            finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
+            finalizado = finalizado+"</select></td>";
+          } else {
+            var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+            finalizado = finalizado+"<option value='1'>Si</option><option value='0'>No</option>";
+            finalizado = finalizado+"</select></td>";
+          }
+
+          if (inventario[i].N_ESTADO == "Funcional"){
+            var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+            estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
+            estados = estados+"</select></td>";
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+finalizado+"</tr>" );
+          }
+          if (inventario[i].N_ESTADO == "Averiado"){
+            var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+            estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
+            estados = estados+"</select></td>";
+            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+"</tr>" );
+          }
+          newElementQuantity++;
+        }
+      }
 
       $('#todo-list').empty();
       var check = "";
@@ -172,8 +219,14 @@ var checklist;
       estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
       estados = estados+"</select></td>";
 
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+estados+"</tr>" );
+      var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
+      finalizado = finalizado+"</select></td>";
+
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+estados+finalizado+"</tr>" );
       newElementQuantity++;
+      $("#Elements").val(newElementQuantity);
+
     }
 
 </script>
@@ -230,32 +283,22 @@ var checklist;
 
         <?php
         echo "<div id='pricing-table' class='clear'>";
-
           echo "<center>";
                 echo "<div class='plan' id='most-popular'>";
                     echo "<h3>PVD<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
                     echo "<ul>";
-                        echo "<li><b>ID: </b> O.o</li>";
-                        echo "<li><b>Región: </b> O.o</li>";
-                        echo "<li><b>Departamento: </b> O.o</li>";
-                        echo "<li><b>Ciudad: </b> O.o</li>";
-                        echo "<li><b>Dirección: </b> O.o</li>";
-                        echo "<li><b>Tipologia: </b> O.o</li>";
-                        echo "<li><b>Fase: </b> O.o</li>";
+                        echo "<li><b>ID: </b>".$PVD->getId()."</li>";
+                        echo "<li><b>Región: </b>".$PVD->getRegion()."</li>";
+                        echo "<li><b>Departamento: </b>".$PVD->getDepartment()."</li>";
+                        echo "<li><b>Ciudad: </b>".$PVD->getCity()."</li>";
+                        echo "<li><b>Dirección: </b>".$PVD->getDireccion()."</li>";
+                        echo "<li><b>Tipologia: </b>".$PVD->getTipologia()."</li>";
+                        echo "<li><b>Fase: </b>".$PVD->getFase()."</li>";
                     echo "</ul>";
                 echo "</div>";
-                echo "</div>";
-                echo "</center>";
-
-
-
+              echo "</div>";
+          echo "</center>";
          ?>
-
-
-
-
-
-
 
           <table class="container">
           <?php
@@ -265,7 +308,9 @@ var checklist;
                   echo "<th><h1>Item</h1></th>";
                   echo "<th><h1>Valor Unitario Incluido IVA</h1></th>";
                   echo "<th><h1>Cantidad Tipologia</h1></th>";
-                  echo "<th><h1>Cantidad Reportada</h1></th>";
+                  echo "<th><h1>Cantidad en Inventario</h1></th>";
+                  echo "<th><h1>Cantidad en Correctivo</h1></th>";
+
                   echo "<th><h1>Valor Total</h1></th>";
                   echo "<th><h1>Expandir</h1></th>";
                 echo "</tr>";
@@ -274,10 +319,12 @@ var checklist;
                 for ($i = 0; $i < count($inventory); $i++){
                   echo "<tr>";
                     echo "<td>".$inventory[$i]['N_NAME']."</td>";
-                    echo "<td></td>";
+                    echo "<td>".$inventory[$i]['price']."</td>";
                     echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
                     echo "<td></td>";
                     echo "<td></td>";
+                    echo "<td>".$inventory[$i]['valorT']."</td>";
+
                     echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'><i class='fa fa-search' aria-hidden='true'></i> Expandir</button></td>";
                   echo "</tr>";
                 }
@@ -326,6 +373,7 @@ var checklist;
                                 echo "<th><h1>Placa de inventario</h1></th>";
                                 echo "<th><h1>Número de parte</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Finalizado</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='inventory' name='inventory'>";
@@ -361,7 +409,6 @@ var checklist;
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='corrective' name='corrective'>";
-
                            echo "</tbody>";
                          echo "</table>";
                         echo "</article>";
@@ -371,11 +418,13 @@ var checklist;
                 </div>
               </div>
             </div>
+            <input name='pvd' id='pvd' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=' <?php echo $_GET['k_pvd'] ?> '></td>
+            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=''></td>
           </form>
           <div class="linea 200%">
             <div class="12u">
               <!-- Features -->
-              <h2 class="major"><span>Checklist</span></h2>
+              <h2 class="major"><span>Rutina de Mantenimiento</span></h2>
               <div class="linea" id="checklist" name="checklist">
                 <form id="todo-list">
                 </form>
@@ -385,7 +434,6 @@ var checklist;
         </div>
       </div>
     </div>
-
   <script type="text/javascript"> Cufon.now(); </script>
   <script>
     $(document).ready(function() {

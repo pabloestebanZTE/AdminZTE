@@ -473,6 +473,8 @@ create table stuff_category
    K_IDSTUFF_CATEGORY           int not null,
    N_NAME                       varchar(500) not null,
    K_IDEQUIPMENT_GENERIC        int not null,
+   V_PRICE_R4                   double(12,2),
+   V_PRICE_R1                   double(12,2),
    primary key (K_IDSTUFF_CATEGORY)
 );
 
@@ -499,8 +501,9 @@ create table stuff
    N_PLACAINVENTARIO        varchar(200),
    N_PARTE                  varchar(200),
    N_ESTADO                 varchar(200),
-   K_IDEQUIPMENTTYPE        int not null,
+   K_IDSTUFF_CATEGORY       int not null,
    K_IDPVD                  int not null,
+   Q_PROGRESS               int not null,
    primary key (K_IDSTUFF)
 );
 
@@ -531,8 +534,8 @@ alter table model add constraint FK_MODEL_SC foreign key (K_IDSTUFF_CATEGORY)
 alter table stuff add constraint FK_STUFF_MODEL foreign key (K_IDMODEL)
       references  model (K_IDMODEL) on delete restrict on update restrict;
 
-alter table stuff add constraint FK_STUFF_ET foreign key (K_IDEQUIPMENTTYPE)
-      references equipment_type (K_IDEQUIPMENTTYPE) on delete restrict on update restrict;
+alter table stuff add constraint FK_STUFF_ET foreign key (K_IDSTUFF_CATEGORY)
+      references stuff_category (K_IDSTUFF_CATEGORY) on delete restrict on update restrict;
 
 alter table stuff add constraint FK_STUFF_PVD foreign key (K_IDPVD)
       references pvd (K_IDPVD) on delete restrict on update restrict;
@@ -640,3 +643,4 @@ ALTER TABLE kpi add N_ESTANDARES varchar(20);
 ALTER TABLE ticket_user add N_OBSERVATION_F varchar(200);
 ALTER TABLE stuff add N_PLACAINVENTARIO varchar(200);
 ALTER TABLE stuff add N_PARTE varchar(200);
+ALTER TABLE stuff add Q_PROGRESS int not null;
