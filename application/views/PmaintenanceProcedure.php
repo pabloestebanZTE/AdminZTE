@@ -89,8 +89,8 @@ var checklist;
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
+          var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
 
-          console.log(inventario[i].Q_PROGRESS);
           if(inventario[i].Q_PROGRESS == "0"){
             var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
@@ -105,17 +105,18 @@ var checklist;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+finalizado+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+finalizado+id+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+"</tr>" );
+            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+id+"</tr>" );
           }
           newElementQuantity++;
         }
       }
+      $("#Elements").val(newElementQuantity);
 
       $('#todo-list').empty();
       var check = "";
@@ -223,6 +224,7 @@ var checklist;
       finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
       finalizado = finalizado+"</select></td>";
 
+
       $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+estados+finalizado+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
@@ -321,10 +323,9 @@ var checklist;
                     echo "<td>".$inventory[$i]['N_NAME']."</td>";
                     echo "<td>".$inventory[$i]['price']."</td>";
                     echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
-                    echo "<td></td>";
-                    echo "<td></td>";
+                    echo "<td>".$inventory[$i]['funcional']."</td>";
+                    echo "<td>".$inventory[$i]['averiado']."</td>";
                     echo "<td>".$inventory[$i]['valorT']."</td>";
-
                     echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'><i class='fa fa-search' aria-hidden='true'></i> Expandir</button></td>";
                   echo "</tr>";
                 }

@@ -134,5 +134,12 @@
       return $respuesta;
     }
 
+    public function updateEquipment($equipment, $PVD){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress()." where K_IDSTUFF = ".$equipment->getId().";";
+      $session->query($sql);
+    }
+
   }
 ?>
