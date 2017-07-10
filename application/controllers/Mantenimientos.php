@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 $msgJS = "";
 
@@ -105,10 +105,19 @@ class Mantenimientos extends CI_Controller {
 
     function editarMP(){
       $PVDs = $this->dao_PVD_model->getPVDs();
-      for($i = 0; $i < count($PVDs); $i++){
+      $countPVD = count($PVDs);
+      for($i = 0; $i < $countPVD; $i++){
         $PVDs[$i]->setMaintenance($this->dao_maintenance_model->getManPrePerPVD($PVDs[$i]->getId()));
         for($j = 0; $j < count($PVDs[$i]->getMaintenance()); $j++){
-          $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
+          if($j != 0){
+            $pvdHelp = clone $PVDs[$i];
+            $pvdHelp->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($pvdHelp->getMaintenance()[$j]->getId()));
+            $mant[0] = $pvdHelp->getMaintenance()[$j];
+            $pvdHelp->setMaintenance($mant);
+            $PVDs[count($PVDs)] = $pvdHelp;
+          } else {
+            $PVDs[$i]->getMaintenance()[0]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[0]->getId()));
+          }
         }
       }
       $respuesta['users'] = $this->dao_user_model->getAllUsers();
