@@ -34,6 +34,7 @@ class Equipment extends CI_Controller {
     public function listBucket($folder){
       try {
         foreach ($GLOBALS['bucket'] as $object) {
+      //    print_r($object);
           $direccion = explode("/", $object['Key']);
           if(count($direccion)>4){
             if($direccion[4] != ""){
@@ -54,7 +55,7 @@ class Equipment extends CI_Controller {
     //  echo $_GET['k_fase'];
     //  echo $_GET['k_pvd'];
       $folders = $this->createFolders();
-      $this->listBucket($folders);
+      $folders = $this->listBucket($folders);
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
@@ -71,7 +72,7 @@ class Equipment extends CI_Controller {
           }
         }
       }
-      print_r($respuesta['inventory']);
+    //  print_r($respuesta['inventory']);
       for($i = 0; $i< count($respuesta['inventory']); $i++){
         $respuesta['inventory'][$i]['valorT'] = 0;
         $respuesta['inventory'][$i]['funcional'] = 0;
@@ -84,11 +85,22 @@ class Equipment extends CI_Controller {
             }
             if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
               $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
+              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 40;
             }
           }
           if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
             $respuesta['inventory'][$i]['averiado']++;
           }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Antes del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Durante el Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+          }
+
         }
       }
       $this->load->view('PmaintenanceProcedure', $respuesta);

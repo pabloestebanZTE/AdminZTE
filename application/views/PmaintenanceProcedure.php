@@ -113,6 +113,11 @@ var zones;
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
+          if(inventario[i].progreso != undefined){
+            var avance =  "<td>"+inventario[i].progreso+" %</td>";
+          } else {
+            var avance =  "<td>0 %</td>";
+          }
           var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
           var fotos = "<td><a class='push_button red' role='button' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
@@ -132,7 +137,7 @@ var zones;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+id+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
@@ -339,13 +344,13 @@ var zones;
               echo "<thead>";
                 echo "<tr>";
                   echo "<th><h1>Item</h1></th>";
-                  echo "<th><h1>Valor Unitario Incluido IVA</h1></th>";
+                  echo "<th><h1>Valor Unitario</h1></th>";
                   echo "<th><h1>Cantidad Tipologia</h1></th>";
-                  echo "<th><h1>Cantidad en Inventario</h1></th>";
-                  echo "<th><h1>Cantidad en Correctivo</h1></th>";
-
+                  echo "<th><h1>En Inventario</h1></th>";
+                  echo "<th><h1>En Correctivo</h1></th>";
                   echo "<th><h1>Valor Total</h1></th>";
                   echo "<th><h1>Expandir</h1></th>";
+                  echo "<th><h1>Avance</h1></th>";
                 echo "</tr>";
               echo "</thead>";
               echo "<tbody>";
@@ -357,7 +362,8 @@ var zones;
                     echo "<td>".$inventory[$i]['funcional']."</td>";
                     echo "<td>".$inventory[$i]['averiado']."</td>";
                     echo "<td>".$inventory[$i]['valorT']."</td>";
-                    echo "<td><button type='button' class='btn btn-success btn-sm' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'><i class='fa fa-search' aria-hidden='true'></i> Expandir</button></td>";
+                    echo "<td><button type='button' class='push_button blue' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
+                    echo "<td> ".$inventory[$i]['avance']."%</td>";
                   echo "</tr>";
                 }
              echo "</tbody>";
@@ -406,6 +412,7 @@ var zones;
                                 echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Galeria</h1></th>";
+                                echo "<th><h1>Avance</h1></th>";
                                 echo "<th><h1>Finalizado</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
@@ -439,8 +446,8 @@ var zones;
                                 echo "<th><h1>Placa de inventario</h1></th>";
                                 echo "<th><h1>Número de parte</h1></th>";
                                 echo "<th><h1>Área</h1></th>";
-                                echo "<th><h1>Galeria</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Galeria</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='corrective' name='corrective'>";
