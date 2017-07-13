@@ -194,7 +194,7 @@
                     echo "</div>";
                 echo "</div>";
                 echo "<h2 class='under'>Información del proceso</h2>";
-                  echo "<a href='/AdminZTE/index.php/Equipment/inventoryPVD?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."' class='btn btn-primary' role='button' > Detalles del mantenimiento</a>";
+                  echo "<a href='/AdminZTE/index.php/Equipment/inventoryPVD?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket->getId()."' class='btn btn-primary' role='button' > Detalles del mantenimiento</a>";
 
                 echo "<h2 class='under'>Información de cierre</h2>";
                 echo "<div id='pricing-table' class='clear'>";

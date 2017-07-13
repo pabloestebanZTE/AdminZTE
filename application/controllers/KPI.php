@@ -8,10 +8,13 @@ class KPI extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+
         $this->load->model('data/dao_kpi_model');
     }
 
+
     public function KPIPrincial(){
+
       $this->load->view('viewKPI');
     }
 

@@ -24,6 +24,17 @@
                 $respuesta = $PVD;
               }
             }
+            $sql = "SELECT * FROM pvd_place WHERE K_IDPVDT = '".$PVD->getTipologia()."';";
+            $result = $session->query($sql);
+            $i = 0;
+            while($row = $result->fetch_assoc()) {
+              $sql2 = "SELECT * FROM pvd_zone WHERE K_IDPVDZONE = ".$row['K_IDPVDZONE'].";";
+              $result2 = $session->query($sql2);
+              $row2 = $result2->fetch_assoc();
+              $zones[$i] = $row2;
+              $i++;
+            }
+            $respuesta->setZones($zones);
           } else {
             $respuesta = "Error de informacion";
           }
@@ -59,7 +70,7 @@
             }
               //  $db->Connection->closeSession($session);
                 return $respuesta;
-            }
+        }
 
         public function getAllPlaces(){
           $zones = $this->getPVDZone();

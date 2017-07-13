@@ -15,6 +15,7 @@
 		protected $parte;
 		protected $estado;
 		protected $progress;
+		protected $zona;
 
 		public function __construct(){
 		}
@@ -66,6 +67,10 @@
 		public function getProgress(){return $this->progress;}
 
     public function setProgress($progress){$this->progress = $progress;}
+
+		public function getZona(){return $this->zona;}
+
+		public function setZona($zona){$this->zona = $zona;}
 
 		public function createEquipment($id, $categoria, $tipo1, $tipo2, $other,$serial, $marca, $modelo, $placa, $parte, $estado, $progress){
 			$newEquipment = new equipment_model();

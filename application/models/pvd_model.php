@@ -13,7 +13,7 @@
     protected $tipologia;
     protected $fase;
     protected $maintenance;
-
+		protected $zones;
 
 		public function __construct(){
 
@@ -58,6 +58,10 @@
     public function getMaintenance(){return $this->maintenance;}
 
     public function setMaintenance($maintenance){$this->maintenance = $maintenance;}
+
+		public function getZones(){return $this->zones;}
+
+    public function setZones($zones){$this->zones = $zones;}
 
 		public function createPVD($id, $city, $deparment, $region, $direccion, $fase, $tipologia){
 			$newPVD= new PVD_model();

@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
 <link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
 <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="/AdminZTE/assets/css/chunkyButtons.css" type="text/css" media="all">
 <link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
@@ -49,6 +50,7 @@ var equipmentType;
 var inventory;
 var category;
 var checklist;
+var zones;
 
     function showMessage(){
         var a = "<?php echo $msj[0]; ?>";
@@ -60,9 +62,9 @@ var checklist;
     function showModal(idEquipo, inventario, name, categorias, rutina){
       newElementQuantity = 0;
     //  console.log(idEquipo);
-      console.log(inventario);
+    //  console.log(inventario);
       //console.log(name);
-      console.log(categorias);
+  //    console.log(categorias);
       checklist = rutina;
       equipmentType = idEquipo;
       inventory = inventario;
@@ -70,6 +72,28 @@ var checklist;
       $('#chk').remove();
       $('#inventory').remove();
       $('#corrective').remove();
+
+      nameZones = ""+"<?php
+         for($i=0;$i<count($PVD->getZones());$i++){
+           echo $PVD->getZones()[$i]['N_NAME'];
+           echo "@";
+         }
+        ?>";
+      idZones = ""+"<?php
+         for($i=0;$i<count($PVD->getZones());$i++){
+           echo $PVD->getZones()[$i]['K_IDPVDZONE'];
+           echo "-";
+         }
+        ?>";
+
+        nameZones = nameZones.split("@");
+        idZones = idZones.split("-");
+
+        $selectZones = "";
+        for(var i = 0; i < idZones.length -1; i++){
+          $selectZones = $selectZones+"<option value='"+idZones[i]+"'>"+nameZones[i]+"</option>";
+        }
+        zones = $selectZones
 
       $('#tableInventory').append("<tbody id='inventory' name='inventory'></tbody>");
       $('#tableCorrective').append("<tbody id='corrective' name='corrective'></tbody>");
@@ -89,7 +113,10 @@ var checklist;
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
+          var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
+          var fotos = "<td><a class='push_button red' role='button' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+
 
           if(inventario[i].Q_PROGRESS == "0"){
             var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
@@ -105,13 +132,15 @@ var checklist;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+finalizado+id+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+id+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+estados+id+"</tr>" );
+            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+id+"</tr>" );
+            var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
+            selectEstado.style.display = 'none';
           }
           newElementQuantity++;
         }
@@ -176,11 +205,13 @@ var checklist;
     function cambioTabla(equipo_categoria){
       var estado = $("#selectEstados"+equipo_categoria+" option:selected").attr('value');
       var linea = document.getElementById("linea"+equipo_categoria);
-
+      var selectEstado = document.getElementById("selectFinalizado"+equipo_categoria);
       if(estado == "Averiado"){
+        selectEstado.style.display = 'none';
         $("#tableCorrective").append(linea);
       }
       if(estado == "Funcional"){
+        selectEstado.style.display = 'block';
         $("#tableInventory").append(linea);
       }
     }
@@ -215,6 +246,11 @@ var checklist;
       var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
+      var fotos = "<td><a class='push_button red' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+
+      var zonaE = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      zonaE = zonaE+zones;
+      zonaE = zonaE+"</select></td>";
 
       var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
@@ -225,7 +261,7 @@ var checklist;
       finalizado = finalizado+"</select></td>";
 
 
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+estados+finalizado+"</tr>" );
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+finalizado+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
 
@@ -278,11 +314,6 @@ var checklist;
 	<div class="body3">
 <!-- content -->
 			<article id="content">
-
-
-
-
-
         <?php
         echo "<div id='pricing-table' class='clear'>";
           echo "<center>";
@@ -361,7 +392,6 @@ var checklist;
                         echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateInventory' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                         echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                       echo "</div></center>";
-
                       if (isset($inventory)){
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableInventory' name='tableInventory'>";
@@ -373,7 +403,9 @@ var checklist;
                                 echo "<th><h1>Serial</h1></th>";
                                 echo "<th><h1>Placa de inventario</h1></th>";
                                 echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Galeria</h1></th>";
                                 echo "<th><h1>Finalizado</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
@@ -406,6 +438,8 @@ var checklist;
                                 echo "<th><h1>Serial</h1></th>";
                                 echo "<th><h1>Placa de inventario</h1></th>";
                                 echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Área</h1></th>";
+                                echo "<th><h1>Galeria</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                               echo "</tr>";
                             echo "</thead>";

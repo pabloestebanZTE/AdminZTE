@@ -1,6 +1,24 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require 'assets/aws_s3_sdk/aws-autoloader.php';
+use Aws\S3\S3Client;
+
+$s3Client = S3Client::factory(array(
+  'http' => [ 'verify' => false ],
+    'version' => 'latest',
+    'region' => 'us-west-2',
+    'credentials' => array(
+        'key'    => 'AKIAJUCUHLTBZFNXHJ6Q',
+        'secret' => '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',
+    )
+));
+
+$iterator = $s3Client->getIterator('ListObjects', array(
+    'Bucket' => strtolower($_GET['k_ticket'])
+));
+
+$GLOBALS['bucket'] = $iterator;
 
 class Equipment extends CI_Controller {
 
@@ -13,10 +31,30 @@ class Equipment extends CI_Controller {
         $this->load->model('equipment_model');
     }
 
+    public function listBucket($folder){
+      try {
+        foreach ($GLOBALS['bucket'] as $object) {
+          $direccion = explode("/", $object['Key']);
+          if(count($direccion)>4){
+            if($direccion[4] != ""){
+              $folder[$direccion[1]][$direccion[2]][$direccion[3]] = 1;
+            }
+            $direccion = NULL;
+          }
+        }
+      } catch (Exception $e ) {
+        echo ".o.o";
+      }
+    //  print_r($folder);
+      return $folder;
+    }
+
     public function inventoryPVD(){
     //  echo $_GET['k_tipo'];
     //  echo $_GET['k_fase'];
     //  echo $_GET['k_pvd'];
+      $folders = $this->createFolders();
+      $this->listBucket($folders);
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
@@ -33,11 +71,12 @@ class Equipment extends CI_Controller {
           }
         }
       }
-
+      print_r($respuesta['inventory']);
       for($i = 0; $i< count($respuesta['inventory']); $i++){
         $respuesta['inventory'][$i]['valorT'] = 0;
         $respuesta['inventory'][$i]['funcional'] = 0;
         $respuesta['inventory'][$i]['averiado'] = 0;
+        $respuesta['inventory'][$i]['avance'] = 0;
         for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
           if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
             if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
@@ -62,12 +101,15 @@ class Equipment extends CI_Controller {
       for($i = 0; $i < $cantidadElementos; $i++){
         $equipment = new equipment_model;
         $equipment = $equipment->createEquipment($_POST['idElement'.$i], $_POST['selectElement'.$i], "", "", "", $_POST['fieldName'.$i], $_POST['selectMarca'.$i], $_POST['selectModelo'.$i], $_POST['fieldPlaca'.$i], $_POST['fieldParte'.$i], $_POST['selectEstados'.$i], $_POST['selectFinalizado'.$i]);
+        $equipment->setZona($_POST['selectZones'.$i]);
+
         if($_POST['idElement'.$i] == ""){
           $respuesta = $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
         } else {
           $respueta = $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
         }
       }
+
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_POST['pvd']);
       print_r($respuesta['PVD']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($respuesta['PVD']->getFase(), $respuesta['PVD']->getTipologia(), $_POST['pvd']);
@@ -105,5 +147,14 @@ class Equipment extends CI_Controller {
         }
       }
       $this->load->view('PmaintenanceProcedure', $respuesta);
+    }
+
+    public function createFolders(){
+      $folders['Computador convencional']['Acceso a Internet']['Antes del Mantenimiento'] = "";
+      $folders['Computador convencional']['Acceso a Internet']['Despues del Mantenimiento'] = "";
+      $folders['Computador convencional']['Acceso a Internet']['Durante el Mantenimiento'] = "";
+      $folders['Computador convencional']['Aspectos generales'] = $folders['Computador convencional']['Servicios complementarios'] = $folders['Computador convencional']['Recepción y registro'] = $folders['Computador convencional']['Producción de contenidos'] = $folders['Computador convencional']['Consultas rápidas'] = $folders['Computador convencional']['Almacenamiento'] = $folders['Computador convencional']['Capacitación'] = $folders['Computador convencional']['Entretenimiento'] = $folders['Computador convencional']['Innovación'] = $folders['Computador convencional']['Acceso a internet'];
+      $folders['Soporte consolas y televisores'] = $folders['Mobiliario (muebles, enceres y señalización)'] = $folders['Alarma para PVD'] = $folders['Redes de datos'] = $folders['Redes electricas'] = $folders['Camara IP'] = $folders['DVD player'] = $folders['Video Beam'] = $folders['Mesa electrificada de 6 a 8 puestos'] = $folders['Mezclador de audio'] = $folders['Grabadora audio digital'] = $folders['Tripode para microfonos'] = $folders['Tripode de cabeza fluida para camara'] = $folders['Tripode ajustable para luces'] = $folders['Microfono inalambrico de solapa'] = $folders['Microfono con cable'] = $folders['Mezclador de video'] = $folders['Camara fotografica'] = $folders['Camara de video'] = $folders['Audifonos para estudio profesional'] = $folders['Lampara escualizable'] = $folders['Diadema para equipo de computo con microfono'] = $folders['Membrana táctil para televisores de 55 Y 58'] = $folders['Home cinema'] = $folders['Consola de juegos'] = $folders['UPS'] = $folders['Televisor LED desde 32 a 42'] = $folders['Tableta digitalizadora'] = $folders['Impresora'] = $folders['Servidor'] = $folders['Workstation y-o administrador de red'] = $folders['Computador All in One'] = $folders['Computador portatil'] = $folders['Computador convencional'];
+      return $folders;
     }
 }

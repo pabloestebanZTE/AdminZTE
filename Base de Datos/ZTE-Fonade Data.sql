@@ -129,7 +129,8 @@ insert into user (K_IDUSER, K_IDTYPEUSER, N_PASSWORD, N_NAME, N_LASTNAME)
   (1097398513, 2, 'NARD6183000960', 'Carlos Andres', 'Vargas Ruiz'), //cambiar contraseña
   (15372417, 2, 'RHMH6183000965','Robinson Hernando', 'Marin Gallo'),
   (80921646, 2, 'Maira2016*','Cristian Rodrigo', 'Real Sanchez'),
-  (14102016, 1, 'LJDP6183000936', 'Laura Jackelinne', 'Delgado Pinilla');}
+  (14277465, 2, 'abc1234','Gilberto', 'Camacho Perez'),
+  (14102016, 1, 'LJDP6183000936', 'Laura Jackelinne', 'Delgado Pinilla');
 /*Table Region*/
 insert into REGION (K_IDREGION, N_NAME)
   values (1, 'Zona 1'),
@@ -3757,7 +3758,7 @@ insert into equipment_generic(K_IDEQUIPMENT_GENERIC, N_NAME)
   values (0, "Computador convencional"),
   (1, "Computador portatil"),
   (2, "Computador All in One"),
-  (3, "Workstation y/o administrador de red"),
+  (3, "Workstation y-o administrador de red"),
   (4, "Servidor"),
   (5, "Impresora"),
   (6, "Tableta digitalizadora"),
