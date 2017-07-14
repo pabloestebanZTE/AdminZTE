@@ -40,6 +40,7 @@
                 $row4 = $result4->fetch_assoc();
                 $row3['K_IDPVD_PLACE'] = $row4;
                 $respuesta[$i]['inventario'][$j] = $row3;
+                $respuesta[$i]['inventario'][$j]['url'] = "";
                 $j++;
               }
             } else {

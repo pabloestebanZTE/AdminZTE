@@ -78,19 +78,9 @@ class Equipment extends CI_Controller {
         $respuesta['inventory'][$i]['funcional'] = 0;
         $respuesta['inventory'][$i]['averiado'] = 0;
         $respuesta['inventory'][$i]['avance'] = 0;
+        $valoresParciales = array();
+        $p = 0;
         for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
-            if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
-              $respuesta['inventory'][$i]['funcional']++;
-            }
-            if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
-              $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
-              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 40;
-            }
-          }
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            $respuesta['inventory'][$i]['averiado']++;
-          }
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Antes del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
             $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
           }
@@ -100,8 +90,32 @@ class Equipment extends CI_Controller {
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
             $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
           }
-
+          $url = "https://console.aws.amazon.com/s3/buckets/".strtolower($_GET['k_ticket'])."/Registro Fotografico"."/".$respuesta['inventory'][$i]['N_NAME']."/".$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']."/"."?region=us-west-2&tab=overview";
+          if (isset($respuesta['inventory'][$i]['inventario'][$j]['url'])){
+            $respuesta['inventory'][$i]['inventario'][$j]['url'] = $url;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+            if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
+              $respuesta['inventory'][$i]['funcional']++;
+            }
+            if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
+              $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
+              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 40;
+            }
+            $valoresParciales[$p] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'];
+            $p++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            $respuesta['inventory'][$i]['averiado']++;
+          }
         }
+        if (count($valoresParciales) > 0){
+          $porcentaje  = 100 / count($valoresParciales);
+        }
+        for($p = 0; $p<count($valoresParciales); $p++){
+          $respuesta['inventory'][$i]['avance'] += $porcentaje / 100 * $valoresParciales[$p];
+        }
+         $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', ''); 
       }
       $this->load->view('PmaintenanceProcedure', $respuesta);
     }

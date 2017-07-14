@@ -116,11 +116,11 @@ var zones;
           if(inventario[i].progreso != undefined){
             var avance =  "<td>"+inventario[i].progreso+" %</td>";
           } else {
-            var avance =  "<td>0 %</td>";
+            var avance =  "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
           }
           var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
-          var fotos = "<td><a class='push_button red' role='button' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+          var fotos = "<td><a class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
 
 
           if(inventario[i].Q_PROGRESS == "0"){
@@ -143,9 +143,12 @@ var zones;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+id+"</tr>" );
+            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
+            var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
+            progress.style.display = 'none';
+
           }
           newElementQuantity++;
         }
@@ -211,11 +214,14 @@ var zones;
       var estado = $("#selectEstados"+equipo_categoria+" option:selected").attr('value');
       var linea = document.getElementById("linea"+equipo_categoria);
       var selectEstado = document.getElementById("selectFinalizado"+equipo_categoria);
+      var avance = document.getElementById("avance"+equipo_categoria);
       if(estado == "Averiado"){
+        avance.style.display = 'none';
         selectEstado.style.display = 'none';
         $("#tableCorrective").append(linea);
       }
       if(estado == "Funcional"){
+        avance.style.display = 'block';
         selectEstado.style.display = 'block';
         $("#tableInventory").append(linea);
       }
@@ -251,7 +257,8 @@ var zones;
       var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
-      var fotos = "<td><a class='push_button red' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+      var fotos = "<td><a class='push_button blue' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+      var avance = "<td>0 %</td>";
 
       var zonaE = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       zonaE = zonaE+zones;
@@ -266,7 +273,7 @@ var zones;
       finalizado = finalizado+"</select></td>";
 
 
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+finalizado+"</tr>" );
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
 
