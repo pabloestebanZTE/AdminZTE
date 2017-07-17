@@ -114,7 +114,7 @@ var zones;
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
           if(inventario[i].progreso != undefined){
-            var avance =  "<td>"+inventario[i].progreso+" %</td>";
+            var avance =  "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>"+inventario[i].progreso+" %</td>";
           } else {
             var avance =  "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
           }
@@ -258,7 +258,7 @@ var zones;
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fotos = "<td><a class='push_button blue' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
-      var avance = "<td>0 %</td>";
+      var avance = "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
 
       var zonaE = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       zonaE = zonaE+zones;
@@ -330,8 +330,9 @@ var zones;
         echo "<div id='pricing-table' class='clear'>";
           echo "<center>";
                 echo "<div class='plan' id='most-popular'>";
-                    echo "<h3>PVD<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
+                    echo "<h3>Información General<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
                     echo "<ul>";
+                        echo "<li><b>Ticket: </b>".$ticket."</li>";
                         echo "<li><b>ID: </b>".$PVD->getId()."</li>";
                         echo "<li><b>Región: </b>".$PVD->getRegion()."</li>";
                         echo "<li><b>Departamento: </b>".$PVD->getDepartment()."</li>";
@@ -402,7 +403,7 @@ var zones;
                     <?php
                       echo "<center><div class='btn-group'>";
                         echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElemento()'><i class='fa fa-plus-square' aria-hidden='true'></i> Añadir Elemento</button>";
-                        echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateInventory' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                        echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                         echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                       echo "</div></center>";
                       if (isset($inventory)){

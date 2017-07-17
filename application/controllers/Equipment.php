@@ -32,9 +32,11 @@ class Equipment extends CI_Controller {
     }
 
     public function listBucket($folder){
+      print_r($GLOBALS['bucket']);
+
       try {
         foreach ($GLOBALS['bucket'] as $object) {
-      //    print_r($object);
+          print_r($object);
           $direccion = explode("/", $object['Key']);
           if(count($direccion)>4){
             if($direccion[4] != ""){
@@ -56,6 +58,7 @@ class Equipment extends CI_Controller {
     //  echo $_GET['k_pvd'];
       $folders = $this->createFolders();
       $folders = $this->listBucket($folders);
+      $respuesta['ticket'] = $_GET['k_ticket'];
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
@@ -115,13 +118,12 @@ class Equipment extends CI_Controller {
         for($p = 0; $p<count($valoresParciales); $p++){
           $respuesta['inventory'][$i]['avance'] += $porcentaje / 100 * $valoresParciales[$p];
         }
-         $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', ''); 
+         $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', '');
       }
       $this->load->view('PmaintenanceProcedure', $respuesta);
     }
 
     public function updateInventory(){
-
       print_r($_POST);
       $cantidadElementos = $_POST['Elements'];
       for($i = 0; $i < $cantidadElementos; $i++){
@@ -130,49 +132,12 @@ class Equipment extends CI_Controller {
         $equipment->setZona($_POST['selectZones'.$i]);
 
         if($_POST['idElement'.$i] == ""){
-          $respuesta = $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
+          $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
         } else {
-          $respueta = $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
+          $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
         }
       }
-
-      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_POST['pvd']);
-      print_r($respuesta['PVD']);
-      $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($respuesta['PVD']->getFase(), $respuesta['PVD']->getTipologia(), $_POST['pvd']);
-      $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($respuesta['PVD']->getFase(), $respuesta['PVD']->getTipologia(), $_POST['pvd']);
-      if ($respuesta['PVD']->getRegion() == "Zona 1"){
-        $stirngPrecio = "V_PRICE_R1";
-      }
-      if ($respuesta['PVD']->getRegion() == "Zona 4"){
-        $stirngPrecio = "V_PRICE_R4";
-      }
-      for($i = 0; $i< count($respuesta['generic']); $i++){
-        for($j = 0; $j <count($respuesta['generic'][$i]['category']); $j++){
-          if($respuesta['generic'][$i]['category'][$j]['V_PRICE_R4'] > 0){
-            $respuesta['inventory'][$i]['price'] = $respuesta['generic'][$i]['category'][$j][$stirngPrecio];
-          }
-        }
-      }
-
-      for($i = 0; $i< count($respuesta['inventory']); $i++){
-        $respuesta['inventory'][$i]['valorT'] = 0;
-        $respuesta['inventory'][$i]['funcional'] = 0;
-        $respuesta['inventory'][$i]['averiado'] = 0;
-        for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
-            if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
-              $respuesta['inventory'][$i]['funcional']++;
-            }
-            if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
-              $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
-            }
-          }
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            $respuesta['inventory'][$i]['averiado']++;
-          }
-        }
-      }
-      $this->load->view('PmaintenanceProcedure', $respuesta);
+      $this->inventoryPVD();
     }
 
     public function createFolders(){

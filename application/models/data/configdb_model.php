@@ -21,7 +21,7 @@
 
         public function openSession(){
           $user = "root";
-          $pass =  "ZTE-536";
+          $pass =  "a4b3c2d1";
           $db = "zte_fonade";
 
           try {

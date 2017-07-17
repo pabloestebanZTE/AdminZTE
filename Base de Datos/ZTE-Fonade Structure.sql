@@ -508,6 +508,23 @@ create table stuff
    primary key (K_IDSTUFF)
 );
 
+
+/*==============================================================*/
+/* Table: stuff                                                  */
+/*==============================================================*/
+create table ticket_corrective_maintenance
+(
+   K_IDTICKET_CORRECTIVE    varchar(20) not null,,
+   N_DAMAGED_ELEMENTS       varchar(800),
+   N_REFERENCE_D_ELEMENTS   varchar(800),
+   N_FAILURE_DESCRIPTION    varchar(800),
+   N_TEST                   varchar(800),
+   N_NEW_ELEMENTS           varchar(800),
+   N_FAILURE_CLASSIFICATION varchar(800),
+   K_IDSTUFF                int not null,
+   primary key (K_IDTICKET_CORRECTIVE)
+);
+
 alter table equipment_type add constraint FK_PHASE_ET foreign key (K_IDPHASE)
       references phase (K_IDPHASE) on delete restrict on update restrict;
 
@@ -543,6 +560,9 @@ alter table stuff add constraint FK_STUFF_PVD foreign key (K_IDPVD)
 
 alter table stuff add constraint FK_STUFF_ZONE foreign key (K_IDPVD_PLACE)
       references PVD_PLACE (K_IDPVD_PLACE) on delete restrict on update restrict;
+
+alter table ticket_corrective add constraint FK_STUFF_TCM foreign key (K_IDSTUFF)
+      references stuff (K_IDSTUFF) on delete restrict on update restrict;
 
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
       references DEPARTMENT (K_IDDEPARTMENT) on delete restrict on update restrict;
