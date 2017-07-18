@@ -27,8 +27,11 @@ class Equipment extends CI_Controller {
         $this->load->model('data/dao_user_model');
         $this->load->model('data/dao_PVD_model');
         $this->load->model('data/dao_inventory_model');
+        $this->load->model('data/dao_MC_model');
         $this->load->model('user_model');
         $this->load->model('equipment_model');
+        $this->load->model('correctiveM_model');
+
     }
 
     public function listBucket($folder){
@@ -130,11 +133,17 @@ class Equipment extends CI_Controller {
         $equipment = new equipment_model;
         $equipment = $equipment->createEquipment($_POST['idElement'.$i], $_POST['selectElement'.$i], "", "", "", $_POST['fieldName'.$i], $_POST['selectMarca'.$i], $_POST['selectModelo'.$i], $_POST['fieldPlaca'.$i], $_POST['fieldParte'.$i], $_POST['selectEstados'.$i], $_POST['selectFinalizado'.$i]);
         $equipment->setZona($_POST['selectZones'.$i]);
-
+        if($equipment->getEstado() == "Averiado"){
+          $ticketCorrective = new correctiveM_model;
+          $ticketCorrective = $ticketCorrective->createMaintenance($_POST['idCM'.$i], $_POST['idElement'.$i], "", "", "", "", $_POST['descripcionFalla'.$i], $_POST['referenciaEquiposAveriados'.$i], $_POST['pruebas'.$i], $_POST['equiposAveriados'.$i], $_POST['elementos'.$i],  $_POST['selectFalla'.$i], "", "");
+        }
         if($_POST['idElement'.$i] == ""){
-          $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
+          $idstuff = $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
+          if($equipment->getEstado() == "Averiado"){
+            $this->dao_MC_model->insertMC($ticketCorrective, $idstuff);
+          }
         } else {
-          $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
+      //    $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
         }
       }
       $this->inventoryPVD();

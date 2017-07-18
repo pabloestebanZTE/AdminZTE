@@ -218,13 +218,25 @@ var zones;
       if(estado == "Averiado"){
         avance.style.display = 'none';
         selectEstado.style.display = 'none';
+        var newRow = "<tr id='newRow"+equipo_categoria+"' name='newRow"+equipo_categoria+"'>";
+        newRow = newRow+"<td><textarea name='equiposAveriados"+equipo_categoria+"' id='equiposAveriados"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required></textarea></td>";
+        newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+equipo_categoria+"' id='referenciaEquiposAveriados"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required></textarea></td>";
+        newRow = newRow+"<td><textarea name='descripcionFalla"+equipo_categoria+"' id='descripcionFalla"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required></textarea></td>";
+        newRow = newRow+"<td><textarea name='pruebas"+equipo_categoria+"' id='pruebas"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required></textarea></td>";
+        newRow = newRow+"<td><textarea name='elementos"+equipo_categoria+"' id='elementos"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required></textarea></td>";
+
+        newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td></tr>";
         $("#tableCorrective").append(linea);
+        $("#tableCorrective").append(newRow);
       }
       if(estado == "Funcional"){
         avance.style.display = 'block';
         selectEstado.style.display = 'block';
+        $("#newRow"+equipo_categoria).remove();
         $("#tableInventory").append(linea);
       }
+
+
     }
 
     function añadirElemento(){
@@ -352,11 +364,11 @@ var zones;
               echo "<thead>";
                 echo "<tr>";
                   echo "<th><h1>Item</h1></th>";
-                  echo "<th><h1>Valor Unitario</h1></th>";
+              //    echo "<th><h1>Valor Unitario</h1></th>";
                   echo "<th><h1>Cantidad Tipologia</h1></th>";
                   echo "<th><h1>En Inventario</h1></th>";
                   echo "<th><h1>En Correctivo</h1></th>";
-                  echo "<th><h1>Valor Total</h1></th>";
+            //      echo "<th><h1>Valor Total</h1></th>";
                   echo "<th><h1>Expandir</h1></th>";
                   echo "<th><h1>Avance</h1></th>";
                 echo "</tr>";
@@ -365,11 +377,11 @@ var zones;
                 for ($i = 0; $i < count($inventory); $i++){
                   echo "<tr>";
                     echo "<td>".$inventory[$i]['N_NAME']."</td>";
-                    echo "<td>".$inventory[$i]['price']."</td>";
+            //        echo "<td>".$inventory[$i]['price']."</td>";
                     echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
                     echo "<td>".$inventory[$i]['funcional']."</td>";
                     echo "<td>".$inventory[$i]['averiado']."</td>";
-                    echo "<td>".$inventory[$i]['valorT']."</td>";
+          //          echo "<td>".$inventory[$i]['valorT']."</td>";
                     echo "<td><button type='button' class='push_button blue' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
                     echo "<td> ".$inventory[$i]['avance']."%</td>";
                   echo "</tr>";

@@ -24,7 +24,6 @@
         if ($result->num_rows > 0) {
           $i = 0;
           while($row = $result->fetch_assoc()) {
-
             $sql2 = "SELECT N_NAME FROM equipment_generic where K_IDEQUIPMENT_GENERIC = ".$row['K_IDEQUIPMENT_GENERIC'].";";
             $result2 = $session->query($sql2);
             $row2 = $result2->fetch_assoc();
@@ -39,6 +38,14 @@
                 $result4 = $session->query($sql4);
                 $row4 = $result4->fetch_assoc();
                 $row3['K_IDPVD_PLACE'] = $row4;
+                $sql5 = "SELECT * FROM ticket_corrective_maintenance WHERE K_IDSTUFF = ".$row3['K_IDSTUFF'].";";
+                $result5 = $session->query($sql5);
+                if ($result5->num_rows > 0) {
+                  while($row5 = $result5->fetch_assoc()) {
+                    $row3['corrective'] = $row5;
+                  }
+                }
+                print_r($row3['corrective']);
                 $respuesta[$i]['inventario'][$j] = $row3;
                 $respuesta[$i]['inventario'][$j]['url'] = "";
                 $j++;
@@ -132,7 +139,7 @@
         $sql2 = "INSERT INTO stuff (K_IDSTUFF, K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
           values (".$row.", ".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
         $session->query($sql2);
-        $respuesta = "ok";
+        $respuesta = $row;
       } else {
         $respuesta = "Error de informacion";
       }
@@ -145,6 +152,5 @@
       $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress()." where K_IDSTUFF = ".$equipment->getId().";";
       $session->query($sql);
     }
-
   }
 ?>
