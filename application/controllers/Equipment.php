@@ -27,6 +27,7 @@ class Equipment extends CI_Controller {
         $this->load->model('data/dao_user_model');
         $this->load->model('data/dao_PVD_model');
         $this->load->model('data/dao_inventory_model');
+        $this->load->model('data/dao_softwareStuff_model');
         $this->load->model('data/dao_MC_model');
         $this->load->model('user_model');
         $this->load->model('equipment_model');
@@ -65,6 +66,8 @@ class Equipment extends CI_Controller {
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);
+      print_r($respuesta['software']);
       if ($respuesta['PVD']->getRegion() == "Zona 1"){
         $stirngPrecio = "V_PRICE_R1";
       }
@@ -78,7 +81,6 @@ class Equipment extends CI_Controller {
           }
         }
       }
-    //  print_r($respuesta['inventory']);
       for($i = 0; $i< count($respuesta['inventory']); $i++){
         $respuesta['inventory'][$i]['valorT'] = 0;
         $respuesta['inventory'][$i]['funcional'] = 0;
@@ -127,10 +129,11 @@ class Equipment extends CI_Controller {
     }
 
     public function updateInventory(){
-      print_r($_POST);
+    //  print_r($_POST);
       $cantidadElementos = $_POST['Elements'];
       for($i = 0; $i < $cantidadElementos; $i++){
         $equipment = new equipment_model;
+        $ref = $_POST['selectElement'.$i];
         $equipment = $equipment->createEquipment($_POST['idElement'.$i], $_POST['selectElement'.$i], "", "", "", $_POST['fieldName'.$i], $_POST['selectMarca'.$i], $_POST['selectModelo'.$i], $_POST['fieldPlaca'.$i], $_POST['fieldParte'.$i], $_POST['selectEstados'.$i], $_POST['selectFinalizado'.$i]);
         $equipment->setZona($_POST['selectZones'.$i]);
         if($equipment->getEstado() == "Averiado"){
@@ -142,8 +145,18 @@ class Equipment extends CI_Controller {
           if($equipment->getEstado() == "Averiado"){
             $this->dao_MC_model->insertMC($ticketCorrective, $idstuff);
           }
+          if($ref == 45 || $ref == 42 || $ref == 46 || $ref == 47 || $ref == 48){
+            $this->dao_softwareStuff_model->createSoftwareStuff("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $idstuff);
+          }
         } else {
-      //    $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
+          if($equipment->getEstado() == "Averiado"){
+            if($_POST['idCM'.$i] == ""){
+              $this->dao_MC_model->insertMC($ticketCorrective, $equipment->getId());
+            } else {
+              $this->dao_MC_model->updateMC($ticketCorrective);
+            }
+          }
+          $this->dao_inventory_model->updateEquipment($equipment,$_POST['pvd'] );
         }
       }
       $this->inventoryPVD();

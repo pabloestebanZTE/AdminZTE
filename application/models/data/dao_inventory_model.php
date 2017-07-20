@@ -45,7 +45,6 @@
                     $row3['corrective'] = $row5;
                   }
                 }
-                print_r($row3['corrective']);
                 $respuesta[$i]['inventario'][$j] = $row3;
                 $respuesta[$i]['inventario'][$j]['url'] = "";
                 $j++;

@@ -59,6 +59,10 @@ var zones;
         sweetAlert(a, b, c);
     }
 
+    function showModalSoftware(inventario){
+      console.log(inventario);
+    }
+
     function showModal(idEquipo, inventario, name, categorias, rutina){
       newElementQuantity = 0;
     //  console.log(idEquipo);
@@ -140,10 +144,22 @@ var zones;
             $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "Averiado"){
+            console.log(inventario[i]);
+            var newRow = "<tr id='newRow"+newElementQuantity+"' name='newRow"+newElementQuantity+"'>";
+            newRow = newRow+"<td hidden><input id='idCM"+newElementQuantity+"' name='idCM"+newElementQuantity+"' value='"+inventario[i].corrective.K_IDTICKET_CORRECTIVE+"' ></td>";
+            newRow = newRow+"<td><textarea  name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+newElementQuantity+"' id='referenciaEquiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required>"+inventario[i].corrective.N_REFERENCE_D_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td><textarea name='descripcionFalla"+newElementQuantity+"' id='descripcionFalla"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].corrective.N_FAILURE_DESCRIPTION+"</textarea></td>";
+            newRow = newRow+"<td><textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
+            newRow = newRow+"<td><textarea name='elementos"+newElementQuantity+"' id='elementos"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required>"+inventario[i].corrective.N_NEW_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td></td><td><p>"+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
+            newRow = newRow+"</tr>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#corrective').append(newRow);
+
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
             var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
@@ -224,7 +240,6 @@ var zones;
         newRow = newRow+"<td><textarea name='descripcionFalla"+equipo_categoria+"' id='descripcionFalla"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='pruebas"+equipo_categoria+"' id='pruebas"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='elementos"+equipo_categoria+"' id='elementos"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required></textarea></td>";
-
         newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td></tr>";
         $("#tableCorrective").append(linea);
         $("#tableCorrective").append(newRow);
@@ -272,7 +287,7 @@ var zones;
       var fotos = "<td><a class='push_button blue' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
       var avance = "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
 
-      var zonaE = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      var zonaE = "<td><select  style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       zonaE = zonaE+zones;
       zonaE = zonaE+"</select></td>";
 
@@ -357,50 +372,48 @@ var zones;
               echo "</div>";
           echo "</center>";
          ?>
-
-          <table class="container">
           <?php
             if (isset($inventory)){
-              echo "<thead>";
-                echo "<tr>";
-                  echo "<th><h1>Item</h1></th>";
-              //    echo "<th><h1>Valor Unitario</h1></th>";
-                  echo "<th><h1>Cantidad Tipologia</h1></th>";
-                  echo "<th><h1>En Inventario</h1></th>";
-                  echo "<th><h1>En Correctivo</h1></th>";
-            //      echo "<th><h1>Valor Total</h1></th>";
-                  echo "<th><h1>Expandir</h1></th>";
-                  echo "<th><h1>Avance</h1></th>";
-                echo "</tr>";
-              echo "</thead>";
-              echo "<tbody>";
-                for ($i = 0; $i < count($inventory); $i++){
+              echo "<table class='container'>";
+                echo "<thead>";
                   echo "<tr>";
-                    echo "<td>".$inventory[$i]['N_NAME']."</td>";
-            //        echo "<td>".$inventory[$i]['price']."</td>";
-                    echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
-                    echo "<td>".$inventory[$i]['funcional']."</td>";
-                    echo "<td>".$inventory[$i]['averiado']."</td>";
-          //          echo "<td>".$inventory[$i]['valorT']."</td>";
-                    echo "<td><button type='button' class='push_button blue' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
-                    echo "<td> ".$inventory[$i]['avance']."%</td>";
+                    echo "<th><h1>Item</h1></th>";
+                //    echo "<th><h1>Valor Unitario</h1></th>";
+                    echo "<th><h1>Cantidad Tipologia</h1></th>";
+                    echo "<th><h1>En Inventario</h1></th>";
+                    echo "<th><h1>En Correctivo</h1></th>";
+              //      echo "<th><h1>Valor Total</h1></th>";
+                    echo "<th><h1>Expandir</h1></th>";
+                    echo "<th><h1>Avance</h1></th>";
                   echo "</tr>";
-                }
-             echo "</tbody>";
+                echo "</thead>";
+                echo "<tbody>";
+                  for ($i = 0; $i < count($inventory); $i++){
+                    echo "<tr>";
+                      echo "<td>".$inventory[$i]['N_NAME']."</td>";
+              //        echo "<td>".$inventory[$i]['price']."</td>";
+                      echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
+                      echo "<td>".$inventory[$i]['funcional']."</td>";
+                      echo "<td>".$inventory[$i]['averiado']."</td>";
+              /*        echo "<td>".$inventory[$i]['valorT']."</td>";*/
+                      echo "<td><button type='button' class='push_button blue' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
+                      echo "<td> ".$inventory[$i]['avance']."%</td>";
+                    echo "</tr>";
+                  }
+               echo "</tbody>";
+             echo "</table>";
+            }
+            if(isset($software)){
+              echo "<button type='button' class='push_button blue' onclick='showModalSoftware(".json_encode($software).")'>Ver inventario de Software</button>";
             }
            ?>
-          </table>
 			</article>
 	</div>
 		<div class="main zerogrid">
 <!-- footer -->
 <!-- footer end -->
 		</div>
-
-
-
-
-    <!--DEMO02-->
+    <!--Modal de inventario-->
     <div id="modal-02" class="modal fade">
       <div class="modal-content">
         <div id="main" class="container">
@@ -496,6 +509,52 @@ var zones;
         </div>
       </div>
     </div>
+
+    <!--Modal inv Software-->
+    <div id="modalSFT" class="modal fade">
+      <div class="modal-content">
+        <div id="main" class="container">
+          <form method='post' name='formActualizar'>
+            <div class="linea 100%">
+              <div class="12u">
+                <!-- Features -->
+                <h2 class="major"><span>Elementos en mantenimiento correctivo</span></h2>
+                <div>
+                  <div class="linea">
+                    <?php
+                      if (isset($inventory)){
+                        echo "<article id='content'>";
+                          echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
+                            echo "<thead>";
+                              echo "<tr>";
+                                echo "<th><h1>Elemento</h1></th>";
+                                echo "<th><h1>Marca</h1></th>";
+                                echo "<th><h1>Modelo</h1></th>";
+                                echo "<th><h1>Serial</h1></th>";
+                                echo "<th><h1>Placa de inventario</h1></th>";
+                                echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Área</h1></th>";
+                                echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Galeria</h1></th>";
+                              echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody id='corrective' name='corrective'>";
+                           echo "</tbody>";
+                         echo "</table>";
+                        echo "</article>";
+                      }
+                     ?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input name='pvd' id='pvd' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=' <?php echo $_GET['k_pvd'] ?> '></td>
+            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=''></td>
+          </form>
+        </div>
+      </div>
+    </div>
+
   <script type="text/javascript"> Cufon.now(); </script>
   <script>
     $(document).ready(function() {

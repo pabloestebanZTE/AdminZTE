@@ -510,7 +510,7 @@ create table stuff
 
 
 /*==============================================================*/
-/* Table: stuff                                                  */
+/* Table: ticket_corrective_maintenance                         */
 /*==============================================================*/
 create table ticket_corrective_maintenance
 (
@@ -523,6 +523,31 @@ create table ticket_corrective_maintenance
    N_FAILURE_CLASSIFICATION varchar(800),
    K_IDSTUFF                int not null,
    primary key (K_IDTICKET_CORRECTIVE)
+);
+
+/*==============================================================*/
+/* Table: software_inventory                                    */
+/*==============================================================*/
+create table software_inventory
+(
+   K_SOFTWARE_INVENTORY           int not null AUTO_INCREMENT,
+   N_OPERATIVE_SYSTEM             varchar(50),
+   N_OFFICE                       varchar(10),
+   N_OFFICE_VERSION               varchar(50),
+   N_ANTIVIRUS                    varchar(50),
+   N_ANTIVIRUS_VERSION            varchar(50),
+   N_BROWSER                      varchar(50),
+   N_BROWSER_VERSION              varchar(50),
+   N_SIMONTIC                     varchar(50),
+   N_SIMONTIC_VERSION             varchar(50),
+   N_MAGIC                        varchar(50),
+   N_MAGIC_VERSION                varchar(50),
+   N_SAC                          varchar(50),
+   N_SAC_VERSION                  varchar(50),
+   N_SEMILLA                      varchar(50),
+   N_SEMILLA_VERSION              varchar(50),
+   K_IDSTUFF                      int not null,
+   primary key (K_SOFTWARE_INVENTORY)
 );
 
 alter table equipment_type add constraint FK_PHASE_ET foreign key (K_IDPHASE)
@@ -562,6 +587,9 @@ alter table stuff add constraint FK_STUFF_ZONE foreign key (K_IDPVD_PLACE)
       references PVD_PLACE (K_IDPVD_PLACE) on delete restrict on update restrict;
 
 alter table ticket_corrective_maintenance add constraint FK_STUFF_TCM foreign key (K_IDSTUFF)
+      references stuff (K_IDSTUFF) on delete restrict on update restrict;
+
+alter table software_inventory add constraint FK_STUFF_SI foreign key (K_IDSTUFF)
       references stuff (K_IDSTUFF) on delete restrict on update restrict;
 
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
