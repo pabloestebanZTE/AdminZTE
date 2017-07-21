@@ -532,19 +532,27 @@ create table software_inventory
 (
    K_SOFTWARE_INVENTORY           int not null AUTO_INCREMENT,
    N_OPERATIVE_SYSTEM             varchar(50),
-   N_OFFICE                       varchar(10),
    N_OFFICE_VERSION               varchar(50),
-   N_ANTIVIRUS                    varchar(50),
    N_ANTIVIRUS_VERSION            varchar(50),
-   N_BROWSER                      varchar(50),
    N_BROWSER_VERSION              varchar(50),
-   N_SIMONTIC                     varchar(50),
    N_SIMONTIC_VERSION             varchar(50),
-   N_MAGIC                        varchar(50),
    N_MAGIC_VERSION                varchar(50),
-   N_SAC                          varchar(50),
    N_SAC_VERSION                  varchar(50),
-   N_SEMILLA                      varchar(50),
+   N_SEMILLA_VERSION              varchar(50),
+   K_IDSTUFF                      int not null,
+   primary key (K_SOFTWARE_INVENTORY)
+);
+
+create table software_inventory
+(
+   K_SOFTWARE_INVENTORY           int not null AUTO_INCREMENT,
+   N_OPERATIVE_SYSTEM             varchar(50),
+   N_OFFICE_VERSION               varchar(50),
+   N_ANTIVIRUS_VERSION            varchar(50),
+   N_BROWSER_VERSION              varchar(50),
+   N_SIMONTIC_VERSION             varchar(50),
+   N_MAGIC_VERSION                varchar(50),
+   N_SAC_VERSION                  varchar(50),
    N_SEMILLA_VERSION              varchar(50),
    K_IDSTUFF                      int not null,
    primary key (K_SOFTWARE_INVENTORY)

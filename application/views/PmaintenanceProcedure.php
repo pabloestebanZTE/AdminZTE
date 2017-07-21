@@ -61,6 +61,7 @@ var zones;
 
     function showModalSoftware(inventario){
       console.log(inventario);
+      $('#modalSFT').modal('show');
     }
 
     function showModal(idEquipo, inventario, name, categorias, rutina){
@@ -404,7 +405,7 @@ var zones;
              echo "</table>";
             }
             if(isset($software)){
-              echo "<button type='button' class='push_button blue' onclick='showModalSoftware(".json_encode($software).")'>Ver inventario de Software</button>";
+              echo "<button type='button' class='push_button blue' onclick='showModalSoftware(".json_encode($software).")'>Inventario de Software</button>";
             }
            ?>
 			</article>
@@ -518,27 +519,47 @@ var zones;
             <div class="linea 100%">
               <div class="12u">
                 <!-- Features -->
-                <h2 class="major"><span>Elementos en mantenimiento correctivo</span></h2>
+                <h2 class="major"><span>Inventario de Software</span></h2>
                 <div>
                   <div class="linea">
                     <?php
-                      if (isset($inventory)){
+                      if (isset($software)){
+                        echo "<center><div class='btn-group'>";
+                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                          echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
+                        echo "</div></center>";
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
                             echo "<thead>";
                               echo "<tr>";
                                 echo "<th><h1>Elemento</h1></th>";
-                                echo "<th><h1>Marca</h1></th>";
-                                echo "<th><h1>Modelo</h1></th>";
                                 echo "<th><h1>Serial</h1></th>";
-                                echo "<th><h1>Placa de inventario</h1></th>";
-                                echo "<th><h1>Número de parte</h1></th>";
-                                echo "<th><h1>Área</h1></th>";
-                                echo "<th><h1>Estado</h1></th>";
-                                echo "<th><h1>Galeria</h1></th>";
+                                echo "<th><h1>Sistema Operativo</h1></th>";
+                                echo "<th><h1>Office </h1></th>";
+                                echo "<th><h1>Antivirus</h1></th>";
+                                echo "<th><h1>Browser</h1></th>";
+                                echo "<th><h1>SIMONTIC</h1></th>";
+                                echo "<th><h1>MAGIC</h1></th>";
+                                echo "<th><h1>SAC</h1></th>";
+                                echo "<th><h1>SEMILLA</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
-                            echo "<tbody id='corrective' name='corrective'>";
+                            echo "<tbody>";
+                            for($i = 0; $i < count($software); $i++){
+                              echo "<tr>";
+                                echo "<td hidden><input id='idSS".$i."' name='idSS".$i."' value='".$software[$i]['K_SOFTWARE_INVENTORY']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td>".$software[$i]['marca']." - ".$software[$i]['modelo']."</td>";
+                                echo "<td>".$software[$i]['serial']."</td>";
+                                echo "<td><input id='SOVer".$i."' name='SOVer".$i."' value='".$software[$i]['N_OPERATIVE_SYSTEM']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='OfficeVer".$i."' name='OfficeVer".$i."'  value='".$software[$i]['N_OFFICE_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='AntivirusVer".$i."' name='AntivirusVer".$i."' value='".$software[$i]['N_ANTIVIRUS_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='BrowserVer".$i."' name='BrowserVer".$i."' value='".$software[$i]['N_BROWSER_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SimonticVer".$i."' name='SimonticVer".$i."' value='".$software[$i]['N_SIMONTIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='MagicVer".$i."' name='MagicVer".$i."' value='".$software[$i]['N_MAGIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SacVer".$i."' name='SacVer".$i."' value='".$software[$i]['N_SAC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SemillaVer".$i."' name='SemillaVer".$i."' value='".$software[$i]['N_SEMILLA_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                              echo "</tr>";
+                            }
                            echo "</tbody>";
                          echo "</table>";
                         echo "</article>";
@@ -549,7 +570,7 @@ var zones;
               </div>
             </div>
             <input name='pvd' id='pvd' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=' <?php echo $_GET['k_pvd'] ?> '></td>
-            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=''></td>
+            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value='<?php echo count($software) ?>'></td>
           </form>
         </div>
       </div>

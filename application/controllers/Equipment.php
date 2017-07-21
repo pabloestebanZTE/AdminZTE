@@ -162,6 +162,14 @@ class Equipment extends CI_Controller {
       $this->inventoryPVD();
     }
 
+    public function updateSoftwareInventory(){
+      print_r($_POST);
+      for($i = 0; $i < $_POST['Elements']; $i++){
+        $this->dao_softwareStuff_model->updateSoftwareInventory($_POST['idSS'.$i], $_POST['SOVer'.$i], $_POST['OfficeVer'.$i], $_POST['AntivirusVer'.$i], $_POST['BrowserVer'.$i], $_POST['SimonticVer'.$i], $_POST['MagicVer'.$i], $_POST['SacVer'.$i], $_POST['SemillaVer'.$i]);
+      }
+      $this->inventoryPVD();
+    }
+
     public function createFolders(){
       $folders['Computador convencional']['Acceso a Internet']['Antes del Mantenimiento'] = "";
       $folders['Computador convencional']['Acceso a Internet']['Despues del Mantenimiento'] = "";
