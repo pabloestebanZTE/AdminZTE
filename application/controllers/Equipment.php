@@ -1,6 +1,8 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require ('assets/extensions/fpdf/fpdf.php');
+/*
 require 'assets/aws_s3_sdk/aws-autoloader.php';
 use Aws\S3\S3Client;
 
@@ -19,6 +21,7 @@ $iterator = $s3Client->getIterator('ListObjects', array(
 ));
 
 $GLOBALS['bucket'] = $iterator;
+*/
 
 class Equipment extends CI_Controller {
 
@@ -35,9 +38,9 @@ class Equipment extends CI_Controller {
 
     }
 
+/*
     public function listBucket($folder){
       print_r($GLOBALS['bucket']);
-
       try {
         foreach ($GLOBALS['bucket'] as $object) {
           print_r($object);
@@ -55,19 +58,18 @@ class Equipment extends CI_Controller {
     //  print_r($folder);
       return $folder;
     }
+*/
 
     public function inventoryPVD(){
-    //  echo $_GET['k_tipo'];
-    //  echo $_GET['k_fase'];
-    //  echo $_GET['k_pvd'];
-      $folders = $this->createFolders();
-      $folders = $this->listBucket($folders);
+  //    $folders = $this->createFolders();
+  //    $folders = $this->listBucket($folders);
       $respuesta['ticket'] = $_GET['k_ticket'];
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);
-      print_r($respuesta['software']);
+      $respuesta['avance'] = 0;
+      $porcentaje = 100/count($respuesta['inventory']);
       if ($respuesta['PVD']->getRegion() == "Zona 1"){
         $stirngPrecio = "V_PRICE_R1";
       }
@@ -90,13 +92,13 @@ class Equipment extends CI_Controller {
         $p = 0;
         for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Antes del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
-            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
           }
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Durante el Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
-            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
           }
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
-            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 20;
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
           }
           $url = "https://console.aws.amazon.com/s3/buckets/".strtolower($_GET['k_ticket'])."/Registro Fotografico"."/".$respuesta['inventory'][$i]['N_NAME']."/".$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']."/"."?region=us-west-2&tab=overview";
           if (isset($respuesta['inventory'][$i]['inventario'][$j]['url'])){
@@ -108,12 +110,14 @@ class Equipment extends CI_Controller {
             }
             if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
               $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
-              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 40;
+              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 100;
             }
             $valoresParciales[$p] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'];
             $p++;
           }
           if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            print_r($respuesta['inventory'][$i]['inventario'][$j]);
+            echo "<br><br>";
             $respuesta['inventory'][$i]['averiado']++;
           }
         }
@@ -124,7 +128,9 @@ class Equipment extends CI_Controller {
           $respuesta['inventory'][$i]['avance'] += $porcentaje / 100 * $valoresParciales[$p];
         }
          $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', '');
+         $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
       }
+      $respuesta['avance'] = number_format((float) $respuesta['avance'], 2, '.', '');
       $this->load->view('PmaintenanceProcedure', $respuesta);
     }
 

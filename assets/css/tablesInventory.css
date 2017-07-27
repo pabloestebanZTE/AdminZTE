@@ -80,12 +80,14 @@ h2 a {
 
 /* Background-color of the odd rows */
 .container tr:nth-child(odd) {
-	  background-color: #778899;
+	 /* background-color: #778899; */
+    background-color: #9eadbc;
 }
 
 /* Background-color of the even rows */
 .container tr:nth-child(even) {
 	  background-color: #C0C0C0;
+    background-color: #ccc9c9;
 }
 
 .container th {

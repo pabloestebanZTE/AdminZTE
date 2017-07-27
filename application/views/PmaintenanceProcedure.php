@@ -43,6 +43,9 @@
 <script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
 <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
+<script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
+
 
 <script>
 var newElementQuantity = 0;
@@ -51,6 +54,8 @@ var inventory;
 var category;
 var checklist;
 var zones;
+var nameZonesG;
+var idZonesG;
 
     function showMessage(){
         var a = "<?php echo $msj[0]; ?>";
@@ -91,8 +96,8 @@ var zones;
          }
         ?>";
 
-        nameZones = nameZones.split("@");
-        idZones = idZones.split("-");
+        nameZonesG = nameZones = nameZones.split("@");
+        idZonesG = idZones = idZones.split("-");
 
         $selectZones = "";
         for(var i = 0; i < idZones.length -1; i++){
@@ -125,8 +130,6 @@ var zones;
           }
           var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
-          var fotos = "<td><a class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
-
 
           if(inventario[i].Q_PROGRESS == "0"){
             var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
@@ -139,6 +142,7 @@ var zones;
           }
 
           if (inventario[i].N_ESTADO == "Funcional"){
+            var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
@@ -146,6 +150,9 @@ var zones;
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             console.log(inventario[i]);
+            var newURL = inventario[i].url.split("Registro");
+            inventario[i].url = newURL[0]+"Registro Fotografico Correctivos/?region=us-west-2&tab=overview";
+            var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var newRow = "<tr id='newRow"+newElementQuantity+"' name='newRow"+newElementQuantity+"'>";
             newRow = newRow+"<td hidden><input id='idCM"+newElementQuantity+"' name='idCM"+newElementQuantity+"' value='"+inventario[i].corrective.K_IDTICKET_CORRECTIVE+"' ></td>";
             newRow = newRow+"<td><textarea  name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
@@ -227,6 +234,21 @@ var zones;
       $("#selectModelo"+equipo_categoria).append(models);
     }
 
+    function cambiarURL(equipo_categoria){
+      var e = document.getElementById("selectZones"+equipo_categoria);
+      var index = e.options[e.selectedIndex].value;
+      var newIndex;
+      for(var i = 0; i < idZonesG.length; i++){
+        if(idZonesG[i] == index){
+          newIndex = i;
+        }
+      }
+      var href = document.getElementById("fotos"+equipo_categoria).getAttribute("href");
+      href = href.split("/");
+      href = href[0] +"/"+ href[1] +"/"+ href[2] +"/"+ href[3] +"/"+ href[4] +"/"+ href[5] +"/"+ href[6] +"/"+ href[7]+"/"+nameZonesG[newIndex]+"/"+href[9];
+      document.getElementById("fotos"+equipo_categoria).href = href;
+    }
+
     function cambioTabla(equipo_categoria){
       var estado = $("#selectEstados"+equipo_categoria+" option:selected").attr('value');
       var linea = document.getElementById("linea"+equipo_categoria);
@@ -235,13 +257,17 @@ var zones;
       if(estado == "Averiado"){
         avance.style.display = 'none';
         selectEstado.style.display = 'none';
+        var href = document.getElementById("fotos"+equipo_categoria).getAttribute("href");
+        var newURL = href.split("Registro");
+        href = newURL[0]+"Registro Fotografico Correctivos/?region=us-west-2&tab=overview";
+        document.getElementById("fotos"+equipo_categoria).href = href;
         var newRow = "<tr id='newRow"+equipo_categoria+"' name='newRow"+equipo_categoria+"'>";
         newRow = newRow+"<td><textarea name='equiposAveriados"+equipo_categoria+"' id='equiposAveriados"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+equipo_categoria+"' id='referenciaEquiposAveriados"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='descripcionFalla"+equipo_categoria+"' id='descripcionFalla"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='pruebas"+equipo_categoria+"' id='pruebas"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='elementos"+equipo_categoria+"' id='elementos"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required></textarea></td>";
-        newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td></tr>";
+        newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td><td></td></tr>";
         $("#tableCorrective").append(linea);
         $("#tableCorrective").append(newRow);
       }
@@ -251,8 +277,6 @@ var zones;
         $("#newRow"+equipo_categoria).remove();
         $("#tableInventory").append(linea);
       }
-
-
     }
 
     function añadirElemento(){
@@ -285,10 +309,11 @@ var zones;
       var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
-      var fotos = "<td><a class='push_button blue' href='https://console.aws.amazon.com/s3/buckets/tt201701260001/Registro%20Fotografico/Camara%20IP/?region=us-west-2&tab=overview' target='_blank'>Ver</a></td>";
+      var href = "https://console.aws.amazon.com/s3/buckets/"+"<?php echo strtolower($ticket) ?>"+"/Registro Fotografico/"+category[0].N_NAME+"/"+nameZonesG[0]+"/?region=us-west-2&tab=overview";
+      var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' href='"+href+"' target='_blank'>Ver</a></td>";
       var avance = "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
 
-      var zonaE = "<td><select  style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+      var zonaE = "<td><select onchange='cambiarURL("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       zonaE = zonaE+zones;
       zonaE = zonaE+"</select></td>";
 
@@ -308,7 +333,30 @@ var zones;
     }
 
 </script>
-
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer",
+	{
+		title:{
+			text: " Procentaje de avance del mantenimiento"
+		},
+                animationEnabled: true,
+		data: [
+		{
+			type: "doughnut",
+			startAngle: 60,
+			toolTipContent: "{legendText}: {y} - <strong>#percent% </strong>",
+			showInLegend: true,
+			dataPoints: [
+				{y: <?php echo $avance ?>, indexLabel: "Avance #percent%", legendText: "Trabajo realizado" },
+				{y: <?php echo 100 - $avance ?>, indexLabel: "Restante #percent%", legendText: "Trabajo Faltante" }
+  		]
+		}
+		]
+	});
+	chart.render();
+	}
+</script>
 </head>
 <body id="page1">
 <div class="body1">
@@ -370,10 +418,22 @@ var zones;
                         echo "<li><b>Fase: </b>".$PVD->getFase()."</li>";
                     echo "</ul>";
                 echo "</div>";
+                echo "<div id='chartContainer' style='height: 400px; width: 50%;'></div>";
               echo "</div>";
+
           echo "</center>";
          ?>
           <?php
+          echo "<center><div class='btn-group'>";
+            if(isset($software)){
+              echo "<a class='btn btn-success btn-sm' onclick='showModalSoftware(".json_encode($software).")'>Inventario de Software</a>";
+            }
+            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/AA/?region=us-west-2&tab=overview'>Videos AA </a>";
+            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/IT/?region=us-west-2&tab=overview'>Videos IT </a>";
+            echo "<a href='/AdminZTE/index.php/PDF/crearActaIT?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' class='btn btn-primary btn-sm' role='button' target='_blank'> Descargar PDF</a>";
+
+          echo "</div></center><br><br><br>";
+
             if (isset($inventory)){
               echo "<table class='container'>";
                 echo "<thead>";
@@ -404,9 +464,7 @@ var zones;
                echo "</tbody>";
              echo "</table>";
             }
-            if(isset($software)){
-              echo "<button type='button' class='push_button blue' onclick='showModalSoftware(".json_encode($software).")'>Inventario de Software</button>";
-            }
+
            ?>
 			</article>
 	</div>
@@ -422,7 +480,7 @@ var zones;
             <div class="linea 200%">
               <div class="12u">
                 <!-- Features -->
-                <h2 class="major"><span>Elementos funcionales</span></h2>
+                <h2 class="major"><span>Inventario elementos funcionales</span></h2>
                 <div>
                   <div class="linea">
                   <!-- content -->
