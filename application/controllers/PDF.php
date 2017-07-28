@@ -27,6 +27,8 @@ class PDF extends CI_Controller {
       $pdf=new FPDF('L','mm','A4');
       $pdf->AddPage();
       $pdf->SetFont('Arial','B',9);
+      $pdf->Image('http://images.dailytech.com/nimage/34372_ZTE_Tomorrow_Never_Waits_FP_Wide.png',250,12,33);
+      $pdf->Image('https://image.ibb.co/frtUS5/logo_consorcio.png',15,12,33);
 
       //LLenar header
       $this->fillHeaderTable($pdf, $pvd, $date);
@@ -34,7 +36,7 @@ class PDF extends CI_Controller {
       //Texto de compromiso
       $pdf->Ln(5);
       $pdf->SetFont('Arial','',6);
-      $pdf->Cell(275,5,utf8_decode('Yo _________________________, identificado con C.C. No. __________ de ___________, actuando como Administrador PVD _____ certifico que ________________, identificado con C.C. __________ de _____________ en representación del Consorcio Integradores 2018'),0,1,'C');
+      $pdf->Cell(275,5,utf8_decode('Yo '.$_POST['nombreAdmin'].', identificado con C.C. No. '.$_POST['cedulaAdmin'].' de '.utf8_decode($_POST['ciudadAdmin']).', actuando como Administrador PVD '.$_GET['k_pvd'].' certifico que '.utf8_decode($_POST['nombreTec']).', identificado con C.C. '.utf8_decode($_POST['cedulaTec']).' de '.utf8_decode($_POST['ciudadTec']).' en representación del Consorcio Integradores 2018'),0,1,'C');
       $pdf->Cell(275,5,utf8_decode('bajo el contrato suscrito con Fonade, se presentó al Punto Vive Digital con el objetivo de realizar mantenimiento preventivo'),0,1,'C');
       $pdf->Ln(5);
       $pdf->Cell(275,5,utf8_decode('El resultado del mantenimiento se describe a continuación:'),0,1,'L');
@@ -42,12 +44,28 @@ class PDF extends CI_Controller {
       //Llenar tabla de correctivos
       $this->fillCorrectiveTable($pdf, $inventory);
 
+      //Lenar tabla de velocidad
+      $this->fillSpeedTable($pdf);
 
       $pdf->Output();
     }
 
-    public function fillCorrectiveTable($pdf, $inventory){
+    public function fillSpeedTable($pdf){
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','B',7);
+      $pdf->Cell(275,5,'ESTADO DE CONECTIVIDAD',0,1,'C');
+      $pdf->SetFont('Arial','B',6);
+      $pdf->Cell(275,5,'Titulo de conectividad',1,1,'C');
+      $pdf->Cell(75,5,'Estado Conectividad',1,0,'C');
+      $pdf->Cell(100,5,'Velocidad Download',1,0,'C');
+      $pdf->Cell(100,5,'Velocidad Upload',1,1,'C');
+      $pdf->Cell(75,5,'Funcional',1,0,'C');
+      $pdf->Cell(100,5,$_POST['velocidadD'],1,0,'C');
+      $pdf->Cell(100,5,$_POST['velocidadU'],1,1,'C');
 
+    }
+
+    public function fillCorrectiveTable($pdf, $inventory){
       //Titulo
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(275,5,'ESTADO GENERAL DEL PVD Y FALLAS ENCONTRADAS',0,1,'C');
@@ -106,7 +124,7 @@ class PDF extends CI_Controller {
 
     public function fillHeaderTable($pdf, $pvd, $date){
       //Encabezado
-      $pdf->Cell(275,5,'Informe de Mantenimiento Preventivo IT',1,1,'C');
+      $pdf->Cell(275,18,'Informe de Mantenimiento Preventivo IT',1,1,'C');
       //Salto de linea
       $pdf->Ln(5);
       $pdf->SetFont('Arial','B',7);
@@ -130,19 +148,19 @@ class PDF extends CI_Controller {
       $pdf->Cell(90,5,$date,1,1,'C');
       //Cuarta linea de la tabla
       $pdf->Cell(40,5,'Administrador',1,0,'C');
-      $pdf->Cell(95,5,'',1,0,'C');
+      $pdf->Cell(95,5,$_POST['nombreAdmin'],1,0,'C');
       $pdf->Cell(20,5,'Correo',1,0,'C');
-      $pdf->Cell(120,5,'',1,1,'C');
+      $pdf->Cell(120,5,$_POST['correoAdmin'],1,1,'C');
       //Quinta linea de la tabla
       $pdf->Cell(40,5,utf8_decode('Identificación'),1,0,'C');
-      $pdf->Cell(95,5,'',1,0,'C');
+      $pdf->Cell(95,5,$_POST['cedulaAdmin'],1,0,'C');
       $pdf->Cell(20,5,utf8_decode('Teléfono'),1,0,'C');
-      $pdf->Cell(120,5,'',1,1,'C');
+      $pdf->Cell(120,5,$_POST['telefonoAdmin'],1,1,'C');
       //Sexta linea de la tablas
       $pdf->Cell(40,5,'Representante del integrador',1,0,'C');
-      $pdf->Cell(115,5,'',1,0,'C');
+      $pdf->Cell(115,5,$_POST['nombreTec'],1,0,'C');
       $pdf->Cell(30,5,utf8_decode('Identificación'),1,0,'C');
-      $pdf->Cell(90,5,'',1,1,'C');
+      $pdf->Cell(90,5,$_POST['cedulaTec'],1,1,'C');
     }
 
 }

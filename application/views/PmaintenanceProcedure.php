@@ -279,6 +279,12 @@ var idZonesG;
       }
     }
 
+    function showActaIT(){
+      console.log("o.o");
+      var form = document.getElementById("formActaIT");
+      form.style.display = 'block';
+    }
+
     function añadirElemento(){
       var options = "<td><select onchange='cambiarSelectMarca("+newElementQuantity+")' style='font-size:10px' name='selectElement"+newElementQuantity+"' id='selectElement"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       for(var i = 0; i < category.length; i++){
@@ -430,9 +436,56 @@ window.onload = function () {
             }
             echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/AA/?region=us-west-2&tab=overview'>Videos AA </a>";
             echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/IT/?region=us-west-2&tab=overview'>Videos IT </a>";
-            echo "<a href='/AdminZTE/index.php/PDF/crearActaIT?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' class='btn btn-primary btn-sm' role='button' target='_blank'> Descargar PDF</a>";
-
+            echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaIT()'> Generar Acta IT</a>";
           echo "</div></center><br><br><br>";
+
+          echo "<div id='formActaIT' name='formActaIT' hidden>";
+            echo "<form method='post' name='form1'>";
+              echo "<table class='container'>";
+                echo "<thead>";
+                  echo "<tr>";
+                    echo "<th><h1>Nombre Admin</h1></th>";
+                    echo "<th><h1>Correo Admin</h1></th>";
+                    echo "<th><h1>Cedula Admin</h1></th>";
+                    echo "<th><h1>Ciudad de Expedición</h1></th>";
+                    echo "<th><h1>Télefono Admin</h1></th>";
+                echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+                  echo "<tr>";
+                    echo "<td><input id='nombreAdmin' name='nombreAdmin' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                    echo "<td><input id='correoAdmin' name='correoAdmin' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                    echo "<td><input id='cedulaAdmin' name='cedulaAdmin' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                    echo "<td><input id='ciudadAdmin' name='ciudadAdmin' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                    echo "<td><input id='telefonoAdmin' name='telefonoAdmin' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                  echo "</tr>";
+               echo "</tbody>";
+             echo "</table><br><br>";
+
+             echo "<table class='container'>";
+               echo "<thead>";
+                 echo "<tr>";
+                   echo "<th><h1>Nombre Técnico</h1></th>";
+                   echo "<th><h1>Cedula Técnico</h1></th>";
+                   echo "<th><h1>Ciudad de Expedición</h1></th>";
+                   echo "<th><h1>Velocidad de Download</h1></th>";
+                   echo "<th><h1>Velocidad de Upload</h1></th>";
+                   echo "<th><h1>Generar Acta</h1></th>";
+                 echo "</tr>";
+               echo "</thead>";
+               echo "<tbody>";
+                 echo "<tr>";
+                   echo "<td><input id='nombreTec' name='nombreTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                   echo "<td><input id='cedulaTec' name='cedulaTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                   echo "<td><input id='ciudadTec' name='ciudadTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                   echo "<td><input id='velocidadD' name='velocidadD' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                   echo "<td><input id='velocidadU' name='velocidadU' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
+                   echo "<td><button onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/PDF/crearActaIT?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
+                 echo "</tr>";
+              echo "</tbody>";
+            echo "</table><br><br>";
+           echo "</form>";
+          echo "</div>";
 
             if (isset($inventory)){
               echo "<table class='container'>";

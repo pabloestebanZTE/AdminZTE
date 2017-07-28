@@ -116,8 +116,6 @@ class Equipment extends CI_Controller {
             $p++;
           }
           if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            print_r($respuesta['inventory'][$i]['inventario'][$j]);
-            echo "<br><br>";
             $respuesta['inventory'][$i]['averiado']++;
           }
         }
