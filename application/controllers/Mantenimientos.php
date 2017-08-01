@@ -269,6 +269,9 @@ class Mantenimientos extends CI_Controller {
       $tablas['Julio']['tabla1'] = $this->resumenPreventivosMes($MP, 'Julio');
       $tablas['Julio']['tabla2'] = $this->avanceDepartamentos($MP, 'Julio');
       $tablas['Julio']['tabla3'] = $this->detalleTickets($MP, 'Julio');
+      $tablas['Agosto']['tabla1'] = $this->resumenPreventivosMes($MP, 'Agosto');
+      $tablas['Agosto']['tabla2'] = $this->avanceDepartamentos($MP, 'Agosto');
+      $tablas['Agosto']['tabla3'] = $this->detalleTickets($MP, 'Agosto');
       return $tablas;
     }
 
@@ -494,7 +497,12 @@ class Mantenimientos extends CI_Controller {
           $MP['Julio']['Zona']=$this->reconocerZona($region, $MP['Julio']['Zona'], $mantenimiento);
           break;
         case 8:
-          $MP['Agosto'][$MP['Agosto']['contador']]= $mantenimiento;
+          $MP['Agosto'][$MP['Agosto']['contador']]['mantenimiento']= $mantenimiento;
+          $MP['Agosto'][$MP['Agosto']['contador']]['ciudad']= $city;
+          $MP['Agosto'][$MP['Agosto']['contador']]['departamento']= $department;
+          $MP['Agosto'][$MP['Agosto']['contador']]['idPVD']= $id;
+          $MP['Agosto'][$MP['Agosto']['contador']]['region']= $regionPVD;
+          $MP['Agosto'][$MP['Agosto']['contador']]['tipologia']= $tipologia;
           $MP['Agosto']['contador']++;
           $MP['Agosto']['Zona']=$this->reconocerZona($region, $MP['Agosto']['Zona'], $mantenimiento);
           break;
@@ -572,6 +580,7 @@ class Mantenimientos extends CI_Controller {
       $MP['Mayo']['contador']=0;
       $MP['Junio']['contador']=0;
       $MP['Julio']['contador']=0;
+      $MP['Agosto']['contador']=0;
 
       $MP['Enero']['Zona']['Zona1']['Cantidad']=0;
       $MP['Enero']['Zona']['Zona4']['Cantidad']=0;
@@ -587,6 +596,8 @@ class Mantenimientos extends CI_Controller {
       $MP['Junio']['Zona']['Zona4']['Cantidad']=0;
       $MP['Julio']['Zona']['Zona1']['Cantidad']=0;
       $MP['Julio']['Zona']['Zona4']['Cantidad']=0;
+      $MP['Agosto']['Zona']['Zona1']['Cantidad']=0;
+      $MP['Agosto']['Zona']['Zona4']['Cantidad']=0;
 
       $MP['Enero']['Zona']['Zona1']['Estado']['Abierto']=0;
       $MP['Enero']['Zona']['Zona1']['Estado']['Ejecutado']=0;
@@ -630,9 +641,14 @@ class Mantenimientos extends CI_Controller {
       $MP['Julio']['Zona']['Zona4']['Estado']['Abierto']=0;
       $MP['Julio']['Zona']['Zona4']['Estado']['Ejecutado']=0;
       $MP['Julio']['Zona']['Zona4']['Estado']['Progreso']=0;
+      $MP['Agosto']['Zona']['Zona1']['Estado']['Abierto']=0;
+      $MP['Agosto']['Zona']['Zona1']['Estado']['Ejecutado']=0;
+      $MP['Agosto']['Zona']['Zona1']['Estado']['Progreso']=0;
+      $MP['Agosto']['Zona']['Zona4']['Estado']['Abierto']=0;
+      $MP['Agosto']['Zona']['Zona4']['Estado']['Ejecutado']=0;
+      $MP['Agosto']['Zona']['Zona4']['Estado']['Progreso']=0;
       return $MP;
     }
-
 }
 
 ?>

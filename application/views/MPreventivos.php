@@ -189,6 +189,7 @@
                   $meses[5] = 'Mayo';
                   $meses[6] = 'Junio';
                   $meses[7] = 'Julio';
+                  $meses[8] = 'Agosto';
 
                   echo "<br><br><br>";
                   echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";

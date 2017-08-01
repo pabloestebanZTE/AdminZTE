@@ -245,6 +245,8 @@
               $meses['numerico'][6]= 6;
               $meses[7] = 'Julio';
               $meses['numerico'][7]= 7;
+              $meses[8] = 'Agosto';
+              $meses['numerico'][8]= 8;
 
               echo "<ul class='nav'>";
                 echo "<center>";
