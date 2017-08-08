@@ -87,6 +87,7 @@ class Equipment extends CI_Controller {
         $respuesta['inventory'][$i]['valorT'] = 0;
         $respuesta['inventory'][$i]['funcional'] = 0;
         $respuesta['inventory'][$i]['averiado'] = 0;
+        $respuesta['inventory'][$i]['NE'] = 0;
         $respuesta['inventory'][$i]['avance'] = 0;
         $valoresParciales = array();
         $p = 0;
@@ -117,6 +118,9 @@ class Equipment extends CI_Controller {
           }
           if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
             $respuesta['inventory'][$i]['averiado']++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "No encontrado"){
+            $respuesta['inventory'][$i]['NE']++;
           }
         }
         if (count($valoresParciales) > 0){
