@@ -82,6 +82,8 @@ var idZonesG;
       $('#chk').remove();
       $('#inventory').remove();
       $('#corrective').remove();
+      $('#NE').remove();
+
 
       nameZones = ""+"<?php
          for($i=0;$i<count($PVD->getZones());$i++){
@@ -107,6 +109,8 @@ var idZonesG;
 
       $('#tableInventory').append("<tbody id='inventory' name='inventory'></tbody>");
       $('#tableCorrective').append("<tbody id='corrective' name='corrective'></tbody>");
+      $('#tableNE').append("<tbody id='NE' name='NE'></tbody>");
+
       if(inventario != "NI"){
         for(var i = 0; i<inventario.length; i++){
           for (var j = 0; j<categorias.length; j++){
@@ -144,9 +148,20 @@ var idZonesG;
           if (inventario[i].N_ESTADO == "Funcional"){
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
-            estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
+            estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
             $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+          }
+          if (inventario[i].N_ESTADO == "No encontrado"){
+            var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
+            var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+            estados = estados+"<option value='No encontrado'>No encontrado</option><option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
+            estados = estados+"</select></td>";
+            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
+            var progress = document.getElementById("avance"+newElementQuantity);
+            selectEstado.style.display = 'none';
+            progress.style.display = 'none';
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             console.log(inventario[i]);
@@ -163,7 +178,7 @@ var idZonesG;
             newRow = newRow+"<td></td><td><p>"+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
             newRow = newRow+"</tr>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
-            estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option>";
+            estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
             $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
             $('#corrective').append(newRow);
@@ -277,6 +292,12 @@ var idZonesG;
         $("#newRow"+equipo_categoria).remove();
         $("#tableInventory").append(linea);
       }
+      if(estado == "No encontrado"){
+        avance.style.display = 'none';
+        selectEstado.style.display = 'none';
+        $("#newRow"+equipo_categoria).remove();
+        $("#tableNE").append(linea);
+      }
     }
 
     function showActaIT(){
@@ -324,7 +345,7 @@ var idZonesG;
       zonaE = zonaE+"</select></td>";
 
       var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
-      estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
+      estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option><option value='No encontrado'>No encontrado</option>";
       estados = estados+"</select></td>";
 
       var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
@@ -496,6 +517,7 @@ window.onload = function () {
                     echo "<th><h1>Cantidad Tipologia</h1></th>";
                     echo "<th><h1>En Inventario</h1></th>";
                     echo "<th><h1>En Correctivo</h1></th>";
+                    echo "<th><h1>No Encontrados</h1></th>";
               //      echo "<th><h1>Valor Total</h1></th>";
                     echo "<th><h1>Expandir</h1></th>";
                     echo "<th><h1>Avance</h1></th>";
@@ -509,6 +531,7 @@ window.onload = function () {
                       echo "<td>".$inventory[$i]['I_QUANTITY']."</td>";
                       echo "<td>".$inventory[$i]['funcional']."</td>";
                       echo "<td>".$inventory[$i]['averiado']."</td>";
+                      echo "<td>".$inventory[$i]['NE']."</td>";
               /*        echo "<td>".$inventory[$i]['valorT']."</td>";*/
                       echo "<td><button type='button' class='push_button blue' onclick='showModal(".json_encode($inventory[$i]['K_IDEQUIPMENTTYPE']).",".json_encode($inventory[$i]['inventario']).",".json_encode($inventory[$i]['N_NAME']).",".json_encode($generic[$i]['category']).",".json_encode($generic[$i]['rutina']).")'>Expandir</button></td>";
                       echo "<td> ".$inventory[$i]['avance']."%</td>";
@@ -596,6 +619,39 @@ window.onload = function () {
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='corrective' name='corrective'>";
+                           echo "</tbody>";
+                         echo "</table>";
+                        echo "</article>";
+                      }
+                     ?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="linea 100%">
+              <div class="12u">
+                <!-- Features -->
+                <h2 class="major"><span>Elementos no Encontrados</span></h2>
+                <div>
+                  <div class="linea">
+                    <?php
+                      if (isset($inventory)){
+                        echo "<article id='content'>";
+                          echo "<table class='container' id='tableNE' name='tableNE'>";
+                            echo "<thead>";
+                              echo "<tr>";
+                                echo "<th><h1>Elemento </h1></th>";
+                                echo "<th><h1>Marca</h1></th>";
+                                echo "<th><h1>Modelo</h1></th>";
+                                echo "<th><h1>Serial</h1></th>";
+                                echo "<th><h1>Placa de inventario</h1></th>";
+                                echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Área</h1></th>";
+                                echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Galeria</h1></th>";
+                              echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody id='NE' name='NE'>";
                            echo "</tbody>";
                          echo "</table>";
                         echo "</article>";

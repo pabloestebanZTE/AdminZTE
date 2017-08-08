@@ -19,6 +19,57 @@ class PDF extends CI_Controller {
 
     public function crearActaIT(){
       $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      for($i = 0; $i< count($respuesta['inventory']); $i++){
+        $respuesta['inventory'][$i]['valorT'] = 0;
+        $respuesta['inventory'][$i]['funcional'] = 0;
+        $respuesta['inventory'][$i]['averiado'] = 0;
+        $respuesta['inventory'][$i]['NE'] = 0;
+        $respuesta['inventory'][$i]['avance'] = 0;
+        $valoresParciales = array();
+        $p = 0;
+        for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Antes del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Durante el Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          $url = "https://console.aws.amazon.com/s3/buckets/".strtolower($_GET['k_ticket'])."/Registro Fotografico"."/".$respuesta['inventory'][$i]['N_NAME']."/".$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']."/"."?region=us-west-2&tab=overview";
+          if (isset($respuesta['inventory'][$i]['inventario'][$j]['url'])){
+            $respuesta['inventory'][$i]['inventario'][$j]['url'] = $url;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+            if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
+              $respuesta['inventory'][$i]['funcional']++;
+            }
+            if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
+              $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
+              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 100;
+            }
+            $valoresParciales[$p] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'];
+            $p++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            $respuesta['inventory'][$i]['averiado']++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "No encontrado"){
+            $respuesta['inventory'][$i]['NE']++;
+          }
+        }
+        if (count($valoresParciales) > 0){
+          $porcentaje  = 100 / count($valoresParciales);
+        }
+        for($p = 0; $p<count($valoresParciales); $p++){
+          $respuesta['inventory'][$i]['avance'] += $porcentaje / 100 * $valoresParciales[$p];
+        }
+         $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', '');
+         $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
+      }
+
       $inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
 
       $timezone = date_default_timezone_get();
@@ -47,7 +98,75 @@ class PDF extends CI_Controller {
       //Lenar tabla de velocidad
       $this->fillSpeedTable($pdf);
 
+      //Lenar resumen PVD
+      $this->fillAbstractPVD($pdf, $respuesta['inventory']);
+
+      //Lenar firmas
+      $this->fillCCC($pdf);
+
+      //Lenar firmas
+      $this->fillSigns($pdf);
+
       $pdf->Output();
+    }
+
+    public function fillCCC($pdf){
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','B',7);
+      $pdf->Cell(275,5,'Estado de PQR',0,1,'C');
+      $pdf->Cell(275,5,utf8_decode('Se verificó con el CCC el estado de los tickets abiertos para el punto, y se realiza atención y cierre'),0,1,'C');
+      $pdf->SetFont('Arial','',7);
+      $pdf->Cell(80,5,utf8_decode('Descripción'),1,0,'C');
+      $pdf->Cell(40,5,utf8_decode('Nro. Caso'),1,0,'C');
+      $pdf->Cell(40,5,utf8_decode('Estado'),1,0,'C');
+      $pdf->Cell(115,5,utf8_decode('Observaciones'),1,1,'C');
+
+      $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
+      $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+      $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+      $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+    }
+
+    public function fillSigns($pdf){
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','',7);
+      date_default_timezone_set("America/Bogota");
+      $mysqlDateTime = date('c');
+      $pdf->Cell(275,5,'En constancia se firma el '.explode("T", $mysqlDateTime)[0],0,1,'L');
+      $pdf->Ln(30);
+      $pdf->Cell(30,5,'Firma administrador PVD',0,0,'L');
+      $pdf->Cell(100,5,'',0,0,'C');
+      $pdf->Cell(30,5,'Firma representante del integrador',0,1,'L');
+      $pdf->Cell(30,5,'Nombre: '.utf8_decode($_POST['nombreAdmin']),0,0,'L');
+      $pdf->Cell(100,5,'',0,0,'C');
+      $pdf->Cell(30,5,'Nombre: '.utf8_decode($_POST['nombreTec']),0,1,'CL');
+      $pdf->Cell(30,5,'C.C. : '.utf8_decode($_POST['cedulaAdmin']),0,0,'L');
+      $pdf->Cell(100,5,'',0,0,'C');
+      $pdf->Cell(30,5,'C.C. : '.utf8_decode($_POST['cedulaTec']),0,1,'CL');
+      $pdf->Cell(30,5,'Cel. : '.utf8_decode($_POST['telefonoAdmin']),0,0,'L');
+      $pdf->Cell(100,5,'',0,0,'C');
+
+
+    }
+
+    public function fillAbstractPVD($pdf, $inventory){
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial','B',7);
+      $pdf->Cell(275,5,'INVENTARIO GENERAL DEL PVD',0,1,'C');
+      $pdf->Cell(155,5,'ITEM',1,0,'C');
+      $pdf->Cell(30,5,'CANTIDAD TIPOLOGIA',1,0,'C');
+      $pdf->Cell(30,5,'EN INVENTARIO',1,0,'C');
+      $pdf->Cell(30,5,'EN CORRECTIVO',1,0,'C');
+      $pdf->Cell(30,5,'NO ENCONTRADO',1,1,'C');
+      $pdf->SetFont('Arial','',7);
+
+      for ($i = 0; $i < count($inventory); $i++){
+        $pdf->Cell(155,5,utf8_decode($inventory[$i]['N_NAME']),1,0,'C');
+        $pdf->Cell(30,5,$inventory[$i]['I_QUANTITY'],1,0,'C');
+        $pdf->Cell(30,5,$inventory[$i]['funcional'],1,0,'C');
+        $pdf->Cell(30,5,$inventory[$i]['averiado'],1,0,'C');
+        $pdf->Cell(30,5,$inventory[$i]['NE'],1,1,'C');
+      }
     }
 
     public function fillSpeedTable($pdf){
@@ -55,14 +174,14 @@ class PDF extends CI_Controller {
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(275,5,'ESTADO DE CONECTIVIDAD',0,1,'C');
       $pdf->SetFont('Arial','B',6);
-      $pdf->Cell(275,5,'Titulo de conectividad',1,1,'C');
-      $pdf->Cell(75,5,'Estado Conectividad',1,0,'C');
-      $pdf->Cell(100,5,'Velocidad Download',1,0,'C');
-      $pdf->Cell(100,5,'Velocidad Upload',1,1,'C');
-      $pdf->Cell(75,5,'Funcional',1,0,'C');
-      $pdf->Cell(100,5,$_POST['velocidadD'],1,0,'C');
-      $pdf->Cell(100,5,$_POST['velocidadU'],1,1,'C');
-
+      $pdf->Cell(35,5,'El punto vive digital',1,0,'C');
+      $pdf->Cell(240,5,'Se realizo prueba de velocidad y se encontraron los siguientes resultados, conectados directamente al Router de entrada.',1,1,'C');
+      $pdf->Cell(35,5,'Cuenta con ',1,0,'C');
+      $pdf->Cell(120,5,'Velocidad Download',1,0,'C');
+      $pdf->Cell(120,5,'Velocidad Upload',1,1,'C');
+      $pdf->Cell(35,5,'',0,0,'C');
+      $pdf->Cell(120,5,$_POST['velocidadD'],1,0,'C');
+      $pdf->Cell(120,5,$_POST['velocidadU'],1,1,'C');
     }
 
     public function fillCorrectiveTable($pdf, $inventory){
