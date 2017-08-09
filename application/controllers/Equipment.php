@@ -65,6 +65,7 @@ class Equipment extends CI_Controller {
   //    $folders = $this->listBucket($folders);
       $respuesta['ticket'] = $_GET['k_ticket'];
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);

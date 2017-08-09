@@ -158,5 +158,23 @@
             }
             return $respuesta;
           }
+
+          public function getAllCCCTicketsPerPBV($idPvd){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            $sql  = "SELECT * FROM ticket_ccc WHERE K_IDPVD = ".$idPvd.";";
+            if ($session != "false"){
+              $result = $session->query($sql);
+              if ($result->num_rows > 0) {
+                $i = 0;
+                while($row = $result->fetch_assoc()) {
+                  $respuesta[$i] = $row;
+                  $i++;
+                }
+              }
+            }
+            return $respuesta;
+
+          }
         }
 ?>

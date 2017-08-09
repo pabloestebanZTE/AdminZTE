@@ -539,16 +539,18 @@ create table software_inventory
    N_MAGIC_VERSION                varchar(50),
    N_SAC_VERSION                  varchar(50),
    N_SEMILLA_VERSION              varchar(50),
+   N_JAWS_VERSION                 varchar(50),
    K_IDSTUFF                      int not null,
    primary key (K_SOFTWARE_INVENTORY)
 );
 
-create table various_maintenance_preventive
+create table ticket_ccc
 (
-   K_VARIOUS_MP                   int not null AUTO_INCREMENT,
-
-   K_IDSTUFF                      int not null,
-   primary key (K_SOFTWARE_INVENTORY)
+   K_IDTICKET_CCC                 int not null,
+   K_IDPVD                        int not null,
+   N_DESCRIPTION                  varchar(500),
+   N_ESTADO                       varchar(20),
+   primary key (K_IDTICKET_CCC)
 );
 
 alter table equipment_type add constraint FK_PHASE_ET foreign key (K_IDPHASE)
@@ -592,6 +594,9 @@ alter table ticket_corrective_maintenance add constraint FK_STUFF_TCM foreign ke
 
 alter table software_inventory add constraint FK_STUFF_SI foreign key (K_IDSTUFF)
       references stuff (K_IDSTUFF) on delete restrict on update restrict;
+
+alter table ticket_ccc add constraint FK_CCC_PVD foreign key (K_IDPVD)
+      references pvd (K_IDPVD) on delete restrict on update restrict;
 
 alter table CITY add constraint FK_DEPARTMENT_CITY foreign key (K_IDDEPARTMENT)
       references DEPARTMENT (K_IDDEPARTMENT) on delete restrict on update restrict;

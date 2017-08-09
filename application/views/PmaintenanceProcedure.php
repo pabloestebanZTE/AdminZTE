@@ -65,8 +65,11 @@ var idZonesG;
     }
 
     function showModalSoftware(inventario){
-      console.log(inventario);
       $('#modalSFT').modal('show');
+    }
+
+    function showModalCCC(){
+      $('#modalCCC').modal('show');
     }
 
     function showModal(idEquipo, inventario, name, categorias, rutina){
@@ -455,6 +458,9 @@ window.onload = function () {
             if(isset($software)){
               echo "<a class='btn btn-success btn-sm' onclick='showModalSoftware(".json_encode($software).")'>Inventario de Software</a>";
             }
+            if(isset($CCC)){
+              echo "<a class='btn btn-success btn-sm' onclick='showModalCCC()'>Tickets CCC</a>";
+            }
             echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/AA/?region=us-west-2&tab=overview'>Videos AA </a>";
             echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Videos/IT/?region=us-west-2&tab=overview'>Videos IT </a>";
             echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaIT()'> Generar Acta IT</a>";
@@ -728,6 +734,65 @@ window.onload = function () {
                               echo "</tr>";
                             }
                            echo "</tbody>";
+                         echo "</table>";
+                        echo "</article>";
+                      }
+                     ?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input name='pvd' id='pvd' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=' <?php echo $_GET['k_pvd'] ?> '></td>
+            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value='<?php echo count($software) ?>'></td>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal inv Software-->
+    <div id="modalCCC" class="modal fade">
+      <div class="modal-content">
+        <div id="main" class="container">
+          <form method='post' name='formActualizar'>
+            <div class="linea 100%">
+              <div class="12u">
+                <!-- Features -->
+                <h2 class="major"><span>Tickets CCC</span></h2>
+                <div>
+                  <div class="linea">
+                    <?php
+                      if (isset($CCC)){
+                        echo "<center><div class='btn-group'>";
+                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                          echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
+                        echo "</div></center>";
+                        echo "<article id='content'>";
+                          echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
+                            echo "<thead>";
+                              echo "<tr>";
+                                echo "<th><h1>Id</h1></th>";
+                                echo "<th><h1>Descripción</h1></th>";
+                                echo "<th><h1>Estado</h1></th>";
+                                echo "<th><h1>Observaciones</h1></th>";
+                              echo "</tr>";
+                            echo "</thead>";
+                          /*  echo "<tbody>";
+                            for($i = 0; $i < count($software); $i++){
+                              echo "<tr>";
+                                echo "<td hidden><input id='idSS".$i."' name='idSS".$i."' value='".$software[$i]['K_SOFTWARE_INVENTORY']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td>".$software[$i]['marca']." - ".$software[$i]['modelo']."</td>";
+                                echo "<td>".$software[$i]['serial']."</td>";
+                                echo "<td><input id='SOVer".$i."' name='SOVer".$i."' value='".$software[$i]['N_OPERATIVE_SYSTEM']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='OfficeVer".$i."' name='OfficeVer".$i."'  value='".$software[$i]['N_OFFICE_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='AntivirusVer".$i."' name='AntivirusVer".$i."' value='".$software[$i]['N_ANTIVIRUS_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='BrowserVer".$i."' name='BrowserVer".$i."' value='".$software[$i]['N_BROWSER_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SimonticVer".$i."' name='SimonticVer".$i."' value='".$software[$i]['N_SIMONTIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='MagicVer".$i."' name='MagicVer".$i."' value='".$software[$i]['N_MAGIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SacVer".$i."' name='SacVer".$i."' value='".$software[$i]['N_SAC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='SemillaVer".$i."' name='SemillaVer".$i."' value='".$software[$i]['N_SEMILLA_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                              echo "</tr>";
+                            }
+                           echo "</tbody>";*/
                          echo "</table>";
                         echo "</article>";
                       }
