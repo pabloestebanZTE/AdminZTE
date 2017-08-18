@@ -127,6 +127,8 @@
                    $meses[5] = 'Mayo';
                    $meses[6] = 'Junio';
                    $meses[7] = 'Julio';
+                   $meses[8] = 'Agosto';
+
                    echo "<div id='tab"."1"."'>";
                      echo "<div class='wrapperTable'>";
                       echo "<table id='table'>";

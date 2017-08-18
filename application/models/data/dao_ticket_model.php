@@ -281,6 +281,32 @@
               }
             }
 
+            public function getAllCCCTicket(){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT * FROM ticket_ccc";
+              if ($session != "false"){
+                $result = $session->query($sql);
+                if ($result->num_rows > 0) {
+                  $i = 0;
+                  while($row = $result->fetch_assoc()) {
+                      $ticket = new ticket_model();
+                      $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                      $result2 = $session->query($sql2);
+                      $row2 = $result2->fetch_assoc();
+                      $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
+                      $respuesta[$i] = $ticket;
+                      $i++;
+                  }
+                } else {
+                  $respuesta = "No tickets";
+                  }
+              } else {
+                $respuesta = "Error en BD";
+              }
+            }
+
+
             public function getAllOtherCategories(){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();

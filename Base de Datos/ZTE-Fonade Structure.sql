@@ -550,6 +550,7 @@ create table ticket_ccc
    K_IDPVD                        int not null,
    N_DESCRIPTION                  varchar(500),
    N_ESTADO                       varchar(20),
+   N_OBSERVATION                  varchar(500),
    primary key (K_IDTICKET_CCC)
 );
 

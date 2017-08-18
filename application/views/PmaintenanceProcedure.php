@@ -16,18 +16,23 @@
 <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/tablesInventory.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/multiTable.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
-<script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
@@ -41,7 +46,6 @@
 <script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
 <script src="/AdminZTE/assets/js/responsiveslides.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
-<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
@@ -127,6 +131,8 @@ var idZonesG;
               }
             }
           }
+        //  var deleteRB = "<td>"+"<div class'[ form-group ]'><input type='checkbox' name='fancy-checkbox-primary' id='fancy-checkbox-primary' autocomplete='off' /><div class='[ btn-group ]'><label for='fancy-checkbox-primary' class='[ btn btn-primary ]'><span class='[ glyphicon glyphicon-ok ]'></span><span> </span></label><label for='fancy-checkbox-primary' class='[ btn btn-default active ]'>Delete</label></div></div>"+"</td>";
+          var deleteRB = "<td><a href='#'><span class='glyphicon glyphicon-remove'></span></a></td>";
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
@@ -153,14 +159,14 @@ var idZonesG;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "No encontrado"){
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='No encontrado'>No encontrado</option><option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
             var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
@@ -183,7 +189,7 @@ var idZonesG;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
             $('#corrective').append(newRow);
 
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
@@ -364,7 +370,7 @@ var idZonesG;
 
 </script>
 <script type="text/javascript">
-window.onload = function () {
+$(window).on('load', function() {
 	var chart = new CanvasJS.Chart("chartContainer",
 	{
 		title:{
@@ -385,7 +391,7 @@ window.onload = function () {
 		]
 	});
 	chart.render();
-	}
+});
 </script>
 </head>
 <body id="page1">
@@ -577,6 +583,7 @@ window.onload = function () {
                           echo "<table class='container' id='tableInventory' name='tableInventory'>";
                             echo "<thead>";
                               echo "<tr>";
+                                echo "<th><h1>Eliminar</h1></th>";
                                 echo "<th><h1>Elemento </h1></th>";
                                 echo "<th><h1>Marca</h1></th>";
                                 echo "<th><h1>Modelo</h1></th>";
@@ -613,6 +620,7 @@ window.onload = function () {
                           echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
                             echo "<thead>";
                               echo "<tr>";
+                                echo "<th><h1>Eliminar</h1></th>";
                                 echo "<th><h1>Elemento </h1></th>";
                                 echo "<th><h1>Marca</h1></th>";
                                 echo "<th><h1>Modelo</h1></th>";
@@ -646,6 +654,7 @@ window.onload = function () {
                           echo "<table class='container' id='tableNE' name='tableNE'>";
                             echo "<thead>";
                               echo "<tr>";
+                              echo "<th><h1>Eliminar</h1></th>";
                                 echo "<th><h1>Elemento </h1></th>";
                                 echo "<th><h1>Marca</h1></th>";
                                 echo "<th><h1>Modelo</h1></th>";
@@ -700,6 +709,7 @@ window.onload = function () {
                         echo "<center><div class='btn-group'>";
                           echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
+                          echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Registro Fotografico Software /?region=us-west-2&tab=overview'>Registro de Software </a>";
                         echo "</div></center>";
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
@@ -767,32 +777,29 @@ window.onload = function () {
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                         echo "</div></center>";
                         echo "<article id='content'>";
-                          echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
+                          echo "<table class='container' id='tableCCC' name='tableCCC'>";
                             echo "<thead>";
                               echo "<tr>";
-                                echo "<th><h1>Id</h1></th>";
                                 echo "<th><h1>Descripción</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Observaciones</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
-                          /*  echo "<tbody>";
-                            for($i = 0; $i < count($software); $i++){
+                            echo "<tbody>";
+                            for($i = 0; $i < count($CCC); $i++){
                               echo "<tr>";
-                                echo "<td hidden><input id='idSS".$i."' name='idSS".$i."' value='".$software[$i]['K_SOFTWARE_INVENTORY']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td>".$software[$i]['marca']." - ".$software[$i]['modelo']."</td>";
-                                echo "<td>".$software[$i]['serial']."</td>";
-                                echo "<td><input id='SOVer".$i."' name='SOVer".$i."' value='".$software[$i]['N_OPERATIVE_SYSTEM']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='OfficeVer".$i."' name='OfficeVer".$i."'  value='".$software[$i]['N_OFFICE_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='AntivirusVer".$i."' name='AntivirusVer".$i."' value='".$software[$i]['N_ANTIVIRUS_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='BrowserVer".$i."' name='BrowserVer".$i."' value='".$software[$i]['N_BROWSER_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='SimonticVer".$i."' name='SimonticVer".$i."' value='".$software[$i]['N_SIMONTIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='MagicVer".$i."' name='MagicVer".$i."' value='".$software[$i]['N_MAGIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='SacVer".$i."' name='SacVer".$i."' value='".$software[$i]['N_SAC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
-                                echo "<td><input id='SemillaVer".$i."' name='SemillaVer".$i."' value='".$software[$i]['N_SEMILLA_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td hidden><input id='idCCC".$i."' name='idCCC".$i."' value='".$CCC[$i]['K_SOFTWARE_INVENTORY']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td>".$CCC[$i]['N_DESCRIPTION']."</td>";
+                                echo "<td><select style='font-size:10px' name='select' id='select' aria-describedby='basic-addon1'>";
+                                  echo "<option selected='selected' value='".$CCC[$i]['N_ESTADO']."'>".$CCC[$i]['N_ESTADO']."</option>";
+                                  echo "<option value='Abierto'>Abierto</option>";
+                                  echo "<option value='Solucionado'>Solucionado</option>";
+                                  echo "<option value='En Correctivo'>En Correctivo</option>";
+                                echo "</select></td>";
+                                echo "<td><textarea>".$CCC[$i]['N_OBSERVATION']."</textarea></td>";
                               echo "</tr>";
                             }
-                           echo "</tbody>";*/
+                           echo "</tbody>";
                          echo "</table>";
                         echo "</article>";
                       }

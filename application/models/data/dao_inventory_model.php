@@ -135,8 +135,9 @@
         $result = $session->query($sql);
         $row = $result->fetch_assoc();
         $row = $row['count(*)']+1;
-        $sql2 = "INSERT INTO stuff (K_IDSTUFF, K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
-          values (".$row.", ".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
+        $sql2 = "INSERT INTO stuff (K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
+          values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
+          echo $sql2;
         $session->query($sql2);
         $respuesta = $row;
       } else {

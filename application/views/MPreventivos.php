@@ -257,11 +257,20 @@
                                 if ($j == 6){
                                   for($l = 0; $l < count($PVDs); $l++){
                                     if($tablas[$meses[$p]]['tabla3']['lineas'][$i][4] == $PVDs[$l]->getId()){
-                                      echo "<td><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
-                                      json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
-                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
-                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
-                                      json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
+                                      if($p < 8){
+                                        echo "<td><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+                                        json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
+                                      } else {
+                                        echo "<td><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+                                        json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateS()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDuracion()).",".
+                                        json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
+
+                                      }
                                     }
                                   }
                                 } else {
@@ -455,6 +464,8 @@
         tf6.init();
         var tf7 = new TableFilter('table3-7', filtersConfig);
         tf7.init();
+        var tf8 = new TableFilter('table3-8', filtersConfig);
+        tf8.init();
     </script>
   </body>
 </html>

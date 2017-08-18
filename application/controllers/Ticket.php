@@ -68,6 +68,11 @@ class Ticket extends CI_Controller {
       $this->load->view('OthersPrincipal', $respuesta);
     }
 
+    public function CCCTicketsPrincipal(){
+      $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherMaintenances();
+      $this->load->view('OthersPrincipal', $respuesta);
+    }
+
     public function OtherTicketCreation(){
       $respuesta['categorias'] = $this->dao_ticket_model->getAllOtherCategories();
       $respuesta['pvds'] = $this->dao_PVD_model->getPVDs();

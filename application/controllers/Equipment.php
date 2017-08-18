@@ -66,6 +66,9 @@ class Equipment extends CI_Controller {
       $respuesta['ticket'] = $_GET['k_ticket'];
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
+      if($_GET['k_tipo'] == "Pl"){
+        $_GET['k_tipo'] = "Plus";
+      }
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);
