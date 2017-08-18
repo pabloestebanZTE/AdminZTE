@@ -49,7 +49,8 @@
 <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
 <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
-
+<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
 var newElementQuantity = 0;
@@ -67,6 +68,24 @@ var idZonesG;
         var c = "<?php echo $msj[2]; ?>";
         sweetAlert(a, b, c);
     }
+
+    function deleteElement(idInv){
+        swal({
+          title: "¿Esta segur@?",
+          text: "Si elimina un elemento no se puede recuperar",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Si, eliminar",
+          cancelButtonText: "Cancelar",
+          closeOnConfirm: false
+        },
+        function(){
+          window.location.href="http://localhost/AdminZTE/index.php/Equipment/deleteElement?k_fase=<?php echo $PVD->getFase() ?>&k_tipo=<?php echo $PVD->getTipologia() ?>&k_pvd=<?php echo $PVD->getID() ?>&k_ticket=<?php echo $ticket ?>&k_element="+idInv;
+        });
+      }
+
+
 
     function showModalSoftware(inventario){
       $('#modalSFT').modal('show');
@@ -132,7 +151,7 @@ var idZonesG;
             }
           }
         //  var deleteRB = "<td>"+"<div class'[ form-group ]'><input type='checkbox' name='fancy-checkbox-primary' id='fancy-checkbox-primary' autocomplete='off' /><div class='[ btn-group ]'><label for='fancy-checkbox-primary' class='[ btn btn-primary ]'><span class='[ glyphicon glyphicon-ok ]'></span><span> </span></label><label for='fancy-checkbox-primary' class='[ btn btn-default active ]'>Delete</label></div></div>"+"</td>";
-          var deleteRB = "<td><a href='#'><span class='glyphicon glyphicon-remove'></span></a></td>";
+          var deleteRB = "<td><a href='javascript:deleteElement("+inventario[i].K_IDSTUFF+")'><span class='glyphicon glyphicon-remove-circle'></span></a></td>";
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
@@ -316,6 +335,7 @@ var idZonesG;
     }
 
     function añadirElemento(){
+      var deleteE = "<td></td>";
       var options = "<td><select onchange='cambiarSelectMarca("+newElementQuantity+")' style='font-size:10px' name='selectElement"+newElementQuantity+"' id='selectElement"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       for(var i = 0; i < category.length; i++){
         options = options+"<option value='"+category[i].K_IDSTUFF_CATEGORY+"'>"+category[i].N_NAME+"</option>";
@@ -362,7 +382,7 @@ var idZonesG;
       finalizado = finalizado+"</select></td>";
 
 
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+"</tr>" );
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
 

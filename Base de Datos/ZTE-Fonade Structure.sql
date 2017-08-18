@@ -704,4 +704,4 @@ ALTER TABLE stuff add N_PLACAINVENTARIO varchar(200);
 ALTER TABLE stuff add N_PARTE varchar(200);
 ALTER TABLE stuff add Q_PROGRESS int not null;
 
-ALTER TABLE stuff add K_IDPVD_PLACE int;
+ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;

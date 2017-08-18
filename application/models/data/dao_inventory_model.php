@@ -130,16 +130,10 @@
     public function insertEquipment($equipment, $pvd){
       $dbConnection = new configdb_model();
       $session = $dbConnection->openSession();
-      $sql = "SELECT count(*) from stuff;";
+      $sql = "INSERT INTO stuff (K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
+        values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
       if ($session != "false"){
-        $result = $session->query($sql);
-        $row = $result->fetch_assoc();
-        $row = $row['count(*)']+1;
-        $sql2 = "INSERT INTO stuff (K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
-          values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
-          echo $sql2;
-        $session->query($sql2);
-        $respuesta = $row;
+        $session->query($sql);
       } else {
         $respuesta = "Error de informacion";
       }
@@ -152,5 +146,14 @@
       $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress()." where K_IDSTUFF = ".$equipment->getId().";";
       $session->query($sql);
     }
+
+    public function deteleElementById($id){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql = "DELETE FROM stuff WHERE K_IDSTUFF = ".$id.";";
+      $session->query($sql);
+      $sql2 = "DELETE FROM software_inventory WHERE K_IDSTUFF =".$id.";";
+      $session->query($sql2);
+     }
   }
 ?>

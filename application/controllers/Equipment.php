@@ -175,7 +175,6 @@ class Equipment extends CI_Controller {
     }
 
     public function updateSoftwareInventory(){
-      print_r($_POST);
       for($i = 0; $i < $_POST['Elements']; $i++){
         $this->dao_softwareStuff_model->updateSoftwareInventory($_POST['idSS'.$i], $_POST['SOVer'.$i], $_POST['OfficeVer'.$i], $_POST['AntivirusVer'.$i], $_POST['BrowserVer'.$i], $_POST['SimonticVer'.$i], $_POST['MagicVer'.$i], $_POST['SacVer'.$i], $_POST['SemillaVer'.$i]);
       }
@@ -189,5 +188,10 @@ class Equipment extends CI_Controller {
       $folders['Computador convencional']['Aspectos generales'] = $folders['Computador convencional']['Servicios complementarios'] = $folders['Computador convencional']['Recepción y registro'] = $folders['Computador convencional']['Producción de contenidos'] = $folders['Computador convencional']['Consultas rápidas'] = $folders['Computador convencional']['Almacenamiento'] = $folders['Computador convencional']['Capacitación'] = $folders['Computador convencional']['Entretenimiento'] = $folders['Computador convencional']['Innovación'] = $folders['Computador convencional']['Acceso a internet'];
       $folders['Soporte consolas y televisores'] = $folders['Mobiliario (muebles, enceres y señalización)'] = $folders['Alarma para PVD'] = $folders['Redes de datos'] = $folders['Redes electricas'] = $folders['Camara IP'] = $folders['DVD player'] = $folders['Video Beam'] = $folders['Mesa electrificada de 6 a 8 puestos'] = $folders['Mezclador de audio'] = $folders['Grabadora audio digital'] = $folders['Tripode para microfonos'] = $folders['Tripode de cabeza fluida para camara'] = $folders['Tripode ajustable para luces'] = $folders['Microfono inalambrico de solapa'] = $folders['Microfono con cable'] = $folders['Mezclador de video'] = $folders['Camara fotografica'] = $folders['Camara de video'] = $folders['Audifonos para estudio profesional'] = $folders['Lampara escualizable'] = $folders['Diadema para equipo de computo con microfono'] = $folders['Membrana táctil para televisores de 55 Y 58'] = $folders['Home cinema'] = $folders['Consola de juegos'] = $folders['UPS'] = $folders['Televisor LED desde 32 a 42'] = $folders['Tableta digitalizadora'] = $folders['Impresora'] = $folders['Servidor'] = $folders['Workstation y-o administrador de red'] = $folders['Computador All in One'] = $folders['Computador portatil'] = $folders['Computador convencional'];
       return $folders;
+    }
+
+    public function deleteElement(){
+      $this->dao_inventory_model->deteleElementById($_GET['k_element']);
+      $this->inventoryPVD();
     }
 }

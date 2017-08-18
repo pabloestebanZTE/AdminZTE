@@ -19,6 +19,16 @@ class PDF extends CI_Controller {
 
     public function crearActaIT(){
       $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      if($_GET['k_tipo'] == "Pl"){
+        $_GET['k_tipo'] = "Plus";
+      }
+      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      if ($respuesta['PVD']->getRegion() == "Zona 1"){
+        $stirngPrecio = "V_PRICE_R1";
+      }
+      if ($respuesta['PVD']->getRegion() == "Zona 4"){
+        $stirngPrecio = "V_PRICE_R4";
+      }
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       for($i = 0; $i< count($respuesta['inventory']); $i++){
         $respuesta['inventory'][$i]['valorT'] = 0;
@@ -71,7 +81,7 @@ class PDF extends CI_Controller {
       }
 
       $inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
-
+    //  print_r($respuesta['inventory']);
       $timezone = date_default_timezone_get();
       $date = date('m/d/Y', time());
 
@@ -192,33 +202,33 @@ class PDF extends CI_Controller {
       $pdf->Cell(275,5,utf8_decode('El PVD se encuentra en funcionamiento de manera correcta en todos sus sistemas excepto en los siguientes componentes los cuales se relacionan a continuación y que serán escalados a interventoria y FONADE para su aprobación de solución'),0,1,'C');
       //Header Tabla
       $pdf->SetFont('Arial','B',6);
-      $pdf->Cell(15,5,'TICKET CCC',1,0,'C');
-      $pdf->Cell(20,5,'TICKET MP',1,0,'C');
-      $pdf->Cell(20,5,'ID BENEFICIARIO',1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('FECHA DETECCIÓN'),1,0,'C');
-      $pdf->Cell(25,5,utf8_decode('TÉCNICO QUE '),1,0,'C');
-      $pdf->Cell(20,5,'TIPO EQUIPO',1,0,'C');
-      $pdf->Cell(20,5,'SERIAL',1,0,'C');
-      $pdf->Cell(20,5,'MARCA',1,0,'C');
-      $pdf->Cell(20,5,'MODELO',1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('AREA'),1,0,'C');
-      $pdf->Cell(25,5,utf8_decode('DESCRICIÓN DE'),1,0,'C');
-      $pdf->Cell(20,5,'TIPO DE FALLA',1,0,'C');
-      $pdf->Cell(30,5,'MATERIALES',1,1,'C');
+      $pdf->Cell(15,5,'TICKET CCC',"TLR",0,'C');
+      $pdf->Cell(20,5,'TICKET MP',"TLR",0,'C');
+      $pdf->Cell(20,5,'ID BENEFICIARIO',"TLR",0,'C');
+      $pdf->Cell(20,5,utf8_decode('FECHA DETECCIÓN'),"TLR",0,'C');
+      $pdf->Cell(25,5,utf8_decode('TÉCNICO QUE '),"TLR",0,'C');
+      $pdf->Cell(20,5,'TIPO EQUIPO',"TLR",0,'C');
+      $pdf->Cell(20,5,'SERIAL',"TLR",0,'C');
+      $pdf->Cell(20,5,'MARCA',"TLR",0,'C');
+      $pdf->Cell(20,5,'MODELO',"TLR",0,'C');
+      $pdf->Cell(20,5,utf8_decode('AREA'),"TLR",0,'C');
+      $pdf->Cell(25,5,utf8_decode('DESCRICIÓN DE'),"TLR",0,'C');
+      $pdf->Cell(20,5,'TIPO DE FALLA',"TLR",0,'C');
+      $pdf->Cell(30,5,'MATERIALES',"TLR",1,'C');
 
-      $pdf->Cell(15,5,'',1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('CORRECTIVO'),1,0,'C');
-      $pdf->Cell(25,5,utf8_decode('REPORTÓ FALLA '),1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('DEL PVD'),1,0,'C');
-      $pdf->Cell(25,5,utf8_decode('LA FALLA'),1,0,'C');
-      $pdf->Cell(20,5,'',1,0,'C');
-      $pdf->Cell(30,5,'PARA SOLUCIONAR',1,1,'C');
+      $pdf->Cell(15,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,utf8_decode('CORRECTIVO'),"BLR",0,'C');
+      $pdf->Cell(25,5,utf8_decode('REPORTÓ FALLA '),"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(20,5,utf8_decode('DEL PVD'),"BLR",0,'C');
+      $pdf->Cell(25,5,utf8_decode('LA FALLA'),"BLR",0,'C');
+      $pdf->Cell(20,5,'',"BLR",0,'C');
+      $pdf->Cell(30,5,'PARA SOLUCIONAR',"BLR",1,'C');
 
       for($i = 0; $i< count($inventory); $i++){
         for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
