@@ -10,12 +10,12 @@
             $this->load->model('data/configdb_model');
         }
 
-        public function createSoftwareStuff($OS, $OF, $OV, $AV, $AVV, $BR, $BRV, $SI, $SIV, $MA, $MAV, $SAC, $SACV, $SEM, $SEMV, $id){
+        public function createSoftwareStuff($OS, $OF, $OV, $AV, $AVV, $BR, $BRV, $SI, $SIV, $MA, $MAV, $SAC, $SACV, $SEM, $SEMV, $JAWS, $id){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
           if ($session != "false"){
-              $sql = "INSERT INTO software_inventory (N_OPERATIVE_SYSTEM, N_OFFICE, N_OFFICE_VERSION, N_ANTIVIRUS, N_ANTIVIRUS_VERSION, N_BROWSER, N_BROWSER_VERSION, N_SIMONTIC, N_SIMONTIC_VERSION, N_MAGIC, N_MAGIC_VERSION, N_SAC, N_SAC_VERSION, N_SEMILLA, N_SEMILLA_VERSION, K_IDSTUFF)
-                VALUES ('".$OS."', '".$OF."', '".$OV."', '".$AV."', '".$AVV."', '".$BR."', '".$BRV."', '".$SI."', '".$SIV."', '".$MA."', '".$MAV."', '".$SAC."', '".$SACV."', '".$SEM."', '".$SEMV."', ".$id.");";
+              $sql = "INSERT INTO software_inventory (N_OPERATIVE_SYSTEM, N_OFFICE_VERSION, N_ANTIVIRUS_VERSION, N_BROWSER_VERSION, N_SIMONTIC_VERSION, N_MAGIC_VERSION, N_SAC_VERSION, N_SEMILLA_VERSION, N_JAWS_VERSION, K_IDSTUFF)
+                VALUES ('".$OS."', '".$OV."', '".$AVV."', '".$BRV."', '".$SIV."','".$MAV."', '".$SACV."', '".$SEMV."', '".$JAWS."', ".$id.");";
               $result = $session->query($sql);
           } else {
             $user = "Error de informacion";
@@ -28,7 +28,7 @@
         public function getAllSoftwareInventoryPerPVD($idPVD){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "SELECT K_SOFTWARE_INVENTORY,N_OPERATIVE_SYSTEM,N_OFFICE,N_OFFICE_VERSION,N_ANTIVIRUS,N_ANTIVIRUS_VERSION,N_BROWSER,N_BROWSER_VERSION,N_SIMONTIC,N_SIMONTIC_VERSION,N_MAGIC,N_MAGIC_VERSION,N_SAC,N_SAC_VERSION,N_SEMILLA,N_SEMILLA_VERSION, stuff.K_IDSTUFF
+          $sql = "SELECT  K_SOFTWARE_INVENTORY,N_OPERATIVE_SYSTEM, N_OFFICE_VERSION, N_ANTIVIRUS_VERSION, N_BROWSER_VERSION, N_SIMONTIC_VERSION, N_MAGIC_VERSION, N_SAC_VERSION, N_SEMILLA_VERSION, N_JAWS_VERSION, stuff.K_IDSTUFF
           FROM software_inventory, pvd, stuff WHERE software_inventory.K_IDSTUFF = stuff.K_IDSTUFF and stuff.K_IDPVD = pvd.K_IDPVD and pvd.K_IDPVD = ".$idPVD.";";
           if ($session != "false"){
             $result = $session->query($sql);
@@ -57,10 +57,10 @@
           return $respuesta;
         }
 
-        public function updateSoftwareInventory($id, $SO, $office, $AV, $Br, $SIM, $MAG, $SAC, $SEM){
+        public function updateSoftwareInventory($id, $SO, $office, $AV, $Br, $SIM, $MAG, $SAC, $SEM, $JAWS){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "UPDATE software_inventory SET N_OPERATIVE_SYSTEM = '".$SO."', N_OFFICE_VERSION = '".$office."', N_ANTIVIRUS_VERSION = '".$AV."', N_BROWSER_VERSION = '".$Br."', N_SIMONTIC_VERSION = '".$SIM."', N_MAGIC_VERSION = '".$MAG."', N_SAC_VERSION ='".$SAC."', N_SEMILLA_VERSION='".$SEM."' WHERE K_SOFTWARE_INVENTORY = ".$id.";";
+          $sql = "UPDATE software_inventory SET N_OPERATIVE_SYSTEM = '".$SO."', N_OFFICE_VERSION = '".$office."', N_ANTIVIRUS_VERSION = '".$AV."', N_BROWSER_VERSION = '".$Br."', N_SIMONTIC_VERSION = '".$SIM."', N_MAGIC_VERSION = '".$MAG."', N_SAC_VERSION ='".$SAC."', N_SEMILLA_VERSION='".$SEM."', N_JAWS_VERSION = '".$JAWS."' WHERE K_SOFTWARE_INVENTORY = ".$id.";";
           if ($session != "false"){
             $result = $session->query($sql);
             $respuesta = "true";

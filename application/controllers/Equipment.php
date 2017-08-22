@@ -158,7 +158,7 @@ class Equipment extends CI_Controller {
             $this->dao_MC_model->insertMC($ticketCorrective, $idstuff);
           }
           if($ref == 45 || $ref == 42 || $ref == 46 || $ref == 47 || $ref == 48){
-            $this->dao_softwareStuff_model->createSoftwareStuff("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $idstuff);
+            $this->dao_softwareStuff_model->createSoftwareStuff("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $idstuff);
           }
         } else {
           if($equipment->getEstado() == "Averiado"){
@@ -176,7 +176,7 @@ class Equipment extends CI_Controller {
 
     public function updateSoftwareInventory(){
       for($i = 0; $i < $_POST['Elements']; $i++){
-        $this->dao_softwareStuff_model->updateSoftwareInventory($_POST['idSS'.$i], $_POST['SOVer'.$i], $_POST['OfficeVer'.$i], $_POST['AntivirusVer'.$i], $_POST['BrowserVer'.$i], $_POST['SimonticVer'.$i], $_POST['MagicVer'.$i], $_POST['SacVer'.$i], $_POST['SemillaVer'.$i]);
+        $this->dao_softwareStuff_model->updateSoftwareInventory($_POST['idSS'.$i], $_POST['SOVer'.$i], $_POST['OfficeVer'.$i], $_POST['AntivirusVer'.$i], $_POST['BrowserVer'.$i], $_POST['SimonticVer'.$i], $_POST['MagicVer'.$i], $_POST['SacVer'.$i], $_POST['SemillaVer'.$i], $_POST['JawsVer'.$i]);
       }
       $this->inventoryPVD();
     }

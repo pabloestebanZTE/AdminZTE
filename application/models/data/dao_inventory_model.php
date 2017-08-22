@@ -134,6 +134,11 @@
         values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
       if ($session != "false"){
         $session->query($sql);
+        $sql2 = "SELECT K_IDSTUFF FROM stuff WHERE K_IDMODEL = '".$equipment->getModelo()."' and N_SERIAL = '".$equipment->getSerial()."' and N_PLACAINVENTARIO = '".$equipment->getPlaca()."' and N_PARTE = '".$equipment->getParte()."' and N_ESTADO = '".$equipment->getEstado()."' and K_IDSTUFF_CATEGORY = '".$equipment->getCategoria()."' and K_IDPVD = '".$pvd."' and Q_PROGRESS = '".$equipment->getProgress()."' and K_IDPVD_PLACE = '".$equipment->getZona()."';";
+        $result = $session->query($sql2);
+        while($row = $result->fetch_assoc()) {
+          $respuesta = $row['K_IDSTUFF'];
+        }
       } else {
         $respuesta = "Error de informacion";
       }
@@ -154,6 +159,37 @@
       $session->query($sql);
       $sql2 = "DELETE FROM software_inventory WHERE K_IDSTUFF =".$id.";";
       $session->query($sql2);
+     }
+
+     public function getModelbiId($idModel){
+       $dbConnection = new configdb_model();
+       $session = $dbConnection->openSession();
+       $sql =  "SELECT * FROM MODEL WHERE K_IDMODEL = ".$idModel.";";
+       if ($session != "false"){
+         $result = $session->query($sql);
+         $row = $result->fetch_assoc();
+         $sql2 = "SELECT * FROM manufacturer WHERE K_IDMANUFACTURER = ".$row['K_IDMANUFACTURER'].";";
+         $sql3 = "SELECT * FROM stuff_category WHERE K_IDSTUFF_CATEGORY = ".$row['K_IDSTUFF_CATEGORY'].";";
+         $result2 = $session->query($sql2);
+         $result3 = $session->query($sql3);
+         $row2 = $result2->fetch_assoc();
+         $row3 = $result3->fetch_assoc();
+         $respuesta['ma'] = $row2['N_NAME'];
+         $respuesta['sc'] = $row3['N_NAME'];
+         $respuesta['mo'] = $row['N_NAME'];
+       }
+       return $respuesta;
+     }
+
+     public function getCorrectiveTicketPerStuff($idStuff){
+       $dbConnection = new configdb_model();
+       $session = $dbConnection->openSession();
+       $sql =  "SELECT * FROM ticket_corrective_maintenance WHERE K_IDSTUFF = ".$idStuff.";";
+       if ($session != "false"){
+         $result = $session->query($sql);
+         $row = $result->fetch_assoc();
+       }
+       return $row;
      }
   }
 ?>

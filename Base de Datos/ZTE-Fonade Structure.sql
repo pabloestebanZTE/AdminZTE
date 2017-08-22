@@ -521,6 +521,7 @@ create table ticket_corrective_maintenance
    N_TEST                   varchar(800),
    N_NEW_ELEMENTS           varchar(800),
    N_FAILURE_CLASSIFICATION varchar(800),
+   N_CCC                    varchar(50),
    K_IDSTUFF                int not null,
    primary key (K_IDTICKET_CORRECTIVE)
 );
@@ -703,5 +704,8 @@ ALTER TABLE ticket_user add N_OBSERVATION_F varchar(200);
 ALTER TABLE stuff add N_PLACAINVENTARIO varchar(200);
 ALTER TABLE stuff add N_PARTE varchar(200);
 ALTER TABLE stuff add Q_PROGRESS int not null;
+
+ALTER TABLE software_inventory add N_JAWS_VERSION  varchar(50) not null;
+ALTER TABLE ticket_corrective_maintenance add N_CCC  varchar(50) not null;
 
 ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;

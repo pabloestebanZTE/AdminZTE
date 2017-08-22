@@ -135,6 +135,16 @@ class PDF extends CI_Controller {
       $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
       $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
       $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+
+            $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
+            $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+            $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+            $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+
+                  $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
+                  $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+                  $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
+                  $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
     }
 
     public function fillSigns($pdf){
@@ -171,11 +181,13 @@ class PDF extends CI_Controller {
       $pdf->SetFont('Arial','',7);
 
       for ($i = 0; $i < count($inventory); $i++){
-        $pdf->Cell(155,5,utf8_decode($inventory[$i]['N_NAME']),1,0,'C');
-        $pdf->Cell(30,5,$inventory[$i]['I_QUANTITY'],1,0,'C');
-        $pdf->Cell(30,5,$inventory[$i]['funcional'],1,0,'C');
-        $pdf->Cell(30,5,$inventory[$i]['averiado'],1,0,'C');
-        $pdf->Cell(30,5,$inventory[$i]['NE'],1,1,'C');
+        if ($inventory[$i]['N_NAME'] != "UPS" && $inventory[$i]['N_NAME'] != "Redes electricas"){
+          $pdf->Cell(155,5,utf8_decode($inventory[$i]['N_NAME']),1,0,'C');
+          $pdf->Cell(30,5,$inventory[$i]['I_QUANTITY'],1,0,'C');
+          $pdf->Cell(30,5,$inventory[$i]['funcional'],1,0,'C');
+          $pdf->Cell(30,5,$inventory[$i]['averiado'],1,0,'C');
+          $pdf->Cell(30,5,$inventory[$i]['NE'],1,1,'C');
+        }
       }
     }
 
@@ -196,6 +208,9 @@ class PDF extends CI_Controller {
 
     public function fillCorrectiveTable($pdf, $inventory){
       //Titulo
+      date_default_timezone_set("America/Bogota");
+      $mysqlDateTime = date('c');
+
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(275,5,'ESTADO GENERAL DEL PVD Y FALLAS ENCONTRADAS',0,1,'C');
       $pdf->SetFont('Arial','',7);
@@ -233,22 +248,53 @@ class PDF extends CI_Controller {
       for($i = 0; $i< count($inventory); $i++){
         for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
           if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            $pdf->Cell(15,5,'',1,0,'C');
-            $pdf->Cell(20,5,$_GET['k_ticket'],1,0,'C');
-            $pdf->Cell(20,5,'',1,0,'C');
-            $pdf->Cell(20,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(25,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(20,5,'',1,0,'C');
-            $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],1,0,'C');
-            $pdf->Cell(20,5,'',1,0,'C');
-            $pdf->Cell(20,5,'',1,0,'C');
-            $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME'],1,0,'C');
-            $pdf->Cell(25,5,'',1,0,'C');
-            $pdf->Cell(20,5,'',1,0,'C');
-            $pdf->Cell(30,5,'',1,1,'C');
+            $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
+            $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
+            $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
+            $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
+            if($sizer > $sizer2){
+              $sizer2 = strlen($corrective['N_FAILURE_CLASSIFICATION']);
+            }else {
+              $sizer = strlen($corrective['N_FAILURE_CLASSIFICATION']);
+            }
+            if($sizer2 > $sizer){
+              $sizer = $sizer2;
+            }
+            $pdf->Cell(15,5,'',"TLR",0,'C');
+            $pdf->Cell(20,5,$_GET['k_ticket'],"TLR",0,'C');
+            $pdf->Cell(20,5,$_GET['k_pvd'],"TRL",0,'C');
+            $pdf->Cell(20,5,utf8_decode(explode("T", $mysqlDateTime)[0]),"TLR",0,'C');
+            $pdf->Cell(25,5,utf8_decode($_POST['nombreTec']),"TLR",0,'C');
+            $pdf->Cell(20,5,utf8_decode(substr($info['sc'],0,20)),"TLR",0,'C');
+            $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+            $pdf->Cell(20,5,utf8_decode($info['ma']),"TLR",0,'C');
+            $pdf->Cell(20,5,utf8_decode($info['mo']),"TLR",0,'C');
+            $pdf->Cell(20,5,utf8_decode($inventory[$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']),"TLR",0,'C');
+            $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,20)),"TLR",0,'C');
+            $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],0,20)),"TLR",0,'C');
+            $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,20)),"TLR",1,'C');
+
+
+            for($k = 1; $k<=($sizer/20); $k++){
+              $pdf->Cell(15,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(25,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,utf8_decode(substr($info['sc'],($k)*20,20)),"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(20,5,'',"LR",0,'C');
+              $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],$k*20,20)),"LR",0,'C');
+              $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],$k*20,20)),"LR",0,'C');
+              $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],$k*20,20)),"LR",1,'C');
+            }
+
           }
         }
       }
+      $pdf->Cell(275,0,'',1,1,'C');
     }
 
     public function fillHeaderTable($pdf, $pvd, $date){

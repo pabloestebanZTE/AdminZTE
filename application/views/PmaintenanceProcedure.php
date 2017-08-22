@@ -198,7 +198,8 @@ var idZonesG;
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var newRow = "<tr id='newRow"+newElementQuantity+"' name='newRow"+newElementQuantity+"'>";
             newRow = newRow+"<td hidden><input id='idCM"+newElementQuantity+"' name='idCM"+newElementQuantity+"' value='"+inventario[i].corrective.K_IDTICKET_CORRECTIVE+"' ></td>";
-            newRow = newRow+"<td><textarea  name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td><textarea name='ccc"+newElementQuantity+"' id='ccc"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</td>";
+            newRow = newRow+"<td><textarea name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+newElementQuantity+"' id='referenciaEquiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required>"+inventario[i].corrective.N_REFERENCE_D_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td><textarea name='descripcionFalla"+newElementQuantity+"' id='descripcionFalla"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].corrective.N_FAILURE_DESCRIPTION+"</textarea></td>";
             newRow = newRow+"<td><textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
@@ -737,14 +738,15 @@ $(window).on('load', function() {
                               echo "<tr>";
                                 echo "<th><h1>Elemento</h1></th>";
                                 echo "<th><h1>Serial</h1></th>";
-                                echo "<th><h1>Sistema Operativo</h1></th>";
+                                echo "<th><h1>S. Operativo</h1></th>";
                                 echo "<th><h1>Office </h1></th>";
                                 echo "<th><h1>Antivirus</h1></th>";
                                 echo "<th><h1>Browser</h1></th>";
                                 echo "<th><h1>SIMONTIC</h1></th>";
                                 echo "<th><h1>MAGIC</h1></th>";
-                                echo "<th><h1>SAC</h1></th>";
-                                echo "<th><h1>SEMILLA</h1></th>";
+                                echo "<th><h1>NEC</h1></th>";
+                                echo "<th><h1>SAC_TIC</h1></th>";
+                                echo "<th><h1>JAWS</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody>";
@@ -761,6 +763,7 @@ $(window).on('load', function() {
                                 echo "<td><input id='MagicVer".$i."' name='MagicVer".$i."' value='".$software[$i]['N_MAGIC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
                                 echo "<td><input id='SacVer".$i."' name='SacVer".$i."' value='".$software[$i]['N_SAC_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
                                 echo "<td><input id='SemillaVer".$i."' name='SemillaVer".$i."' value='".$software[$i]['N_SEMILLA_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td><input id='JawsVer".$i."' name='JawsVer".$i."' value='".$software[$i]['N_JAWS_VERSION']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
                               echo "</tr>";
                             }
                            echo "</tbody>";
