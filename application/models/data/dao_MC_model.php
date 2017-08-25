@@ -24,6 +24,7 @@
             $id = $id.$row['count(*)'];
             $sql2 = "INSERT INTO ticket_corrective_maintenance (K_IDTICKET_CORRECTIVE, N_DAMAGED_ELEMENTS, N_REFERENCE_D_ELEMENTS, N_FAILURE_DESCRIPTION, N_TEST, N_NEW_ELEMENTS, N_FAILURE_CLASSIFICATION, K_IDSTUFF, N_JAWS_VERSION, N_CCC)
               values('".$id."', '".$maintenance->getStuff()."', '".$maintenance->getEquipment()."', '".$maintenance->getDamage()."', '".$maintenance->getDescription()."', '".$maintenance->getSDate()."', '".$maintenance->getFDate()."', ".$idstuff.", '', '');";
+              echo $sql2;
             $session->query($sql2);
           } else {
             $respuesta = "Error de informacion";
