@@ -9,6 +9,19 @@
       $this->load->model('data/configdb_model');
     }
 
+    public function getStuffCatById($id){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql = "SELECT * FROM stuff_category WHERE K_IDSTUFF_CATEGORY = ".$id.";";
+      if ($session != "false"){
+        $result = $session->query($sql);
+        $respuesta = $result->fetch_assoc();
+      } else {
+        $respuesta = "Error de informacion";
+      }
+      return $respuesta;
+    }
+
     public function getEquipmentTypePVD($id_fase, $id_tipo, $id_pvd){
       if ($id_tipo == "A" || $id_tipo == "B" || $id_tipo == "C" || $id_tipo == "D"){
         $id_tipo = "Tipo ".$id_tipo;
