@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -100,6 +101,15 @@
   				<div class="wrapper">
             <?php
               if($_SESSION['permissions'][5] == 1){
+                echo "<div class='wrapperWheel'>";
+                  echo "<div class='mainWheel'>";
+                    echo "<a href='#wheel1' class='wheel-button ne'>";
+                      echo "<span><img src='/AdminZTE/assets/images/pvd.png' /></span>";
+                    echo "</a>";
+                    echo "<ul id='wheel1'  data-angle='all'>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/User/loadPrincipalView'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
+                    echo "</ul>";
+
                 echo "<br><br><br><br><div class='wrapperWheel'>";
                   echo "<div class='mainWheel'>";
                     echo "<a href='#wheel' class='wheel-button'>";
@@ -107,10 +117,11 @@
                     echo "</a>";
                     echo "<div class='pointer'><center>Clic sobre mi</center></div>";
                     echo "<ul id='wheel'  data-angle='all'>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/KPI/KPIPrincial'><img src='/AdminZTE/assets/images/KPI.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/ticket2.png' /></a></li>";
-                      echo "<li class='item'><a href=''#home'><img src='/AdminZTE/assets/images/process.png' /></a></li>";
-                      echo "<li class='item'><a href=''#home'><img src='/AdminZTE/assets/images/quality.png' /></a></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/KPI/KPIPrincial'><img src='/AdminZTE/assets/images/KPI.png' /></a>KPI</div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/ticket2.png' /></a><p>Ticket</p></div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href=''#home'><img src='/AdminZTE/assets/images/process.png' /></a>Process</div></li>";
+                       echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/User/detailByUser'><img src='/AdminZTE/assets/images/personal2.png' /></a>Personal</div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href=''#home'><img src='/AdminZTE/assets/images/quality.png' /></a>Quality</div></li>";
                     echo "</ul>";
                   echo "</div>";
                 echo "</div>";

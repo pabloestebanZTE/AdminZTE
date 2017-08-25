@@ -3,10 +3,11 @@
 
 	class user_model extends CI_Model{
 
-		protected $id;
-		protected $pass;
-		protected $name;
-		protected $lastname;
+		public $id;
+		public $idTicket;//---------camilo-----
+		public $pass;
+		public $name;
+		public $lastname;
     protected $permissions;
 
 		public function __construct(){
@@ -16,6 +17,10 @@
 		public function getId(){return $this->id;}
 
 		public function setId($id){$this->id = $id;}
+
+		public function getIdTicket(){return $this->idTicket;}//----------camilo
+		
+		public function setIdTicket($idTicket){$this->idTicket = $idTicket;}//------------camilo
 
     public function getName(){return $this->name;}
 
@@ -41,6 +46,9 @@
 			$newUsuario->setLastname($lastname);
 
 			return $newUsuario;
-    }
+    	}
+
+
+
 	}
 ?>

@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/responsiveslides.css">
 <link rel="stylesheet" href="/AdminZTE/assets/css/multiTable.css">
+<link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -129,7 +130,7 @@
                   echo "<span><img src='/AdminZTE/assets/images/ticket2.png' /></span>";
                 echo "</a>";
                 echo "<ul id='wheel1'  data-angle='all'>";
-                  echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                  echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
                 echo "</ul>";
               echo "</div>";
             echo "</div>";

@@ -40,6 +40,13 @@ class Ticket extends CI_Controller {
       $this->load->view('ticketDetail', $respuesta);
     }
 
+    //----------------------------------camilo----------------------------------
+    public function ticketODetails(){
+      $respuesta['ticket']=$this->dao_ticket_model->getTicketOByID($_GET['k_ticket']);
+      $this->load->view('ticketODetails',$respuesta);
+      } 
+//------------------------------------------------------------------------------
+      
     public function fixArrayUsers($respuesta){
       $i = 0;
       if($respuesta['ticket']->getTechs()['users']>0){

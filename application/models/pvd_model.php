@@ -3,17 +3,17 @@
 
 	class PVD_model extends CI_Model{
 
-		protected $id;
-		protected $city;
-    protected $deparment;
-    protected $region;
-		protected $ejecutor;
-		protected $admin;
-    protected $direccion;
-    protected $tipologia;
-    protected $fase;
-    protected $maintenance;
-		protected $zones;
+		public $id;
+		public $city;
+    public $deparment;
+    public $region;
+		public $ejecutor;
+		public $admin;
+    public $direccion;
+    public $tipologia;
+    public $fase;
+    public $maintenance;
+		public $zones;
 
 		public function __construct(){
 

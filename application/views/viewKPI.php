@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,6 +34,14 @@
     <script type="text/javascript" src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
     <script>
+           $(document).ready(function(){
+        $(".wheel-button").wheelmenu({
+          trigger: "hover",
+          animation: "fly",
+          animationSpeed: "fast"
+        });
+      });
+
       function showMessage(){
         var a = "<?php echo $msj[0]; ?>";
         var b = "<?php echo $msj[1]; ?>";
@@ -44,17 +53,17 @@
 
   <body id="page4">
 
-  	<div class="body1">
-  	<div class="body2">
-  	<div class="body5">
-  		<div class="main zerogrid">
+    <div class="body1">
+    <div class="body2">
+    <div class="body5">
+      <div class="main zerogrid">
   <!-- header -->
-  			<header>
+        <header>
           <br>
-  				<div class="wrapper rơw">
+          <div class="wrapper rơw">
           <h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
-  				<nav>
-  					<ul id="menu">
+          <nav>
+            <ul id="menu">
               <?php
                 if ($_SESSION['permissions'] != NULL){
                   echo "<li id='nav1'><a href='/AdminZTE/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
@@ -76,83 +85,67 @@
                 }
               ?>
               <li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
-  					</ul>
-  				</nav>
-  				</div>
-  			</header>
+            </ul>
+          </nav>
+          </div>
+        </header>
   <!-- header end-->
   <!-- content -->
-  		</div>
-  	</div>
-  	</div>
-  	</div>
-  	<div class="body3">
-  		<div class="main zerogrid">
-  			<article id="content">
-  				<div class="wrapper">
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="body3">
+      <div class="main zerogrid">
+        <article id="content">
+          <div class="wrapper">
             <?php
               if($_SESSION['permissions'][5] == 1){
+
                 echo "<div class='wrapperWheel'>";
                   echo "<div class='mainWheel'>";
-                    echo "<a href='/AdminZTE/index.php/KPI/KPIPrincial' class='wheel-button nw'>";
+                    echo "<a href='#wheel1' class='wheel-button ne'>";
+                      echo "<span><img src='/AdminZTE/assets/images/home.png' /></span>";
+                    echo "</a>";
+                    echo "<ul id='wheel1'  data-angle='all'>";
+                      echo "<li class='item'><div class='cae_texto'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
+                    echo "</ul>";
+
+                    echo "<br><br><br><br><div class='wrapperWheel'>";
+                  echo "<div class='mainWheel'>";
+                    echo "<a href='#wheel' class='wheel-button'>";
                       echo "<span><img src='/AdminZTE/assets/images/KPI.png' /></span>";
                     echo "</a>";
-                    echo "<div class='pointer'><center>KPIs</center></div>";
+                    echo "<div class='pointer'><center>Clic sobre mi</center></div>";
                     echo "<ul id='wheel'  data-angle='all'>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href=''#home'><img src='/AdminZTE/assets/images/calificar.png' /></a>Calificar</div></li>";
+                      echo "<li class='item'><div class='cae_texto'><a href=''#home'><img src='/AdminZTE/assets/images/ver2.png' /></a>Ver</div></li>";
                     echo "</ul>";
                   echo "</div>";
                 echo "</div>";
-                echo "<br>";
-                if($_SESSION['permissions'][10] == 1){
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/download?n_name=KPI.xlsx' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar</button></form></form></td>";
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/downloadFile' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar 1</button></form></form></td>";
-                  echo "<td><form method='post' action='/AdminZTE/index.php/KPI/dw' role='form' class='form-inline'><button type='submit' id='Descargar' name='Descargar' class='btn btn-primary'>Descargar 1</button></form></form></td>";
-
-                }
-                echo "<a href='/AdminZTE/index.php/KPI/getKPIperSource' class='btn btn-primary' role='button' > Calificar KPI´s</a>";
-                if (isset($KPIsPP)){
-                  echo "<div class='wrapper tabs'>";
-                    echo "<br>";
-                    echo "<h2 class='under'>"."Lista de KPI´s para evaluar"."</h2>";
-                    echo "<div class='table'>";
-                      echo "<div class='row header'>";
-                        echo "<div class='cell'>Nombre</div>";
-                        echo "<div class='cell'>Descripcion</div>";
-                      echo "</div>";
-                      for ($i = 0; $i<count($KPIsPP); $i++){
-                        echo "<div class='row'>";
-                          echo "<div class='cell'><a href='/AdminZTE/index.php/KPI/evaluateKPI?k_kpi=".$KPIsPP[$i]['K_IDKPI']."'>".$KPIsPP[$i]['N_NAME']."</a></div>";
-                          echo "<div class='cell'>".$KPIsPP[$i]['N_DESCRIPTION']."</div>";
-                        echo "</div>";
-                      }
-                    echo "</div>";
-                  echo "</div>";
-                }
-              }
-              if ($msj != ""){
-                echo "<script type='text/javascript'>showMessage();</script>";
-              }
-              echo "<br><br><br>"
+                echo "<br><br><br><br><br><br>";
+            }
              ?>
           </div>
-  			</article>
-  		</div>
-  	</div>
-  	<div class="body4">
-  		<div class="main zerogrid">
-  			<article id="content2">
-  				<div class="wrapper row">
+        </article>
+      </div>
+    </div>
+    <div class="body4">
+      <div class="main zerogrid">
+        <article id="content2">
+          <div class="wrapper row">
 
-  				</div>
-  			</article>
+          </div>
+        </article>
   <!-- content end -->
-  		</div>
-  	</div>
+      </div>
+    </div>
     <script type="text/javascript"> Cufon.now(); </script>
     <script>
-    	$(document).ready(function() {
-    		tabs.init();
-    	})
+      $(document).ready(function() {
+        tabs.init();
+      })
     </script>
   </body>
 </html>
+

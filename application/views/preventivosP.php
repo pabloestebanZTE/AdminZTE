@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
@@ -106,9 +107,9 @@
                       echo "<span><img src='/AdminZTE/assets/images/ticket2.png' /></span>";
                     echo "</a>";
                     echo "<ul id='wheel1'  data-angle='NE' class='wheel'>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/editarMP'><img src='/AdminZTE/assets/images/edit.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/ticketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a></li>";
+                      echo "<li class='item'><div class='cae_texto'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
+                      echo "<li class='item'><div class='cae_texto' style='text-align: left;'><a href='/AdminZTE/index.php/Mantenimientos/editarMP'><img src='/AdminZTE/assets/images/edit.png' /></a>Edit</div></li>";
+                      echo "<li class='item'><div class='cae_texto'><a href='/AdminZTE/index.php/Ticket/ticketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a>Plus</div></li>";
                     echo "</ul>";
                     echo "<br><br><br><br>";
                   echo "</div>";
