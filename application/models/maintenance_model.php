@@ -3,11 +3,11 @@
 
 	class maintenance_model extends CI_Model{
 
-		protected $id;
-		protected $idPVD;
-		protected $type;
-		protected $date;
-    protected $ticket;
+		public $id;
+		public $idPVD;
+		public $type;
+		public $date;
+    public $ticket;
 
 		public function __construct(){
 

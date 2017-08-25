@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -106,8 +107,8 @@
                       echo "<span><img src='/AdminZTE/assets/images/otros.png' /></span>";
                     echo "</a>";
                     echo "<ul id='wheel1'  data-angle='NE' class='wheel'>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/OtherTicketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a></li>";
+                      echo "<li class='item'><div class='cae_texto'><a href='/AdminZTE/index.php/Ticket/TicketPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
+                      echo "<li class='item'><div class='cae_texto'><a href='/AdminZTE/index.php/Ticket/OtherTicketCreation'><img src='/AdminZTE/assets/images/plus.ico' /></a>Plus</div></li>";
                     echo "</ul>";
                     echo "<br><br><br><br>";
                   echo "</div>";
@@ -135,7 +136,7 @@
                         echo "<tbody>";
                           for ($p = 0; $p < count($tickets); $p++){
                              echo "<tr>";
-                               echo "<td>".$tickets[$p]->getId()."</td>";
+                               echo "<td><a href='/AdminZTE/index.php/Ticket/ticketODetails?k_ticket=".$tickets[$p]->getId()."'>".$tickets[$p]->getId()."</a></td>";
                                echo "<td>".$tickets[$p]->getStatus()."</td>";
                                echo "<td>".$tickets[$p]->getIdM()."</td>";
                                echo "<td>".$tickets[$p]->getDateS()."</td>";

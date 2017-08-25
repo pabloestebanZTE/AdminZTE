@@ -25,6 +25,12 @@ class User extends CI_Controller {
         $this->load->view('login', $respuesta);
       }
     }
+
+    public function detailByUser(){
+
+      $person['user'] = $this->dao_user_model->getAllUsers();
+      $this->load->view('userDetails', $person);
+    }
 }
 
 ?>

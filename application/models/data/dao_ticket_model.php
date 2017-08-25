@@ -383,5 +383,46 @@
               }
               return $respuesta;
             }
+
+      //-------------------------------------camilo-------------------------------------
+            public function getTicketOByID($id){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT * FROM ticket_others where K_IDTICKETOTHERS = '".$id."';";
+              if ($session != "false"){
+                $result = $session->query($sql);
+                if ($result->num_rows > 0) {
+                  $row = $result->fetch_assoc();
+                  $ticket = new ticket_model();
+                  $sql2 = "SELECT n_name from ticket_other_status where K_IDSTATUSTICKETO = ".$row['K_IDTICKETT'].";";
+                  $result2 = $session->query($sql2);
+                  $row2 = $result2->fetch_assoc();
+                  $sql3 = "SELECT * FROM ticketo_user where K_IDTICKETO = '".$row['K_IDTICKETOTHERS']."';";
+                  $result3 = $session->query($sql3);  
+                  $i=0;              
+                  while($row3 = $result3->fetch_assoc()) {
+                    $sql4 = "SELECT * FROM user where K_IDUSER = ".$row3['K_IDUSER'].";";
+                    $result4 = $session->query($sql4);
+                    $row4 = $result4->fetch_assoc();
+                    $user = new user_model();
+                    $user = $user->createUser($row4['k_IDUSER'],'',$row4['N_NAME'],$row4['N_LASTNAME']);   
+                    $users[$i] = $user;
+                    $i++;
+                  }
+                  $ticket = $ticket->createTicket($row['K_IDTICKETOTHERS'], '',$row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'],'','','','', $users,$row['K_IDPVD'], $row['N_OBSERVATION_F']);//usé en la casilla 'color', para ingresar el ID del PVD
+
+                  $ticket->setObservacionesF($row['N_OBSERVATION_F']);
+                  $ticket->setAlmuerzos($row['Q_ALMUERZOS']);
+                  $ticket->setEstadia($row['Q_ESTADIA']);
+                  $respuesta = $ticket;
+                } else {
+                  $respuesta = "No ticket";
+                  }
+              } else {
+                $respuesta = "Error en BD";
+              }                                           
+              return $respuesta;
+            }
+    //-----------------------------------------------------------------------------------------------------
         }
 ?>

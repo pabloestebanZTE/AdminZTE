@@ -21,7 +21,7 @@
 
         public function openSession(){
           $user = "root";
-          $pass =  "a4b3c2d1";
+          $pass =  "";
           $db = "zte_fonade";
 
           try {

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -106,7 +107,7 @@
                       echo "<span><img src='/AdminZTE/assets/images/home.png' /></span>";
                     echo "</a>";
                     echo "<ul id='wheel1'  data-angle='all'>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                      echo "<li class='item'><div  id='cae_texto'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE' ><img src='/AdminZTE/assets/images/return.png'></a>Return</div></li>";
                     echo "</ul>";
                     echo "<br><br><br><br>";
                     echo "<a href='#wheel' class='wheel-button'>";
@@ -114,9 +115,9 @@
                     echo "</a>";
                     echo "<div class='pointer'><center>Clic sobre mi</center></div>";
                     echo "<ul id='wheel'  data-angle='all'>";
-                      echo "<li class='item'><a href='#'><img src='/AdminZTE/assets/images/correctivos.ico' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Ticket/OtherTicketsPrincipal'><img src='/AdminZTE/assets/images/otros.png' /></a></li>";
-                      echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/preventivos.ico' /></a></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='#'><img src='/AdminZTE/assets/images/correctivos.ico' /></a>Correctivos</div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/Ticket/OtherTicketsPrincipal'><img src='/AdminZTE/assets/images/otros.png'></a>Otros</div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/preventivos.ico' /></a>Preventivos</div></li>";
                     echo "</ul>";
                   echo "</div>";
                 echo "</div>";

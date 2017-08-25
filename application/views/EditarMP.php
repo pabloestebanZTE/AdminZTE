@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
     <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
-
+    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -214,7 +214,7 @@
                     echo "<span><img src='/AdminZTE/assets/images/edit.png' /></span>";
                   echo "</a>";
                   echo "<ul id='wheel1'  data-angle='all'>";
-                    echo "<li class='item'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a></li>";
+                    echo "<li class='item'><div id='cae_texto'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
                   echo "</ul>";
                 echo "</div>";
               echo "</div>";

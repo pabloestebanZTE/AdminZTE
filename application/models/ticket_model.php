@@ -3,22 +3,22 @@
 
 	class ticket_model extends CI_Model{
 
-		protected $id;
-		protected $idMaintenance;
-    protected $status;
-    protected $dateStart;
-		protected $dateFinish;
-    protected $dateStartIT;
-		protected $dateFinishIT;
-    protected $dateStartAA;
-		protected $dateFinishAA;
-		protected $techs;
-		protected $duracion;
-		protected $color;
-		protected $observacionesInicio;
-		protected $observacionesFinal;
-		protected $estadia;
-		protected $almuerzos;
+		public $id;
+		public $idMaintenance;
+    public $status;
+    public $dateStart;
+		public $dateFinish;
+    public $dateStartIT;
+		public $dateFinishIT;
+   public $dateStartAA;
+		public $dateFinishAA;
+		public $techs;
+		public $duracion;
+		public $color;
+		public $observacionesInicio;
+		public $observacionesFinal;
+		public $estadia;
+		public $almuerzos;
 
 
 		public function __construct(){
