@@ -577,8 +577,6 @@ $(window).on('load', function() {
                    echo "<th><h1>Nombre Técnico</h1></th>";
                    echo "<th><h1>Cedula Técnico</h1></th>";
                    echo "<th><h1>Ciudad de Expedición</h1></th>";
-                   echo "<th><h1>Velocidad de Download</h1></th>";
-                   echo "<th><h1>Velocidad de Upload</h1></th>";
                    echo "<th><h1>Generar Acta</h1></th>";
                  echo "</tr>";
                echo "</thead>";
@@ -587,8 +585,6 @@ $(window).on('load', function() {
                    echo "<td><input id='nombreTec' name='nombreTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='cedulaTec' name='cedulaTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='ciudadTec' name='ciudadTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
-                   echo "<td><input id='velocidadD' name='velocidadD' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
-                   echo "<td><input id='velocidadU' name='velocidadU' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><button onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/PDF/crearActaAA?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
                  echo "</tr>";
               echo "</tbody>";
@@ -603,7 +599,7 @@ $(window).on('load', function() {
                     echo "<th><h1>Item</h1></th>";
                 //    echo "<th><h1>Valor Unitario</h1></th>";
                     echo "<th><h1>Cantidad Tipologia</h1></th>";
-                    echo "<th><h1>En Inventario</h1></th>";
+                    echo "<th><h1>En Funcionamiento</h1></th>";
                     echo "<th><h1>En Correctivo</h1></th>";
                     echo "<th><h1>No Encontrados</h1></th>";
               //      echo "<th><h1>Valor Total</h1></th>";
