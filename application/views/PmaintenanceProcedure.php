@@ -289,7 +289,8 @@ var idZonesG;
       }
       var href = document.getElementById("fotos"+equipo_categoria).getAttribute("href");
       href = href.split("/");
-      href = href[0] +"/"+ href[1] +"/"+ href[2] +"/"+ href[3] +"/"+ href[4] +"/"+ href[5] +"/"+ href[6] +"/"+ href[7]+"/"+nameZonesG[newIndex]+"/"+href[9];
+      href = href[0] +"/"+ href[1] +"/"+ href[2] +"/"+ href[3] +"/"+ href[4] +"/"+ href[5] +"/"+ href[6] +"/"+nameZonesG[newIndex]+"/"+href[9];
+      console.log(href);
       document.getElementById("fotos"+equipo_categoria).href = href;
     }
 
@@ -781,7 +782,7 @@ $(window).on('load', function() {
                         echo "<center><div class='btn-group'>";
                           echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
-                          echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Registro Fotografico Software /?region=us-west-2&tab=overview'>Registro de Software </a>";
+                          echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/".strtolower($ticket)."/Registro Fotografico Software /?region=us-west-2&tab=overview'>Registro Fotografico de Software </a>";
                         echo "</div></center>";
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
