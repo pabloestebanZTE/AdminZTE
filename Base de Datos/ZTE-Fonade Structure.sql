@@ -709,3 +709,4 @@ ALTER TABLE software_inventory add N_JAWS_VERSION  varchar(50) not null;
 ALTER TABLE ticket_corrective_maintenance add N_CCC  varchar(50) not null;
 
 ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;
+ALTER TABLE stuff add N_OBSERVATION varchar(200);
