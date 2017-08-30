@@ -163,6 +163,12 @@ var idZonesG;
           var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
 
+          if(typeof inventario[i].N_NAME !== "undefined") {
+            var observaciones = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].N_NAME+"</textarea></td>";
+          } else {
+            var observaciones = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Observaciones *' required></textarea></td>";
+          }
+
           if(inventario[i].Q_PROGRESS == "0"){
             var finalizado = "<td><select style='font-size:10px' name='selectFinalizado"+newElementQuantity+"' id='selectFinalizado"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
@@ -178,14 +184,14 @@ var idZonesG;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+observaciones+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "No encontrado"){
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='No encontrado'>No encontrado</option><option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+observaciones+id+"</tr>" );
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
             var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
@@ -198,13 +204,13 @@ var idZonesG;
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var newRow = "<tr id='newRow"+newElementQuantity+"' name='newRow"+newElementQuantity+"'>";
             newRow = newRow+"<td hidden><input id='idCM"+newElementQuantity+"' name='idCM"+newElementQuantity+"' value='"+inventario[i].corrective.K_IDTICKET_CORRECTIVE+"' ></td>";
-            newRow = newRow+"<td><textarea name='ccc"+newElementQuantity+"' id='ccc"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</td>";
-            newRow = newRow+"<td><textarea name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td><textarea  name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+newElementQuantity+"' id='referenciaEquiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required>"+inventario[i].corrective.N_REFERENCE_D_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td><textarea name='descripcionFalla"+newElementQuantity+"' id='descripcionFalla"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].corrective.N_FAILURE_DESCRIPTION+"</textarea></td>";
             newRow = newRow+"<td><textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
             newRow = newRow+"<td><textarea name='elementos"+newElementQuantity+"' id='elementos"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required>"+inventario[i].corrective.N_NEW_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td></td><td><p>"+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
+            newRow = newRow+"<td><input  name='cccTicket"+newElementQuantity+"' id='cccTicket"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' >"+inventario[i].corrective.N_CCC+"</td><td></td><td></td>";
             newRow = newRow+"</tr>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option><option value='No encontrado'>No encontrado</option>";
@@ -312,7 +318,8 @@ var idZonesG;
         newRow = newRow+"<td><textarea name='descripcionFalla"+equipo_categoria+"' id='descripcionFalla"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='pruebas"+equipo_categoria+"' id='pruebas"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required></textarea></td>";
         newRow = newRow+"<td><textarea name='elementos"+equipo_categoria+"' id='elementos"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required></textarea></td>";
-        newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td><td></td></tr>";
+        newRow = newRow+"<td></td><td><select name='selectFalla"+equipo_categoria+"' id='selectFalla"+equipo_categoria+"'><option value'Daño por uso'>Por uso</option><option value'Daño por mal uso'>Por mal uso</option><option value'Daño por falta de mantenimiento'>Por falta de mto.</option><option value'Daño por falla eléctrica'>Por falla eléctrica</option><option value'Otras Causas'>Otras causas</option></select></td>";
+        newRow = newRow+"<td><input name='cccTicket"+equipo_categoria+"' id='cccTicket"+equipo_categoria+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' ></td><td></td><td></td></tr>";
         $("#tableCorrective").append(linea);
         $("#tableCorrective").append(newRow);
       }
@@ -387,8 +394,8 @@ var idZonesG;
       finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
       finalizado = finalizado+"</select></td>";
 
-
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+"</tr>" );
+      var observacion = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  ></textarea></td>";
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+observacion+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
 
@@ -668,6 +675,7 @@ $(window).on('load', function() {
                                 echo "<th><h1>Galeria</h1></th>";
                                 echo "<th><h1>Avance</h1></th>";
                                 echo "<th><h1>Finalizado</h1></th>";
+                                echo "<th><h1>Observaciones</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='inventory' name='inventory'>";
@@ -737,6 +745,8 @@ $(window).on('load', function() {
                                 echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Galeria</h1></th>";
+                                echo "<th><h1></h1></th>";
+                                echo "<th><h1>Observaciones</h1></th>";
                               echo "</tr>";
                             echo "</thead>";
                             echo "<tbody id='NE' name='NE'>";
