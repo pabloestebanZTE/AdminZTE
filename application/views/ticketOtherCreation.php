@@ -68,8 +68,6 @@
       document.getElementById("tipologia").value = res[4];
       document.getElementById("Administrador").value = res[5];
       document.getElementById("CAdministrador").value = res[6];
-
-      console.log(valorOption);
     }
 
     function añadirTec(){
@@ -81,6 +79,55 @@
       select2.name = "tec-"+cantidadTec;
       div.appendChild(select2);
     }
+
+    function arreglarForm(){
+      var valorOption = $('#tipo option:selected').attr('value');
+      console.log(valorOption);
+      var fechaInicio = document.getElementById("date");
+      var fechaFin = document.getElementById("dateF");
+      var labelFecha = document.getElementById("labelFecha");
+      var labelFechaF = document.getElementById("labelFechaF");
+      var labelTec = document.getElementById("labelTec");
+      var selectTec = document.getElementById("tec-0");
+      var BEditar = document.getElementById("BEditar");
+      var tipoSelect = document.getElementById("tipoSelect");
+      var selectTipo = document.getElementById("selectTipo");
+      var labelCCC = document.getElementById("labelCCC");
+      var fieldCCC = document.getElementById("fieldCCC");
+
+      if(valorOption == 6){
+        fechaInicio.style.display = 'none';
+        fechaFin.style.display = 'none';
+        labelFecha.style.display = 'none';
+        labelFechaF.style.display = 'none';
+        labelTec.style.display = 'none';
+        selectTec.style.display = 'none';
+        BEditar.style.display = 'none';
+        selectTipo.style.display = 'block';
+        tipoSelect.style.display = 'block';
+        labelCCC.style.display = 'block';
+        fieldCCC.style.display = 'block';
+        document.getElementById("date").required="";
+        document.getElementById("dateF").required="";
+        document.getElementById("fieldCCC").required="required";
+      } else {
+        fechaInicio.style.display = 'block';
+        fechaFin.style.display = 'block';
+        labelFecha.style.display = 'block';
+        labelFechaF.style.display = 'block';
+        labelTec.style.display = 'block';
+        selectTec.style.display = 'block';
+        BEditar.style.display = 'block';
+        selectTipo.style.display = 'none';
+        tipoSelect.style.display = 'none';
+        labelCCC.style.display = 'none';
+        fieldCCC.style.display = 'none';
+        document.getElementById("date").required="required";
+        document.getElementById("dateF").required="required";
+        document.getElementById("fieldCCC").required="";
+      }
+    }
+
 </script>
 
 </head>
@@ -176,18 +223,26 @@
 
                           echo "<legend><span class='number'>2</span> Información Ticket</legend>";
                           echo "<label for='job'>Tipo de ticket :</label>";
-                          echo "<select id='tipo' name='tipo'>";
+                          echo "<select id='tipo' name='tipo' onchange='arreglarForm()' >";
                             for($i = 0; $i<count($categorias); $i++){
                               echo "<option value='".$categorias[$i]['K_IDSTATUSTICKETO']."'>".$categorias[$i]['N_NAME']."</option>";
                             }
                           echo "</select>";
-                          echo "<label for='job'>Fecha Inicio:</label>";
-                          echo "<input type='date' name='date' placeholder='Fecha Inicio*' required>";
-                          echo "<label for='job'>Fecha Fin:</label>";
-                          echo "<input type='date' name='dateF' placeholder='Fecha Fin*' required>";
-                        echo "<label for='job'>Nombre técnico(s):</label>";
+                          echo "<label for='job' id='labelFecha'>Fecha Inicio:</label>";
+                          echo "<input type='date' name='date' id='date' placeholder='Fecha Inicio*' required>";
+                          echo "<label for='job' id='labelFechaF'>Fecha Fin:</label>";
+                          echo "<input type='date' name='dateF' id='dateF' placeholder='Fecha Fin*' required>";
+                          echo "<label for='job' id='labelCCC' style='display: none;'>Ticket CCC:</label>";
+                          echo "<input type='number' name='fieldCCC' id='fieldCCC' placeholder='Ticket CCC*' style='display: none;'>";
+                          echo "<label for='job' id='tipoSelect' style='display: none;'>Tipo de Elemento:</label>";
+                          echo "<select id='selectTipo' name='selectTipo' style='display: none;>";
+                            echo "<option value='AA'>AA</option>";
+                            echo "<option value='IT'>IT</option>";
+                            echo "<option value='AA'>AA</option>";
+                          echo "</select>";
+                          echo "<label for='job' id='labelTec'>Nombre técnico(s):</label>";
                           echo "<div name='divTec' id='divTec'>";
-                            echo "<select id='tec-0' name='tec-0'>";
+                            echo "<select id='tec-0' name='tec-0' >";
                               echo "<option value='-1'></option>";
                               for($i = 0; $i<count($users); $i++){
                                 echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";

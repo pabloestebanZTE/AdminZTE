@@ -17,6 +17,39 @@ class PDF extends CI_Controller {
         $this->load->model('correctiveM_model');
     }
 
+    public function exportInventoryExcel(){
+
+
+
+
+
+        // filename for download
+        $filename = "website_data_.xls";
+
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Content-Type: application/vnd.ms-excel");
+        $data = [
+["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
+["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
+["firstname" => "James", "lastname" => "Brown", "age" => 31],
+["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
+["firstname" => "Michael", "lastname" => "Davis", "age" => 43],
+["firstname" => "Sarah", "lastname" => "Miller", "age" => 24],
+["firstname" => "Patrick", "lastname" => "Miller", "age" => 27]
+];
+
+          $flag = false;
+          foreach($data as $row) {
+            if(!$flag) {
+              // display field/column names as first row
+              echo implode("\t", array_keys($row)) . "\r\n";
+              $flag = true;
+            }
+            echo implode("\t", array_values($row)) . "\r\n";
+          }
+            exit;
+    }
+
     public function crearActaAA(){
       $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       if($_GET['k_tipo'] == "Pl"){
@@ -242,6 +275,8 @@ class PDF extends CI_Controller {
       //Lenar resumen PVD
       $this->fillAbstractPVD($pdf, $respuesta['inventory']);
 
+      $this->fillFunctionalTable($pdf, $respuesta['inventory']);
+
       //Lenar firmas
       $this->fillCCC($pdf);
 
@@ -252,53 +287,87 @@ class PDF extends CI_Controller {
     }
 
     public function fillCCC($pdf){
+      $ccc =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       $pdf->Ln(10);
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(275,5,'Estado de PQR',0,1,'C');
       $pdf->Cell(275,5,utf8_decode('Se verificó con el CCC el estado de los tickets abiertos para el punto, y se realiza atención y cierre'),0,1,'C');
       $pdf->SetFont('Arial','',7);
-      $pdf->Cell(80,5,utf8_decode('Descripción'),1,0,'C');
-      $pdf->Cell(40,5,utf8_decode('Nro. Caso'),1,0,'C');
-      $pdf->Cell(40,5,utf8_decode('Estado'),1,0,'C');
+
+      $pdf->Cell(40,5,utf8_decode('Ticket CCC'),1,0,'C');
+      $pdf->Cell(90,5,utf8_decode('Descripción'),1,0,'C');
+      $pdf->Cell(30,5,utf8_decode('Estado'),1,0,'C');
       $pdf->Cell(115,5,utf8_decode('Observaciones'),1,1,'C');
 
-      $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+      for($i = 0; $i< count($ccc); $i++){
+        if($ccc[$i]['N_TIPO'] == "IT"){
+          $sizer = strlen($ccc[$i]['N_DESCRIPTION'])/85;
+          $sizer2 = strlen($ccc[$i]['N_OBSERVATION'])/90;
+          if($sizer > $sizer2){
+            $sizer2 = strlen($ccc[$i]['N_DESCRIPTION']/85);
+          }else {
+            $sizer = strlen($ccc[$i]['N_DESCRIPTION']/85);
+          }
+          if($sizer2 > $sizer){
+            $sizer = $sizer2;
+          }
 
-            $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+          $pdf->Cell(40,5,utf8_decode($ccc[$i]['K_IDTICKET_CCC']),"TLR",0,'C');
+          $pdf->Cell(90,5,utf8_decode(substr($ccc[$i]['N_DESCRIPTION'],0,85)),"TLR",0,'C');
+          $pdf->Cell(30,5,utf8_decode($ccc[$i]['N_ESTADO']),"TLR",0,'C');
+          $pdf->Cell(115,5,utf8_decode(substr($ccc[$i]['N_OBSERVATION'],0,90)),"TLR",1,'C');
 
-                  $pdf->Cell(80,5,utf8_decode(''),1,0,'C');
-                  $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-                  $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-                  $pdf->Cell(115,5,utf8_decode(''),1,1,'C');
+          for($k = 1; $k<=($sizer); $k++){
+            $pdf->Cell(40,5,'',"LR",0,'C');
+            $pdf->Cell(90,5,utf8_decode(substr($ccc[$i]['N_DESCRIPTION'],$k*85,85)),"LR",0,'C');
+            $pdf->Cell(30,5,'',"LR",0,'C');
+            $pdf->Cell(115,5,utf8_decode(substr($ccc[$i]['N_OBSERVATION'],$k*90,90)),"LR",1,'C');
+          }
+        }
+      }
+      $pdf->Cell(275,0,'',1,1,'C');
     }
 
     public function fillCCAA($pdf){
+      $ccc =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       $pdf->Ln(10);
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(190,5,'Estado de PQR',0,1,'C');
       $pdf->Cell(190,5,utf8_decode('Se verificó con el CCC el estado de los tickets abiertos para el punto, y se realiza atención y cierre'),0,1,'C');
       $pdf->SetFont('Arial','',7);
-      $pdf->Cell(40,5,utf8_decode('Descripción'),1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('Nro. Caso'),1,0,'C');
-      $pdf->Cell(20,5,utf8_decode('Estado'),1,0,'C');
-      $pdf->Cell(110,5,utf8_decode('Observaciones'),1,1,'C');
 
-      $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(20,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(20,5,utf8_decode(''),1,0,'C');
-      $pdf->Cell(110,5,utf8_decode(''),1,1,'C');
+      $pdf->Cell(30,5,utf8_decode('Ticket CCC'),1,0,'C');
+      $pdf->Cell(50,5,utf8_decode('Descripción'),1,0,'C');
+      $pdf->Cell(30,5,utf8_decode('Estado'),1,0,'C');
+      $pdf->Cell(80,5,utf8_decode('Observaciones'),1,1,'C');
 
-            $pdf->Cell(40,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(20,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(20,5,utf8_decode(''),1,0,'C');
-            $pdf->Cell(110,5,utf8_decode(''),1,1,'C');
+      for($i = 0; $i< count($ccc); $i++){
+        if($ccc[$i]['N_TIPO'] == "AA"){
+          $sizer = strlen($ccc[$i]['N_DESCRIPTION'])/35;
+          $sizer2 = strlen($ccc[$i]['N_OBSERVATION'])/60;
+          if($sizer > $sizer2){
+            $sizer2 = strlen($ccc[$i]['N_DESCRIPTION']/35);
+          }else {
+            $sizer = strlen($ccc[$i]['N_DESCRIPTION']/35);
+          }
+          if($sizer2 > $sizer){
+            $sizer = $sizer2;
+          }
 
+          $pdf->Cell(30,5,utf8_decode($ccc[$i]['K_IDTICKET_CCC']),"TLR",0,'C');
+          $pdf->Cell(50,5,utf8_decode(substr($ccc[$i]['N_DESCRIPTION'],0,35)),"TLR",0,'C');
+          $pdf->Cell(30,5,utf8_decode($ccc[$i]['N_ESTADO']),"TLR",0,'C');
+          $pdf->Cell(80,5,utf8_decode(substr($ccc[$i]['N_OBSERVATION'],0,60)),"TLR",1,'C');
+
+          for($k = 1; $k<=($sizer); $k++){
+            $pdf->Cell(30,5,'',"LR",0,'C');
+            $pdf->Cell(50,5,utf8_decode(substr($ccc[$i]['N_DESCRIPTION'],$k*35,35)),"LR",0,'C');
+            $pdf->Cell(30,5,'',"LR",0,'C');
+            $pdf->Cell(80,5,utf8_decode(substr($ccc[$i]['N_OBSERVATION'],$k*60,60)),"LR",1,'C');
+          }
+        }
+      }
+      $pdf->Cell(190,0,'',1,1,'C');
     }
 
     public function fillSigns($pdf){
@@ -327,6 +396,9 @@ class PDF extends CI_Controller {
       $pdf->Ln(10);
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(275,5,'INVENTARIO GENERAL DEL PVD',0,1,'C');
+      $pdf->SetFont('Arial','',6);
+      $pdf->Cell(190,5,'Resumen de equipos a los cuales se les realizo la rutina de mantenimiento preventivo, la rutina de mantenimiento fue enviada previamente al momento de agendar la visita al correo del administrador del PVD.',0,1,'C');
+      $pdf->SetFont('Arial','B',7);
       $pdf->Cell(155,5,'ITEM',1,0,'C');
       $pdf->Cell(30,5,'CANTIDAD TIPOLOGIA',1,0,'C');
       $pdf->Cell(30,5,'EN INVENTARIO',1,0,'C');
@@ -349,6 +421,9 @@ class PDF extends CI_Controller {
       $pdf->Ln(10);
       $pdf->SetFont('Arial','B',7);
       $pdf->Cell(190,5,'INVENTARIO DEL PVD',0,1,'C');
+      $pdf->SetFont('Arial','',6);
+      $pdf->Cell(190,5,'Resumen de equipos a los cuales se les realizo la rutina de mantenimiento preventivo, la rutina de mantenimiento fue enviada previamente al momento de agendar la visita al correo del administrador del PVD.',0,1,'C');
+      $pdf->SetFont('Arial','B',7);
       $pdf->Cell(70,5,'ITEM',1,0,'C');
       $pdf->Cell(30,5,'CANTIDAD TIPOLOGIA',1,0,'C');
       $pdf->Cell(30,5,'EN INVENTARIO',1,0,'C');
@@ -381,6 +456,46 @@ class PDF extends CI_Controller {
       $pdf->Cell(120,5,$_POST['velocidadD'],1,0,'C');
       $pdf->Cell(120,5,$_POST['velocidadU'],1,1,'C');
     }
+
+    public function fillFunctionalTable($pdf, $inventory){
+        //Titulo
+        $pdf->Ln(10);
+
+        date_default_timezone_set("America/Bogota");
+        $mysqlDateTime = date('c');
+
+        $pdf->SetFont('Arial','B',7);
+        $pdf->Cell(295,5,'INVENTARIO  DE EQUIPOS DE IT FUNCIONALES',0,1,'C');
+        $pdf->SetFont('Arial','',7);
+
+        //Header Tabla
+        $pdf->SetFont('Arial','B',6);
+        $pdf->Cell(40,5,'TICKET MP',"TLR",0,'C');
+        $pdf->Cell(140,5,'TIPO EQUIPO',"TLR",0,'C');
+        $pdf->Cell(30,5,'SERIAL',"TLR",0,'C');
+        $pdf->Cell(30,5,'MARCA',"TLR",0,'C');
+        $pdf->Cell(35,5,'MODELO',"TLR",1,'C');
+        $pdf->SetFont('Arial','',6);
+
+        for($i = 0; $i< count($inventory); $i++){
+          for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
+            if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+              if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216){
+                $cateforia = $this->dao_inventory_model->getStuffCatById($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY']);
+
+                $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
+
+                $pdf->Cell(40,5,$_GET['k_ticket'],"TLR",0,'C');
+                $pdf->Cell(140,5,utf8_decode($cateforia['N_NAME']),"TLR",0,'C');
+                $pdf->Cell(30,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+                $pdf->Cell(30,5,utf8_decode($info['ma']),"TLR",0,'C');
+                $pdf->Cell(35,5,utf8_decode($info['mo']),"TLR",1,'C');
+              }
+            }
+          }
+        }
+        $pdf->Cell(275,0,'',1,1,'C');
+      }
 
 
       public function fillFunctionalTableAA($pdf, $inventory){

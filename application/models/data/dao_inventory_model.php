@@ -42,7 +42,7 @@
             $row2 = $result2->fetch_assoc();
             $row['N_NAME'] = $row2['N_NAME'];
             $respuesta[$i] = $row;
-            $sql3 = "SELECT stuff.K_IDSTUFF, stuff.K_IDPVD_PLACE, stuff.K_IDMODEL, stuff.N_SERIAL, stuff.N_PLACAINVENTARIO, stuff.N_PARTE, stuff.N_ESTADO, stuff.K_IDSTUFF_CATEGORY, stuff.K_IDPVD, stuff.Q_PROGRESS, stuff_category.V_PRICE_R1, stuff_category.V_PRICE_R4 from stuff, stuff_category, equipment_generic where K_IDPVD = ".$id_pvd." and equipment_generic.K_IDEQUIPMENT_GENERIC=stuff_category.K_IDEQUIPMENT_GENERIC and stuff_category.K_IDSTUFF_CATEGORY=stuff.K_IDSTUFF_CATEGORY and equipment_generic.K_IDEQUIPMENT_GENERIC=".$row['K_IDEQUIPMENT_GENERIC'].";";
+            $sql3 = "SELECT stuff.N_NAME, stuff.K_IDSTUFF, stuff.K_IDPVD_PLACE, stuff.K_IDMODEL, stuff.N_SERIAL, stuff.N_PLACAINVENTARIO, stuff.N_PARTE, stuff.N_ESTADO, stuff.K_IDSTUFF_CATEGORY, stuff.K_IDPVD, stuff.Q_PROGRESS, stuff_category.V_PRICE_R1, stuff_category.V_PRICE_R4 from stuff, stuff_category, equipment_generic where K_IDPVD = ".$id_pvd." and equipment_generic.K_IDEQUIPMENT_GENERIC=stuff_category.K_IDEQUIPMENT_GENERIC and stuff_category.K_IDSTUFF_CATEGORY=stuff.K_IDSTUFF_CATEGORY and equipment_generic.K_IDEQUIPMENT_GENERIC=".$row['K_IDEQUIPMENT_GENERIC'].";";
             $result3 = $session->query($sql3);
             if ($result3->num_rows > 0) {
               $j = 0;
@@ -143,8 +143,8 @@
     public function insertEquipment($equipment, $pvd){
       $dbConnection = new configdb_model();
       $session = $dbConnection->openSession();
-      $sql = "INSERT INTO stuff (K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE)
-        values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().");";
+      $sql = "INSERT INTO stuff (K_IDMODEL, N_SERIAL, N_PLACAINVENTARIO, N_PARTE, N_ESTADO, K_IDSTUFF_CATEGORY, K_IDPVD, Q_PROGRESS, K_IDPVD_PLACE, N_NAME)
+        values (".$equipment->getModelo().", '".$equipment->getSerial()."', '".$equipment->getPlaca()."', '".$equipment->getParte()."', '".$equipment->getEstado()."', ".$equipment->getCategoria().", ".$pvd.", ".$equipment->getProgress().",".$equipment->getZona().",'".$equipment->getTipo1()."' );";
       if ($session != "false"){
         $session->query($sql);
         $sql2 = "SELECT K_IDSTUFF FROM stuff WHERE K_IDMODEL = '".$equipment->getModelo()."' and N_SERIAL = '".$equipment->getSerial()."' and N_PLACAINVENTARIO = '".$equipment->getPlaca()."' and N_PARTE = '".$equipment->getParte()."' and N_ESTADO = '".$equipment->getEstado()."' and K_IDSTUFF_CATEGORY = '".$equipment->getCategoria()."' and K_IDPVD = '".$pvd."' and Q_PROGRESS = '".$equipment->getProgress()."' and K_IDPVD_PLACE = '".$equipment->getZona()."';";
@@ -161,7 +161,7 @@
     public function updateEquipment($equipment, $PVD){
       $dbConnection = new configdb_model();
       $session = $dbConnection->openSession();
-      $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress()." where K_IDSTUFF = ".$equipment->getId().";";
+      $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress().", N_NAME ='".$equipment->getTipo1()."' where K_IDSTUFF = ".$equipment->getId().";";
       $session->query($sql);
     }
 

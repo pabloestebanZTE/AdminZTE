@@ -65,6 +65,9 @@
 								if($_SESSION['permissions'][5] == 1){
 									echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
 								}
+								if($_SESSION['permissions'][20] == 1){
+									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/preventivosInterventoria'>Mantenimientos<span>Interventoria</span></a></li>";
+								}
 							}
             ?>
 						<li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>

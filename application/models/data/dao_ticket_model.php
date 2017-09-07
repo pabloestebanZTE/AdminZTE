@@ -129,7 +129,8 @@
                       $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                       $result2 = $session->query($sql2);
                       $row2 = $result2->fetch_assoc();
-                      $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION']);
+                      $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "", "");
+                      $ticket->setAlmuerzos($row['Q_ALMUERZOS']);
                       $respuesta[$i] = $ticket;
                       $i++;
                   }
@@ -398,14 +399,14 @@
                   $result2 = $session->query($sql2);
                   $row2 = $result2->fetch_assoc();
                   $sql3 = "SELECT * FROM ticketo_user where K_IDTICKETO = '".$row['K_IDTICKETOTHERS']."';";
-                  $result3 = $session->query($sql3);  
-                  $i=0;              
+                  $result3 = $session->query($sql3);
+                  $i=0;
                   while($row3 = $result3->fetch_assoc()) {
                     $sql4 = "SELECT * FROM user where K_IDUSER = ".$row3['K_IDUSER'].";";
                     $result4 = $session->query($sql4);
                     $row4 = $result4->fetch_assoc();
                     $user = new user_model();
-                    $user = $user->createUser($row4['k_IDUSER'],'',$row4['N_NAME'],$row4['N_LASTNAME']);   
+                    $user = $user->createUser($row4['k_IDUSER'],'',$row4['N_NAME'],$row4['N_LASTNAME']);
                     $users[$i] = $user;
                     $i++;
                   }
@@ -420,9 +421,29 @@
                   }
               } else {
                 $respuesta = "Error en BD";
-              }                                           
+              }
               return $respuesta;
             }
     //-----------------------------------------------------------------------------------------------------
+
+          public function createTicketCCC($id, $pvd, $desc, $tipo){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            if ($session != "false"){
+              $sql = "INSERT INTO ticket_ccc (K_IDTICKET_CCC, K_IDPVD, N_DESCRIPTION, N_ESTADO, N_TIPO)
+                values ('".$id."', '".$pvd."', '".$desc."', 'Abierto', '".$tipo."');";
+              $session->query($sql);
+              $sql2 = "SELECT * FROM ticket_ccc WHERE K_IDTICKET_CCC = '".$id."';";
+              $result2 = $session->query($sql2);
+              if ($result2->num_rows > 0) {
+                $respuesta = $id;
+              } else {
+                $respuesta = "Error en BD";
+              }
+            } else {
+              $respuesta = "Error en BD";
+            }
+            return $respuesta;
+          }
         }
 ?>

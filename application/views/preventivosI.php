@@ -119,7 +119,6 @@
              ?>
              <div class="wrapper tabs">
                <?php
-               if($_SESSION['permissions'][1] == 1){
                  if (isset($tablas)){
                    $meses[1] = 'Enero';
                    $meses[2] = 'Febrero';
@@ -131,42 +130,55 @@
                    $meses[8] = 'Agosto';
                    $meses[9] = 'Septiembre';
 
-
                    echo "<div id='tab"."1"."'>";
                      echo "<div class='wrapperTable'>";
                       echo "<table id='table'>";
                         echo "<thead>";
                           echo "<tr>";
-                            echo "<th>".$tablas[$meses[1]]['tabla3']['Titulos'][6]."</th>";
-                            echo "<th>".$tablas[$meses[1]]['tabla3']['Titulos'][2]."</th>";
-                            echo "<th>".$tablas[$meses[1]]['tabla3']['Titulos'][4]."</th>";
-                            echo "<th>".$tablas[$meses[1]]['tabla3']['Titulos'][3]."</th>";
+                            echo "<th>Ticket</th>";
+                            echo "<th>Región</th>";
+                            echo "<th>PVD</th>";
+                            echo "<th>Departamento / Ciudad</th>";
                             echo "<th>Año</th>";
                             echo "<th>Mes</th>";
                           echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
-                          for ($p = 1; $p <= count($meses); $p++){
-                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
-                             echo "<tr>";
-                               echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
-                               echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][2]."</td>";
-                               echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][4]."</td>";
-                               echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][3]."</td>";
-                               if (explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
-                                 echo "<td>".explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0]."</td>";
-                               } else {
-                                 echo "<td></td>";
-                               }
-                               $dateObj   = DateTime::createFromFormat('!m', explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[1]);
-                               if ($dateObj != "" && explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
-                                  echo "<td>".$dateObj->format('F')."</td>";
-                               } else {
-                                echo "<td></td>";
-                               }
-                               echo "</tr>";
+                        for ($i = 1; $i <= count($tickets); $i++){
+                          echo "<tr>";
+                            if(isset($tickets[$i])){
+                              echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tickets[$i]->getId()."'>".$tickets[$i]->getId()."</a></td>";
+                              echo "<td>".$tickets[$i]->getRegion()."</td>";
+
                             }
+                          echo "</tr>";
+                        }
+
+
+
+                          for ($p = 1; $p <= count($tickets); $p++){
+                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
+                             if($tablas[$meses[$p]]['tabla3']['lineas'][$i][7] == "Ejecutado"){
+                               echo "<tr>";
+                                 echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
+                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][2]."</td>";
+                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][4]."</td>";
+                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][3]."</td>";
+                                 if (explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
+                                   echo "<td>".explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0]."</td>";
+                                 } else {
+                                   echo "<td></td>";
+                                 }
+                                 $dateObj   = DateTime::createFromFormat('!m', explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[1]);
+                                 if ($dateObj != "" && explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
+                                    echo "<td>".$dateObj->format('F')."</td>";
+                                 } else {
+                                  echo "<td></td>";
+                                 }
+                                 echo "</tr>";
+                             }
                           }
+                        }
                         echo "</tbody>";
                       echo "</table>";
                     echo "</div>";
@@ -175,7 +187,7 @@
                  if ($msg != ""){
                    echo "<script type='text/javascript'>showMessage();</script>";
                  }
-               }
+               echo "<li id='nav5'><a href='/AdminZTE/index.php/PDF/exportInventoryExcel'>ZTE<span>Plataforma</span></a></li>";
                ?>
              </div>
           </div>

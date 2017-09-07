@@ -495,7 +495,7 @@ create table checklist
 create table stuff
 (
    K_IDSTUFF                int not null,
-   N_NAME                   varchar(200),
+   N_NAME                   varchar(500),
    K_IDMODEL                int,
    N_SERIAL                 varchar(200),
    N_PLACAINVENTARIO        varchar(200),
@@ -552,6 +552,7 @@ create table ticket_ccc
    N_DESCRIPTION                  varchar(500),
    N_ESTADO                       varchar(20),
    N_OBSERVATION                  varchar(500),
+   N_TIPO                         varchar(3),
    primary key (K_IDTICKET_CCC)
 );
 
@@ -710,3 +711,4 @@ ALTER TABLE ticket_corrective_maintenance add N_CCC  varchar(50) not null;
 
 ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;
 ALTER TABLE stuff add N_OBSERVATION varchar(200);
+ALTER TABLE ticket_ccc add N_TIPO varchar(3);

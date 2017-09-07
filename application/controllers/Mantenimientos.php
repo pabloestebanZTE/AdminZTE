@@ -86,6 +86,23 @@ class Mantenimientos extends CI_Controller {
       $this->load->view('preventivosP', $respuesta);
     }
 
+    public function preventivosInterventoria(){
+      $PVDs = $this->dao_PVD_model->getPVDs();
+      for($i = 0; $i < count($PVDs); $i++){
+        $PVDs[$i]->setMaintenance($this->dao_maintenance_model->getManPrePerPVD($PVDs[$i]->getId()));
+        for($j = 0; $j < count($PVDs[$i]->getMaintenance()); $j++){
+          $PVDs[$i]->getMaintenance()[$j]->setTicket($this->dao_ticket_model->getTicketsPerMaintenance($PVDs[$i]->getMaintenance()[$j]->getId()));
+        }
+      }
+      $respuesta['PVDs'] = $PVDs;
+      $respuesta['MP'] = $this->arregloGraficasMP($PVDs);
+      $respuesta['tablas'] = $this->arregloTablas($respuesta['MP']);
+
+      $respuesta['tickets'] = $this->dao_ticket_model->getAllTickets();
+
+      $this->load->view('preventivosI', $respuesta);
+    }
+
     function loadMPView(){
         $PVDs = $this->dao_PVD_model->getPVDs();
         for($i = 0; $i < count($PVDs); $i++){
@@ -272,6 +289,9 @@ class Mantenimientos extends CI_Controller {
       $tablas['Agosto']['tabla1'] = $this->resumenPreventivosMes($MP, 'Agosto');
       $tablas['Agosto']['tabla2'] = $this->avanceDepartamentos($MP, 'Agosto');
       $tablas['Agosto']['tabla3'] = $this->detalleTickets($MP, 'Agosto');
+      $tablas['Septiembre']['tabla1'] = $this->resumenPreventivosMes($MP, 'Septiembre');
+      $tablas['Septiembre']['tabla2'] = $this->avanceDepartamentos($MP, 'Septiembre');
+      $tablas['Septiembre']['tabla3'] = $this->detalleTickets($MP, 'Septiembre');
       return $tablas;
     }
 
@@ -507,9 +527,14 @@ class Mantenimientos extends CI_Controller {
           $MP['Agosto']['Zona']=$this->reconocerZona($region, $MP['Agosto']['Zona'], $mantenimiento);
           break;
         case 9:
-          $MP['Septiembre'][$MP['Septiembre']['contador']]= $mantenimiento;
-          $MP['Septiembre']['Septiembre']++;
-          $MP['Septiembre']['Zona']=$this->reconocerZona($region, $MP['Septiembre']['Zona'],$mantenimiento);
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['mantenimiento']= $mantenimiento;
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['ciudad']= $city;
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['departamento']= $department;
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['idPVD']= $id;
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['region']= $regionPVD;
+          $MP['Septiembre'][$MP['Septiembre']['contador']]['tipologia']= $tipologia;
+          $MP['Septiembre']['contador']++;
+          $MP['Septiembre']['Zona']=$this->reconocerZona($region, $MP['Septiembre']['Zona'], $mantenimiento);
           break;
         case 10:
           $MP['Octubre'][$MP['Octubre']['contador']]= $mantenimiento;
@@ -581,6 +606,7 @@ class Mantenimientos extends CI_Controller {
       $MP['Junio']['contador']=0;
       $MP['Julio']['contador']=0;
       $MP['Agosto']['contador']=0;
+      $MP['Septiembre']['contador']=0;
 
       $MP['Enero']['Zona']['Zona1']['Cantidad']=0;
       $MP['Enero']['Zona']['Zona4']['Cantidad']=0;
@@ -598,6 +624,8 @@ class Mantenimientos extends CI_Controller {
       $MP['Julio']['Zona']['Zona4']['Cantidad']=0;
       $MP['Agosto']['Zona']['Zona1']['Cantidad']=0;
       $MP['Agosto']['Zona']['Zona4']['Cantidad']=0;
+      $MP['Septiembre']['Zona']['Zona1']['Cantidad']=0;
+      $MP['Septiembre']['Zona']['Zona4']['Cantidad']=0;
 
       $MP['Enero']['Zona']['Zona1']['Estado']['Abierto']=0;
       $MP['Enero']['Zona']['Zona1']['Estado']['Ejecutado']=0;
@@ -647,6 +675,12 @@ class Mantenimientos extends CI_Controller {
       $MP['Agosto']['Zona']['Zona4']['Estado']['Abierto']=0;
       $MP['Agosto']['Zona']['Zona4']['Estado']['Ejecutado']=0;
       $MP['Agosto']['Zona']['Zona4']['Estado']['Progreso']=0;
+      $MP['Septiembre']['Zona']['Zona1']['Estado']['Abierto']=0;
+      $MP['Septiembre']['Zona']['Zona1']['Estado']['Ejecutado']=0;
+      $MP['Septiembre']['Zona']['Zona1']['Estado']['Progreso']=0;
+      $MP['Septiembre']['Zona']['Zona4']['Estado']['Abierto']=0;
+      $MP['Septiembre']['Zona']['Zona4']['Estado']['Ejecutado']=0;
+      $MP['Septiembre']['Zona']['Zona4']['Estado']['Progreso']=0;
       return $MP;
     }
 }

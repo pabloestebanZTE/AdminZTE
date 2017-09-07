@@ -207,7 +207,7 @@
                             echo "<li><b>Cantidad almuerzos: </b> ".$viaticos[$i]['Almuerzos']."</li>";
                             echo "<li><b>Observaciones: </b> ".$viaticos[$i]['Observaciones']."</li>";
                         echo "</ul>";
-                        if($_SESSION['permissions'][6] == 1 and $ticket->getStatus() == "Ejecutado"){
+                        if($_SESSION['permissions'][6] == 1 ){
                           echo "<div class='form-style-5'>";
                             echo "<form  name='formulario' id='formulario' method='post' accept-charset='utf-8'>";
                               echo "<fieldset>";

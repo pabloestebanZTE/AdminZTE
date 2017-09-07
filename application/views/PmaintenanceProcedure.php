@@ -155,18 +155,13 @@ var idZonesG;
           var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
           var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
           var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
-          if(inventario[i].progreso != undefined){
-            var avance =  "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>"+inventario[i].progreso+" %</td>";
-          } else {
-            var avance =  "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
-          }
+
           var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
-
-          if(typeof inventario[i].N_NAME !== "undefined") {
-            var observaciones = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].N_NAME+"</textarea></td>";
+          if(inventario[i].N_NAME != null) {
+            var observaciones = "<td id='tdta"+newElementQuantity+"'><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' >"+inventario[i].N_NAME+"</textarea></td>";
           } else {
-            var observaciones = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Observaciones *' required></textarea></td>";
+            var observaciones = "<td id='tdta"+newElementQuantity+"'><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Observaciones *' ></textarea></td>";
           }
 
           if(inventario[i].Q_PROGRESS == "0"){
@@ -184,18 +179,16 @@ var idZonesG;
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
-            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+observaciones+"</tr>" );
+            $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+id+observaciones+"</tr>" );
           }
           if (inventario[i].N_ESTADO == "No encontrado"){
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='No encontrado'>No encontrado</option><option value='Funcional'>Funcional</option><option value='Averiado'>Averiado</option>";
             estados = estados+"</select></td>";
-            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+observaciones+id+"</tr>" );
+            $('#NE').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+observaciones+id+"</tr>" );
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
-            var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
-            progress.style.display = 'none';
           }
           if (inventario[i].N_ESTADO == "Averiado"){
             console.log(inventario[i]);
@@ -210,18 +203,18 @@ var idZonesG;
             newRow = newRow+"<td><textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
             newRow = newRow+"<td><textarea name='elementos"+newElementQuantity+"' id='elementos"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required>"+inventario[i].corrective.N_NEW_ELEMENTS+"</textarea></td>";
             newRow = newRow+"<td></td><td><p>"+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
-            newRow = newRow+"<td><input  name='cccTicket"+newElementQuantity+"' id='cccTicket"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' >"+inventario[i].corrective.N_CCC+"</td><td></td><td></td>";
+            newRow = newRow+"<td><input  name='cccTicket"+newElementQuantity+"' id='cccTicket"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' value='"+inventario[i].corrective.N_CCC+"'></td><td></td><td></td>";
             newRow = newRow+"</tr>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option><option value='No encontrado'>No encontrado</option>";
             estados = estados+"</select></td>";
-            $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+avance+finalizado+id+"</tr>" );
+            $('#corrective').append("<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteRB+elemento+marca+modelo+serial+placa+parte+zone+estados+fotos+finalizado+observaciones+id+"</tr>" );
             $('#corrective').append(newRow);
 
             var selectEstado = document.getElementById("selectFinalizado"+newElementQuantity);
-            var progress = document.getElementById("avance"+newElementQuantity);
             selectEstado.style.display = 'none';
-            progress.style.display = 'none';
+            var selectEstado = document.getElementById("tdta"+newElementQuantity);
+            selectEstado.style.display = 'none';
 
           }
           newElementQuantity++;
@@ -303,10 +296,14 @@ var idZonesG;
     function cambioTabla(equipo_categoria){
       var estado = $("#selectEstados"+equipo_categoria+" option:selected").attr('value');
       var linea = document.getElementById("linea"+equipo_categoria);
+      try {
+          var tdta = document.getElementById("tdta"+equipo_categoria);
+      }
+      catch(err) {
+      }
       var selectEstado = document.getElementById("selectFinalizado"+equipo_categoria);
-      var avance = document.getElementById("avance"+equipo_categoria);
       if(estado == "Averiado"){
-        avance.style.display = 'none';
+        tdta.style.display = 'none';
         selectEstado.style.display = 'none';
         var href = document.getElementById("fotos"+equipo_categoria).getAttribute("href");
         var newURL = href.split("Registro");
@@ -324,13 +321,13 @@ var idZonesG;
         $("#tableCorrective").append(newRow);
       }
       if(estado == "Funcional"){
-        avance.style.display = 'block';
+        tdta.style.display = 'block';
         selectEstado.style.display = 'block';
         $("#newRow"+equipo_categoria).remove();
         $("#tableInventory").append(linea);
       }
       if(estado == "No encontrado"){
-        avance.style.display = 'none';
+        tdta.style.display = 'block';
         selectEstado.style.display = 'none';
         $("#newRow"+equipo_categoria).remove();
         $("#tableNE").append(linea);
@@ -378,9 +375,8 @@ var idZonesG;
       var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
-      var href = "https://console.aws.amazon.com/s3/buckets/"+"<?php echo strtolower($ticket) ?>"+"/Registro Fotografico/"+category[0].N_NAME+"/"+nameZonesG[0]+"/?region=us-west-2&tab=overview";
+      var href = "https://console.aws.amazon.com/s3/buckets/"+"<?php echo strtolower($ticket) ?>"+"/Registro Fotografico/"+nameZonesG[0]+"/?region=us-west-2&tab=overview";
       var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' href='"+href+"' target='_blank'>Ver</a></td>";
-      var avance = "<td name='avance"+newElementQuantity+"' id='avance"+newElementQuantity+"'>0 %</td>";
 
       var zonaE = "<td><select onchange='cambiarURL("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
       zonaE = zonaE+zones;
@@ -394,8 +390,8 @@ var idZonesG;
       finalizado = finalizado+"<option value='0'>No</option><option value='1'>Si</option>";
       finalizado = finalizado+"</select></td>";
 
-      var observacion = "<td><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  ></textarea></td>";
-      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+avance+finalizado+observacion+"</tr>" );
+      var observacion = "<td id='tdta"+newElementQuantity+"'><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  ></textarea></td>";
+      $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+finalizado+observacion+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
 
@@ -407,7 +403,7 @@ $(window).on('load', function() {
 	var chart = new CanvasJS.Chart("chartContainer",
 	{
 		title:{
-			text: " Procentaje de avance del mantenimiento"
+			text: " Porcentaje de avance del mantenimiento"
 		},
                 animationEnabled: true,
 		data: [
@@ -673,7 +669,6 @@ $(window).on('load', function() {
                                 echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Galeria</h1></th>";
-                                echo "<th><h1>Avance</h1></th>";
                                 echo "<th><h1>Finalizado</h1></th>";
                                 echo "<th><h1>Observaciones</h1></th>";
                               echo "</tr>";
@@ -858,13 +853,15 @@ $(window).on('load', function() {
                     <?php
                       if (isset($CCC)){
                         echo "<center><div class='btn-group'>";
-                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateCCC?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                         echo "</div></center>";
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableCCC' name='tableCCC'>";
                             echo "<thead>";
                               echo "<tr>";
+                                echo "<th><h1>Id Ticket</h1></th>";
+                                echo "<th><h1>Tipo</h1></th>";
                                 echo "<th><h1>Descripción</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Observaciones</h1></th>";
@@ -873,15 +870,17 @@ $(window).on('load', function() {
                             echo "<tbody>";
                             for($i = 0; $i < count($CCC); $i++){
                               echo "<tr>";
-                                echo "<td hidden><input id='idCCC".$i."' name='idCCC".$i."' value='".$CCC[$i]['K_SOFTWARE_INVENTORY']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td hidden><input id='idCCC".$i."' name='idCCC".$i."' value='".$CCC[$i]['K_IDTICKET_CCC']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
+                                echo "<td>".$CCC[$i]['K_IDTICKET_CCC']."</td>";
+                                echo "<td>".$CCC[$i]['N_TIPO']."</td>";
                                 echo "<td>".$CCC[$i]['N_DESCRIPTION']."</td>";
-                                echo "<td><select style='font-size:10px' name='select' id='select' aria-describedby='basic-addon1'>";
+                                echo "<td><select style='font-size:10px' name='select".$i."' aria-describedby='basic-addon1'>";
                                   echo "<option selected='selected' value='".$CCC[$i]['N_ESTADO']."'>".$CCC[$i]['N_ESTADO']."</option>";
                                   echo "<option value='Abierto'>Abierto</option>";
                                   echo "<option value='Solucionado'>Solucionado</option>";
                                   echo "<option value='En Correctivo'>En Correctivo</option>";
                                 echo "</select></td>";
-                                echo "<td><textarea>".$CCC[$i]['N_OBSERVATION']."</textarea></td>";
+                                echo "<td><textarea name='observciones".$i."'>".$CCC[$i]['N_OBSERVATION']."</textarea></td>";
                               echo "</tr>";
                             }
                            echo "</tbody>";
@@ -894,7 +893,7 @@ $(window).on('load', function() {
               </div>
             </div>
             <input name='pvd' id='pvd' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value=' <?php echo $_GET['k_pvd'] ?> '></td>
-            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value='<?php echo count($software) ?>'></td>
+            <input name='Elements' id='Elements' style='font-size:10px' type='hidden' aria-describedby='basic-addon1' value='<?php echo count($CCC) ?>'></td>
           </form>
         </div>
       </div>

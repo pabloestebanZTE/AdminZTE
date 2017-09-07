@@ -23,8 +23,7 @@
             }
             $id = $id.$row['count(*)'];
             $sql2 = "INSERT INTO ticket_corrective_maintenance (K_IDTICKET_CORRECTIVE, N_DAMAGED_ELEMENTS, N_REFERENCE_D_ELEMENTS, N_FAILURE_DESCRIPTION, N_TEST, N_NEW_ELEMENTS, N_FAILURE_CLASSIFICATION, K_IDSTUFF, N_JAWS_VERSION, N_CCC)
-              values('".$id."', '".$maintenance->getStuff()."', '".$maintenance->getEquipment()."', '".$maintenance->getDamage()."', '".$maintenance->getDescription()."', '".$maintenance->getSDate()."', '".$maintenance->getFDate()."', ".$idstuff.", '', '');";
-              echo $sql2;
+              values('".$id."', '".$maintenance->getStuff()."', '".$maintenance->getEquipment()."', '".$maintenance->getDamage()."', '".$maintenance->getDescription()."', '".$maintenance->getSDate()."', '".$maintenance->getFDate()."', ".$idstuff.", '', '".$maintenance->getUser()."');";
             $session->query($sql2);
           } else {
             $respuesta = "Error de informacion";
@@ -35,7 +34,14 @@
         public function updateMC($maintenance){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-          $sql = "UPDATE ticket_corrective_maintenance SET N_DAMAGED_ELEMENTS = '".$maintenance->getStuff()."', N_REFERENCE_D_ELEMENTS = '".$maintenance->getEquipment()."', N_FAILURE_DESCRIPTION='".$maintenance->getDamage()."', N_TEST = '".$maintenance->getDescription()."', N_NEW_ELEMENTS='".$maintenance->getSDate()."' WHERE K_IDTICKET_CORRECTIVE = '".$maintenance->getId()."';";
+          $sql = "UPDATE ticket_corrective_maintenance SET N_DAMAGED_ELEMENTS = '".$maintenance->getStuff()."', N_REFERENCE_D_ELEMENTS = '".$maintenance->getEquipment()."', N_FAILURE_DESCRIPTION='".$maintenance->getDamage()."', N_TEST = '".$maintenance->getDescription()."', N_NEW_ELEMENTS='".$maintenance->getSDate()."', N_CCC = '".$maintenance->getUser()."' WHERE K_IDTICKET_CORRECTIVE = '".$maintenance->getId()."';";
+          $session->query($sql);
+        }
+
+        public function editCCC($id, $estado, $desc){
+          $dbConnection = new configdb_model();
+          $session = $dbConnection->openSession();
+          $sql = "UPDATE ticket_ccc SET N_ESTADO = '".$estado."', N_OBSERVATION = '".$desc."' WHERE K_IDTICKET_CCC = ".$id.";";
           $session->query($sql);
         }
     }

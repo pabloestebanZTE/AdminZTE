@@ -152,11 +152,11 @@ class Equipment extends CI_Controller {
       for($i = 0; $i < $cantidadElementos; $i++){
         $equipment = new equipment_model;
         $ref = $_POST['selectElement'.$i];
-        $equipment = $equipment->createEquipment($_POST['idElement'.$i], $_POST['selectElement'.$i], "", "", "", $_POST['fieldName'.$i], $_POST['selectMarca'.$i], $_POST['selectModelo'.$i], $_POST['fieldPlaca'.$i], $_POST['fieldParte'.$i], $_POST['selectEstados'.$i], $_POST['selectFinalizado'.$i]);
+        $equipment = $equipment->createEquipment($_POST['idElement'.$i], $_POST['selectElement'.$i], $_POST['observaciones'.$i], "", "", $_POST['fieldName'.$i], $_POST['selectMarca'.$i], $_POST['selectModelo'.$i], $_POST['fieldPlaca'.$i], $_POST['fieldParte'.$i], $_POST['selectEstados'.$i], $_POST['selectFinalizado'.$i]);
         $equipment->setZona($_POST['selectZones'.$i]);
         if($equipment->getEstado() == "Averiado"){
           $ticketCorrective = new correctiveM_model;
-          $ticketCorrective = $ticketCorrective->createMaintenance($_POST['idCM'.$i], $_POST['idElement'.$i], "", "", "", "", $_POST['descripcionFalla'.$i], $_POST['referenciaEquiposAveriados'.$i], $_POST['pruebas'.$i], $_POST['equiposAveriados'.$i], $_POST['elementos'.$i],  $_POST['selectFalla'.$i], "", "");
+          $ticketCorrective = $ticketCorrective->createMaintenance($_POST['idCM'.$i], $_POST['idElement'.$i], $_POST['cccTicket'.$i], "", "", "", $_POST['descripcionFalla'.$i], $_POST['referenciaEquiposAveriados'.$i], $_POST['pruebas'.$i], $_POST['equiposAveriados'.$i], $_POST['elementos'.$i],  $_POST['selectFalla'.$i], "", "");
         }
         if($_POST['idElement'.$i] == ""){
           $idstuff = $this->dao_inventory_model->insertEquipment($equipment, $_POST['pvd']);
@@ -198,6 +198,13 @@ class Equipment extends CI_Controller {
 
     public function deleteElement(){
       $this->dao_inventory_model->deteleElementById($_GET['k_element']);
+      $this->inventoryPVD();
+    }
+
+    public function updateCCC(){
+      for($i = 0; $i < $_POST['Elements']; $i++){
+        $this->dao_MC_model->editCCC($_POST['idCCC'.$i], $_POST['select'.$i], $_POST['observciones'.$i]);
+      }
       $this->inventoryPVD();
     }
 }

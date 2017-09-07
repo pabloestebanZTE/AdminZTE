@@ -190,6 +190,7 @@
                   $meses[6] = 'Junio';
                   $meses[7] = 'Julio';
                   $meses[8] = 'Agosto';
+                  $meses[9] = 'Septiembre';
 
                   echo "<br><br><br>";
                   echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
@@ -466,6 +467,8 @@
         tf7.init();
         var tf8 = new TableFilter('table3-8', filtersConfig);
         tf8.init();
+        var tf9 = new TableFilter('table3-9', filtersConfig);
+        tf9.init();
     </script>
   </body>
 </html>

@@ -44,9 +44,9 @@ class Ticket extends CI_Controller {
     public function ticketODetails(){
       $respuesta['ticket']=$this->dao_ticket_model->getTicketOByID($_GET['k_ticket']);
       $this->load->view('ticketODetails',$respuesta);
-      } 
+      }
 //------------------------------------------------------------------------------
-      
+
     public function fixArrayUsers($respuesta){
       $i = 0;
       if($respuesta['ticket']->getTechs()['users']>0){
@@ -89,19 +89,23 @@ class Ticket extends CI_Controller {
     }
 
     public function createOtherTicket(){
-      $j = 0;
-      for($i = 6; $i<count($_POST); $i++){
-        if(explode("/",$_POST['tec-'.$j])[1] != ""){
-          $users[$j] = explode("/",$_POST['tec-'.$j])[1];
-          $j++;
+      if($_POST['tipo'] == 6){
+        $ticket = $this->dao_ticket_model->createTicketCCC($_POST['fieldCCC'],  explode("/", $_POST['pvd'])[0],$_POST['Observaciones'], $_POST['selectTipo']);
+      } else {
+        $j = 0;
+        for($i = 6; $i<count($_POST); $i++){
+          if(explode("/",$_POST['tec-'.$j])[1] != ""){
+            $users[$j] = explode("/",$_POST['tec-'.$j])[1];
+            $j++;
+          }
         }
+        $pvd = explode("/", $_POST['pvd'])[0];
+        $ticketO = new ticket_model;
+        $ticketO = $ticketO->createTicket("TO-",$pvd,$_POST['tipo'], $_POST['date'], $_POST['dateF'], $_POST['duracion'], "", "", "", "", $users, "", $_POST['Observaciones']);
+        $duration = $ticketO->calculateDuration();
+        $ticketO->setDuracion($duration);
+        $ticket = $this->dao_ticket_model->insertOtherTicket($ticketO);
       }
-      $pvd = explode("/", $_POST['pvd'])[0];
-      $ticketO = new ticket_model;
-      $ticketO = $ticketO->createTicket("TO-",$pvd,$_POST['tipo'], $_POST['date'], $_POST['dateF'], $_POST['duracion'], "", "", "", "", $users, "", $_POST['Observaciones']);
-      $duration = $ticketO->calculateDuration();
-      $ticketO->setDuracion($duration);
-      $ticket = $this->dao_ticket_model->insertOtherTicket($ticketO);
       if($ticket == "Error en BD"){
         $respuesta['msg'][0] = "Algo salio mal, no se pudo crear el ticket";
         $respuesta['msg'][1] = "Contacte al administrador del servicio";
@@ -115,7 +119,6 @@ class Ticket extends CI_Controller {
       $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherMaintenances();
       $this->load->view('OthersPrincipal', $respuesta);
     }
-
 }
 
 ?>
