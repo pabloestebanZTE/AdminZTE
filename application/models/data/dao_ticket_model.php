@@ -129,8 +129,11 @@
                       $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
                       $result2 = $session->query($sql2);
                       $row2 = $result2->fetch_assoc();
+                      $mantenimiento = $this->dao_maintenance_model->getManPrePerID($row['K_IDMAINTENANCE']);
+                      $pvd = $this->dao_PVD_model->getPVDbyId($mantenimiento->getIdPVD());
                       $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "", "");
                       $ticket->setAlmuerzos($row['Q_ALMUERZOS']);
+                      $ticket->setEstadia($pvd);
                       $respuesta[$i] = $ticket;
                       $i++;
                   }

@@ -119,17 +119,7 @@
              ?>
              <div class="wrapper tabs">
                <?php
-                 if (isset($tablas)){
-                   $meses[1] = 'Enero';
-                   $meses[2] = 'Febrero';
-                   $meses[3] = 'Marzo';
-                   $meses[4] = 'Abril';
-                   $meses[5] = 'Mayo';
-                   $meses[6] = 'Junio';
-                   $meses[7] = 'Julio';
-                   $meses[8] = 'Agosto';
-                   $meses[9] = 'Septiembre';
-
+                 if (isset($tickets)){
                    echo "<div id='tab"."1"."'>";
                      echo "<div class='wrapperTable'>";
                       echo "<table id='table'>";
@@ -147,37 +137,17 @@
                         for ($i = 1; $i <= count($tickets); $i++){
                           echo "<tr>";
                             if(isset($tickets[$i])){
-                              echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tickets[$i]->getId()."'>".$tickets[$i]->getId()."</a></td>";
-                              echo "<td>".$tickets[$i]->getRegion()."</td>";
-
+                              if($tickets[$i]->getStatus() == "Ejecutado"){
+                                echo "<td><a href='/AdminZTE/index.php/Equipment/inventoryPVD?k_fase=".$tickets[$i]->getEstadia()->getFase()."&k_tipo=".$tickets[$i]->getEstadia()->getTipologia()."&k_pvd=".$tickets[$i]->getEstadia()->getID()."&k_ticket=".$tickets[$i]->getId()."'>".$tickets[$i]->getId()."</a></td>";
+                                echo "<td>".$tickets[$i]->getEstadia()->getRegion()."</td>";
+                                echo "<td>".$tickets[$i]->getEstadia()->getId()."</td>";
+                                echo "<td>".$tickets[$i]->getEstadia()->getDepartment()." / ".$tickets[$i]->getEstadia()->getCity()."</td>";
+                                echo "<td>".explode("-",$tickets[$i]->getDateS())[0]."</td>";
+                                $dateObj = DateTime::createFromFormat('!m', explode("-",$tickets[$i]->getDateS())[1]);
+                                echo "<td>".$dateObj->format('F')."</td>";
+                              }
                             }
                           echo "</tr>";
-                        }
-
-
-
-                          for ($p = 1; $p <= count($tickets); $p++){
-                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
-                             if($tablas[$meses[$p]]['tabla3']['lineas'][$i][7] == "Ejecutado"){
-                               echo "<tr>";
-                                 echo "<td><a href='/AdminZTE/index.php/Ticket/ticketDetails?k_ticket=".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][6]."</a></td>";
-                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][2]."</td>";
-                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][4]."</td>";
-                                 echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][3]."</td>";
-                                 if (explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
-                                   echo "<td>".explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0]."</td>";
-                                 } else {
-                                   echo "<td></td>";
-                                 }
-                                 $dateObj   = DateTime::createFromFormat('!m', explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[1]);
-                                 if ($dateObj != "" && explode("-",$tablas[$meses[$p]]['tabla3']['lineas'][$i][8])[0] != "0000"){
-                                    echo "<td>".$dateObj->format('F')."</td>";
-                                 } else {
-                                  echo "<td></td>";
-                                 }
-                                 echo "</tr>";
-                             }
-                          }
                         }
                         echo "</tbody>";
                       echo "</table>";
