@@ -152,11 +152,15 @@ var idZonesG;
           }
         //  var deleteRB = "<td>"+"<div class'[ form-group ]'><input type='checkbox' name='fancy-checkbox-primary' id='fancy-checkbox-primary' autocomplete='off' /><div class='[ btn-group ]'><label for='fancy-checkbox-primary' class='[ btn btn-primary ]'><span class='[ glyphicon glyphicon-ok ]'></span><span> </span></label><label for='fancy-checkbox-primary' class='[ btn btn-default active ]'>Delete</label></div></div>"+"</td>";
           var deleteRB = "<td><a href='javascript:deleteElement("+inventario[i].K_IDSTUFF+")'><span class='glyphicon glyphicon-remove-circle'></span></a></td>";
-          var serial =  "<td>"+inventario[i].N_SERIAL+"</td>";
-          var placa =  "<td>"+inventario[i].N_PLACAINVENTARIO+"</td>";
-          var parte =  "<td>"+inventario[i].N_PARTE+"</td>";
+          var serial =  "<td><input name='fieldName"+newElementQuantity+"' value='"+inventario[i].N_SERIAL+"'></td>";
+          var placa =  "<td><input name='fieldPlaca"+newElementQuantity+"' value='"+inventario[i].N_PLACAINVENTARIO+"'></td>";
+          var parte =  "<td><input name='fieldParte"+newElementQuantity+"' value='"+inventario[i].N_PARTE+"'></td>";
 
-          var zone =  "<td name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</td>";
+          var zone = "<td><select onchange='cambiarURL("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
+          zone = zone + "<option value='-1'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</option>";
+          zone = zone+zones;
+          zone = zone+"</select></td>";
+
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
           if(inventario[i].N_NAME != null) {
             var observaciones = "<td id='tdta"+newElementQuantity+"'><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' >"+inventario[i].N_NAME+"</textarea></td>";
@@ -197,13 +201,13 @@ var idZonesG;
             var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' role='button' href='"+inventario[i].url+"' target='_blank'>Ver</a></td>";
             var newRow = "<tr id='newRow"+newElementQuantity+"' name='newRow"+newElementQuantity+"'>";
             newRow = newRow+"<td hidden><input id='idCM"+newElementQuantity+"' name='idCM"+newElementQuantity+"' value='"+inventario[i].corrective.K_IDTICKET_CORRECTIVE+"' ></td>";
-            newRow = newRow+"<td><textarea  name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
-            newRow = newRow+"<td><textarea name='referenciaEquiposAveriados"+newElementQuantity+"' id='referenciaEquiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required>"+inventario[i].corrective.N_REFERENCE_D_ELEMENTS+"</textarea></td>";
-            newRow = newRow+"<td><textarea name='descripcionFalla"+newElementQuantity+"' id='descripcionFalla"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].corrective.N_FAILURE_DESCRIPTION+"</textarea></td>";
-            newRow = newRow+"<td><textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
-            newRow = newRow+"<td><textarea name='elementos"+newElementQuantity+"' id='elementos"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required>"+inventario[i].corrective.N_NEW_ELEMENTS+"</textarea></td>";
-            newRow = newRow+"<td></td><td><p>"+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
-            newRow = newRow+"<td><input  name='cccTicket"+newElementQuantity+"' id='cccTicket"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' value='"+inventario[i].corrective.N_CCC+"'></td><td></td><td></td>";
+            newRow = newRow+"<td>Elementos averiados:<textarea name='equiposAveriados"+newElementQuantity+"' id='equiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Lista de equipos averiados *' required>"+inventario[i].corrective.N_DAMAGED_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td>Referencias elementos:<textarea name='referenciaEquiposAveriados"+newElementQuantity+"' id='referenciaEquiposAveriados"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Referencias de equipos averiados *' required>"+inventario[i].corrective.N_REFERENCE_D_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td>Descripción de la falla:<textarea name='descripcionFalla"+newElementQuantity+"' id='descripcionFalla"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' required>"+inventario[i].corrective.N_FAILURE_DESCRIPTION+"</textarea></td>";
+            newRow = newRow+"<td>Pruebas realizadas: <textarea name='pruebas"+newElementQuantity+"' id='pruebas"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Pruebas realizadas (por favor explicar los detalles) *' required>"+inventario[i].corrective.N_TEST+"</textarea></td>";
+            newRow = newRow+"<td>Elementos necesarios:<textarea name='elementos"+newElementQuantity+"' id='elementos"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Elementos necesarios para solucionar la falla (Listar TODOS los elementos) *' required>"+inventario[i].corrective.N_NEW_ELEMENTS+"</textarea></td>";
+            newRow = newRow+"<td></td><td><p>Tipo de falla: "+inventario[i].corrective.N_FAILURE_CLASSIFICATION+"</p></td>";
+            newRow = newRow+"<td>Ticket CCC:<input  name='cccTicket"+newElementQuantity+"' id='cccTicket"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Ticket CCC *' value='"+inventario[i].corrective.N_CCC+"'></td><td></td><td></td>";
             newRow = newRow+"</tr>";
             var estados = "<td><select onchange='cambioTabla("+newElementQuantity+")' style='font-size:10px' name='selectEstados"+newElementQuantity+"' id='selectEstados"+newElementQuantity+"' aria-describedby='basic-addon1'>";
             estados = estados+"<option value='Averiado'>Averiado</option><option value='Funcional'>Funcional</option><option value='No encontrado'>No encontrado</option>";
@@ -501,7 +505,9 @@ $(window).on('load', function() {
             echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaIT()'> Generar Acta IT</a>";
             echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaAA()'> Generar Acta AA</a>";
           echo "</div></center><br><br><br>";
-
+          echo "<center><div class='btn-group'>";
+            echo "<a class='btn btn-primary btn-sm' target='_blank' href='/AdminZTE/index.php/PDF/exportInventoryExcel?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Exportar Inventario</a>";
+          echo "</div></center><br><br><br>";
 
 
           echo "<div id='formActaIT' name='formActaIT' hidden>";
@@ -629,6 +635,12 @@ $(window).on('load', function() {
              echo "</table>";
             }
 
+            if($_SESSION['id'] == 1023000199 || $_SESSION['id'] == 1014295226){
+              echo "<center><div class='btn-group'>";
+                echo "<br><br><br><a class='btn btn-danger btn-sm' href='/AdminZTE/index.php/Equipment/approveTicket?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Aprobar a Interventoria</a>";
+              echo "</div></center><br><br><br>";
+            }
+
            ?>
 			</article>
 	</div>
@@ -697,12 +709,12 @@ $(window).on('load', function() {
                             echo "<thead>";
                               echo "<tr>";
                                 echo "<th><h1>Eliminar</h1></th>";
-                                echo "<th><h1>Elemento </h1></th>";
+                                echo "<th><h1>Elemento</h1></th>";
                                 echo "<th><h1>Marca</h1></th>";
                                 echo "<th><h1>Modelo</h1></th>";
                                 echo "<th><h1>Serial</h1></th>";
                                 echo "<th><h1>Placa de inventario</h1></th>";
-                                echo "<th><h1>Número de parte</h1></th>";
+                                echo "<th><h1>Número parte</h1></th>";
                                 echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Galeria</h1></th>";

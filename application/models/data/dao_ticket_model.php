@@ -133,6 +133,7 @@
                       $pvd = $this->dao_PVD_model->getPVDbyId($mantenimiento->getIdPVD());
                       $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], "", "", "", "", "", "", "");
                       $ticket->setAlmuerzos($row['Q_ALMUERZOS']);
+                      $ticket->setEstadoI($row['N_ESTADO_I']);
                       $ticket->setEstadia($pvd);
                       $respuesta[$i] = $ticket;
                       $i++;
@@ -239,9 +240,17 @@
             public function insertTech($ticket, $user, $type){
               $dbConnection = new configdb_model();
               $session = $dbConnection->openSession();
-              $sql = "insert into ticket_user (K_IDTICKET, K_IDUSER, N_TYPE)
-                values ('".$ticket."',".$user.",'".$type."');";
-              $session->query($sql);
+              $sql2 = "SELECT COUNT(*) FROM ticket_user WHERE K_IDTICKET = '".$ticket."' and N_TYPE = '".$type."';";
+              $result = $session->query($sql2);
+              $row = $result->fetch_assoc();
+              if ($row['COUNT(*)'] > 0) {
+                $sql3 = "UPDATE ticket_user SET K_IDUSER = ".$user." WHERE K_IDTICKET = '".$ticket."' and N_TYPE = '".$type."';";
+                $session->query($sql3);
+              } else {
+                $sql = "insert into ticket_user (K_IDTICKET, K_IDUSER, N_TYPE)
+                  values ('".$ticket."',".$user.",'".$type."');";
+                $session->query($sql);
+              }
             }
 
             public function ticketQuantity(){
@@ -448,5 +457,15 @@
             }
             return $respuesta;
           }
+
+          public function approveTicket($ticket){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            $sql = "UPDATE ticket SET N_ESTADO_I = 1 WHERE K_IDTICKET = '".$ticket."';";
+            $session->query($sql);
+          }
+
         }
+
+
 ?>

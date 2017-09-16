@@ -161,8 +161,12 @@
     public function updateEquipment($equipment, $PVD){
       $dbConnection = new configdb_model();
       $session = $dbConnection->openSession();
-      $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress().", N_NAME ='".$equipment->getTipo1()."' where K_IDSTUFF = ".$equipment->getId().";";
+      $sql = "UPDATE stuff SET N_ESTADO = '".$equipment->getEstado()."', Q_PROGRESS =".$equipment->getProgress().", N_NAME ='".$equipment->getTipo1()."', N_SERIAL = '".$equipment->getSerial()."', N_PARTE = '".$equipment->getParte()."', N_PLACAINVENTARIO = '".$equipment->getPlaca()."' where K_IDSTUFF = ".$equipment->getId().";";
       $session->query($sql);
+      if($equipment->getZona() != -1){
+        $sql2 = "UPDATE stuff SET K_IDPVD_PLACE = '".$equipment->getZona()."' where K_IDSTUFF = ".$equipment->getId().";";
+      }
+      $session->query($sql2);
     }
 
     public function deteleElementById($id){
@@ -203,6 +207,21 @@
          $row = $result->fetch_assoc();
        }
        return $row;
+     }
+
+     public function getAllStuffPerPVD($idPVD){
+       $dbConnection = new configdb_model();
+       $session = $dbConnection->openSession();
+       $sql = "SELECT * FROM stuff WHERE K_IDPVD = ".$idPVD.";";
+       if ($session != "false"){
+         $result = $session->query($sql);
+         $i = 0;
+         while($row = $result->fetch_assoc()) {
+           $respuesta[$i] = $row;
+           $i++;
+         }
+       }
+       return $respuesta;
      }
   }
 ?>

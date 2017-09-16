@@ -46,7 +46,7 @@
         }
     </script>
     <script>
-        function cloneSelect(p, i, field){
+        function cloneSelect(p, i, field, userName, userLastname){
           var fila = document.getElementById("fila"+p+"/"+i);
           var select = document.getElementById("prueba");
           select.style.visibility = 'hidden';
@@ -58,7 +58,11 @@
           select2.name = i+"-"+field;
           iDiv.appendChild(select2);
           fila.appendChild(iDiv);
-
+          if(userName != "") {
+            $("#"+select2.id).prepend($('<option value="-1" selected>'+userName+" "+userLastname+'</option>'));
+          } else {
+            $("#"+select2.id).prepend($('<option value="-1" selected></option>'));
+          }
         }
 
         function cambiarAtributo(x, f){
@@ -224,7 +228,6 @@
             }
             echo "<h2 class='under'>Mantenimientos Preventivos </h2>";
             echo "<select type='hidden' style='font-size:12px' name='prueba' id='prueba' disabled='disabled'  aria-describedby='basic-addon1'>";
-            echo "<option value='-1'></option>";
             for($j = 0; $j<count($users); $j++){
               echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
             }
@@ -324,26 +327,26 @@
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSIT()."'></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFIT()."'></div>";
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10);</script>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,'','');</script>";
                                     } else {
-                                      echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_LASTNAME']."</div>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_LASTNAME']).");</script>";
                                     }
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11);</script>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,'','');</script>";
                                     } else {
-                                      echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_LASTNAME']."</div>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_LASTNAME']).");</script>";
                                     }
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSAA()."'></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFAA()."'></div>";
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14);</script>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,'','');</script>";
                                     } else {
-                                      echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_LASTNAME']."</div>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_LASTNAME']).");</script>";
                                     }
                                     if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15);</script>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,'','');</script>";
                                     } else {
-                                      echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME']." ".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_LASTNAME']."</div>";
+                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_LASTNAME']).");</script>";
                                     }
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateS()."</div>";
                                     echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateF()."</div>";
@@ -354,12 +357,12 @@
                                     echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option></option><option>Ejecutado</option><option>En Progreso</option><option>Abierto</option><option>Cancelado</option></select></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value=''></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10);</script>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11);</script>";
+                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,'','');</script>";
+                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,'','');</script>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value=''></div>";
                                     echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14);</script>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15);</script>";
+                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,'','');</script>";
+                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,'','');</script>";
                                     echo "<div class='cell'></div>";
                                     echo "<div class='cell'></div>";
                                     echo "<div class='cell'></div>";

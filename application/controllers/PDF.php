@@ -9,6 +9,7 @@ class PDF extends CI_Controller {
         parent::__construct();
         $this->load->model('data/dao_user_model');
         $this->load->model('data/dao_PVD_model');
+        $this->load->model('data/dao_ticket_model');
         $this->load->model('data/dao_inventory_model');
         $this->load->model('data/dao_softwareStuff_model');
         $this->load->model('data/dao_MC_model');
@@ -18,42 +19,45 @@ class PDF extends CI_Controller {
     }
 
     public function exportInventoryExcel(){
-
-
-
-
-
         // filename for download
-        $filename = "website_data_.xls";
+        $filename = "inventario_".$_GET['k_pvd'].".xls";
 
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header("Content-Type: application/vnd.ms-excel");
-        $data = [
-["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
-["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
-["firstname" => "James", "lastname" => "Brown", "age" => 31],
-["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
-["firstname" => "Michael", "lastname" => "Davis", "age" => 43],
-["firstname" => "Sarah", "lastname" => "Miller", "age" => 24],
-["firstname" => "Patrick", "lastname" => "Miller", "age" => 27]
-];
-
-          $flag = false;
-          foreach($data as $row) {
-            if(!$flag) {
-              // display field/column names as first row
-              echo implode("\t", array_keys($row)) . "\r\n";
-              $flag = true;
-            }
-            echo implode("\t", array_values($row)) . "\r\n";
+        $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+        if($_GET['k_tipo'] == "Pl"){
+          $_GET['k_tipo'] = "Plus";
+        }
+        if($_GET['k_tipo'] == "Pi"){
+          $_GET['k_tipo'] = "Piloto";
+        }
+        //$inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+        $inventory = $this->dao_inventory_model->getAllStuffPerPVD($_GET['k_pvd']);
+        $count = 0;
+        for($i = 0; $i < count($inventory); $i++){
+          $marca = $this->dao_inventory_model->getModelbiId($inventory[$i]['K_IDMODEL']);
+          $data[$count] = ["Tipo de equipo" => $marca['sc'], "Marca" => $marca['ma'], "Modelo" => $marca['mo'], "Serial" => $inventory[$i]['N_SERIAL'], "Estado" => $inventory[$i]['N_ESTADO']];
+          $count++;
+        }
+        $flag = false;
+        foreach($data as $row) {
+          if(!$flag) {
+            // display field/column names as first row
+            echo implode("\t", array_keys($row)) . "\r\n";
+            $flag = true;
           }
-            exit;
+          echo implode("\t", array_values($row)) . "\r\n";
+        }
+        exit;
     }
 
     public function crearActaAA(){
       $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       if($_GET['k_tipo'] == "Pl"){
         $_GET['k_tipo'] = "Plus";
+      }
+      if($_GET['k_tipo'] == "Pi"){
+        $_GET['k_tipo'] = "Piloto";
       }
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       if ($respuesta['PVD']->getRegion() == "Zona 1"){
@@ -185,6 +189,9 @@ class PDF extends CI_Controller {
       $pvd = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       if($_GET['k_tipo'] == "Pl"){
         $_GET['k_tipo'] = "Plus";
+      }
+      if($_GET['k_tipo'] == "Pi"){
+        $_GET['k_tipo'] = "Piloto";
       }
       $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
       if ($respuesta['PVD']->getRegion() == "Zona 1"){
@@ -613,18 +620,18 @@ class PDF extends CI_Controller {
               $pdf->Cell(25,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
               $pdf->Cell(25,5,utf8_decode($info['ma']),"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode($info['mo']),"TLR",0,'C');
-              $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,22)),"TLR",0,'C');
-              $pdf->Cell(35,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,32)),"TLR",1,'C');
+              $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,18)),"TLR",0,'C');
+              $pdf->Cell(35,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,26)),"TLR",1,'C');
 
-              for($k = 1; $k<=($sizer/32); $k++){
+              for($k = 1; $k<=($sizer/26); $k++){
                 $pdf->Cell(20,5,'',"LR",0,'C');
                 $pdf->Cell(20,5,'',"LR",0,'C');
                 $pdf->Cell(20,5,'',"LR",0,'C');
                 $pdf->Cell(25,5,'',"LR",0,'C');
                 $pdf->Cell(25,5,'',"LR",0,'C');
                 $pdf->Cell(20,5,'',"LR",0,'C');
-                $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],$k*22,22)),"LR",0,'C');
-                $pdf->Cell(35,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],$k*32,32)),"LR",1,'C');
+                $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],$k*18,18)),"LR",0,'C');
+                $pdf->Cell(35,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],$k*26,26)),"LR",1,'C');
               }
             }
           }
@@ -675,49 +682,50 @@ class PDF extends CI_Controller {
       for($i = 0; $i< count($inventory); $i++){
         for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
           if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
-            $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
-            $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
-            $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
-            if($sizer > $sizer2){
-              $sizer2 = strlen($corrective['N_FAILURE_CLASSIFICATION']);
-            }else {
-              $sizer = strlen($corrective['N_FAILURE_CLASSIFICATION']);
-            }
-            if($sizer2 > $sizer){
-              $sizer = $sizer2;
-            }
-            $pdf->Cell(15,5,'',"TLR",0,'C');
-            $pdf->Cell(20,5,$_GET['k_ticket'],"TLR",0,'C');
-            $pdf->Cell(20,5,$_GET['k_pvd'],"TRL",0,'C');
-            $pdf->Cell(20,5,utf8_decode(explode("T", $mysqlDateTime)[0]),"TLR",0,'C');
-            $pdf->Cell(25,5,utf8_decode($_POST['nombreTec']),"TLR",0,'C');
-            $pdf->Cell(20,5,utf8_decode(substr($info['sc'],0,20)),"TLR",0,'C');
-            $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
-            $pdf->Cell(20,5,utf8_decode($info['ma']),"TLR",0,'C');
-            $pdf->Cell(20,5,utf8_decode($info['mo']),"TLR",0,'C');
-            $pdf->Cell(20,5,utf8_decode($inventory[$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']),"TLR",0,'C');
-            $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,20)),"TLR",0,'C');
-            $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],0,20)),"TLR",0,'C');
-            $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,20)),"TLR",1,'C');
+            if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 156 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 155 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 157 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 158 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 159 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 160 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 161 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 162 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 163 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 164 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 165 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 166 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 167 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 168 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 169 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 170 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 171 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 172 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 173 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 174 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 175 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 176 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 177 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 178 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 179){
+              $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
+              $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
+              $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
+              $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
+              if($sizer > $sizer2){
+                $sizer2 = strlen($corrective['N_FAILURE_CLASSIFICATION']);
+              }else {
+                $sizer = strlen($corrective['N_FAILURE_CLASSIFICATION']);
+              }
+              if($sizer2 > $sizer){
+                $sizer = $sizer2;
+              }
+              $pdf->Cell(15,5,$corrective['N_CCC'],"TLR",0,'C');
+              $pdf->Cell(20,5,$_GET['k_ticket'],"TLR",0,'C');
+              $pdf->Cell(20,5,$_GET['k_pvd'],"TRL",0,'C');
+              $pdf->Cell(20,5,utf8_decode(explode("T", $mysqlDateTime)[0]),"TLR",0,'C');
+              $pdf->Cell(25,5,utf8_decode($_POST['nombreTec']),"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode(substr($info['sc'],0,16)),"TLR",0,'C');
+              $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode($info['ma']),"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode(substr($info['mo'],0,16)),"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode($inventory[$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']),"TLR",0,'C');
+              $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,16)),"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],0,18)),"TLR",0,'C');
+              $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,16)),"TLR",1,'C');
 
 
-            for($k = 1; $k<=($sizer/20); $k++){
-              $pdf->Cell(15,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(25,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,utf8_decode(substr($info['sc'],($k)*20,20)),"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(20,5,'',"LR",0,'C');
-              $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],$k*20,20)),"LR",0,'C');
-              $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],$k*20,20)),"LR",0,'C');
-              $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],$k*20,20)),"LR",1,'C');
+              for($k = 1; $k<=($sizer/16); $k++){
+                $pdf->Cell(15,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(25,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,utf8_decode(substr($info['sc'],($k)*16,16)),"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(20,5,utf8_decode(substr($info['mo'],($k)*16,16)),"LR",0,'C');
+                $pdf->Cell(20,5,'',"LR",0,'C');
+                $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],$k*16,16)),"LR",0,'C');
+                $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],$k*18,18)),"LR",0,'C');
+                $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],$k*16,16)),"LR",1,'C');
+              }
             }
-
           }
         }
       }
@@ -725,6 +733,8 @@ class PDF extends CI_Controller {
     }
 
     public function fillHeaderTable($pdf, $pvd, $date){
+      $ticket = $_GET['k_ticket'];
+      $ticket = $this->dao_ticket_model->getTicketByID($ticket);
       //Encabezado
       $pdf->Cell(275,18,'Informe de Mantenimiento Preventivo IT',1,1,'C');
       //Salto de linea
@@ -746,8 +756,10 @@ class PDF extends CI_Controller {
       //Tercera linea de la tabla
       $pdf->Cell(40,5,utf8_decode('Dirección'),1,0,'C');
       $pdf->Cell(115,5,utf8_decode($pvd->getDireccion()),1,0,'C');
-      $pdf->Cell(30,5,'Fecha',1,0,'C');
-      $pdf->Cell(90,5,$date,1,1,'C');
+      $pdf->Cell(30,5,'Fecha Inicio',1,0,'C');
+      $pdf->Cell(30,5,$ticket->getDateSIT(),1,0,'C');
+      $pdf->Cell(30,5,'Fecha Fin',1,0,'C');
+      $pdf->Cell(30,5,$date,1,1,'C');
       //Cuarta linea de la tabla
       $pdf->Cell(40,5,'Administrador',1,0,'C');
       $pdf->Cell(95,5,$_POST['nombreAdmin'],1,0,'C');

@@ -712,3 +712,4 @@ ALTER TABLE ticket_corrective_maintenance add N_CCC  varchar(50) not null;
 ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;
 ALTER TABLE stuff add N_OBSERVATION varchar(200);
 ALTER TABLE ticket_ccc add N_TIPO varchar(3);
+ALTER TABLE ticket add N_ESTADO_I varchar(3);

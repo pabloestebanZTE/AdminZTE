@@ -134,10 +134,10 @@
                           echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
-                        for ($i = 1; $i <= count($tickets); $i++){
-                          echo "<tr>";
-                            if(isset($tickets[$i])){
-                              if($tickets[$i]->getStatus() == "Ejecutado"){
+                        for ($i = 0; $i <= count($tickets); $i++){
+                          if(isset($tickets[$i])){
+                            if($tickets[$i]->getEstadoI() == 1){
+                              echo "<tr>";
                                 echo "<td><a href='/AdminZTE/index.php/Equipment/inventoryPVD?k_fase=".$tickets[$i]->getEstadia()->getFase()."&k_tipo=".$tickets[$i]->getEstadia()->getTipologia()."&k_pvd=".$tickets[$i]->getEstadia()->getID()."&k_ticket=".$tickets[$i]->getId()."'>".$tickets[$i]->getId()."</a></td>";
                                 echo "<td>".$tickets[$i]->getEstadia()->getRegion()."</td>";
                                 echo "<td>".$tickets[$i]->getEstadia()->getId()."</td>";
@@ -145,9 +145,9 @@
                                 echo "<td>".explode("-",$tickets[$i]->getDateS())[0]."</td>";
                                 $dateObj = DateTime::createFromFormat('!m', explode("-",$tickets[$i]->getDateS())[1]);
                                 echo "<td>".$dateObj->format('F')."</td>";
-                              }
+                              echo "</tr>";
                             }
-                          echo "</tr>";
+                          }
                         }
                         echo "</tbody>";
                       echo "</table>";

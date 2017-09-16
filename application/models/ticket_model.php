@@ -19,11 +19,15 @@
 		public $observacionesFinal;
 		public $estadia;
 		public $almuerzos;
-
+		public $estadoI;
 
 		public function __construct(){
 
 		}
+
+		public function getEstadoI(){return $this->estadoI;}
+
+		public function setEstadoI($estadoI){$this->estadoI = $estadoI;}
 
 		public function getId(){return $this->id;}
 

@@ -249,11 +249,14 @@
                         echo "<table id='table3-".$p."'>";
                           echo "<thead>  <tr>";
                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['Titulos']); $i++){
+                            if ($i == 7){
+                              echo "<th>Estado IT</th>";
+                              echo "<th>Estado AA</th>";
+                            }
                             echo "<th>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</th>";
                           }
                           echo "<tr></thead><tbody>";
                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
-                            echo "<tr>";
                               for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
                                 if ($j == 6){
                                   for($l = 0; $l < count($PVDs); $l++){
@@ -270,8 +273,11 @@
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDuracion()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
-
                                       }
+                                      print_r($PVDs[$l]);
+                                      echo "<br><br>";
+                                      echo "<td>Estado IT</td>";
+                                      echo "<td>Estado AA</td>";
                                     }
                                   }
                                 } else {

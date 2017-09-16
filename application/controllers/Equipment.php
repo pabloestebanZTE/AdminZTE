@@ -28,6 +28,7 @@ class Equipment extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('data/dao_user_model');
+        $this->load->model('data/dao_ticket_model');
         $this->load->model('data/dao_PVD_model');
         $this->load->model('data/dao_inventory_model');
         $this->load->model('data/dao_softwareStuff_model');
@@ -68,6 +69,9 @@ class Equipment extends CI_Controller {
       $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       if($_GET['k_tipo'] == "Pl"){
         $_GET['k_tipo'] = "Plus";
+      }
+      if($_GET['k_tipo'] == "Pi"){
+        $_GET['k_tipo'] = "Piloto";
       }
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
@@ -147,7 +151,6 @@ class Equipment extends CI_Controller {
     }
 
     public function updateInventory(){
-    //  print_r($_POST);
       $cantidadElementos = $_POST['Elements'];
       for($i = 0; $i < $cantidadElementos; $i++){
         $equipment = new equipment_model;
@@ -205,6 +208,11 @@ class Equipment extends CI_Controller {
       for($i = 0; $i < $_POST['Elements']; $i++){
         $this->dao_MC_model->editCCC($_POST['idCCC'.$i], $_POST['select'.$i], $_POST['observciones'.$i]);
       }
+      $this->inventoryPVD();
+    }
+
+    public function approveTicket(){
+      $this->dao_ticket_model->approveTicket($_GET['k_ticket']);
       $this->inventoryPVD();
     }
 }
