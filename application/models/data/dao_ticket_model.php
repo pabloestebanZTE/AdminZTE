@@ -52,6 +52,7 @@
                       $row['I_DURATION'] = "";
                     }
                     $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], $row['D_STARTDATEIT'], $row['D_FINISHDATEIT'], $row['D_STARTDATEAA'], $row['D_FINISHDATEAA'], $users, $row['N_COLOR'], $row['K_OBSERVATION_I']);
+                    $ticket->setObservacionesF($row['N_OBSERVATION_F']);
                     $respuesta[$i] = $ticket;
                     $i++;
                 }
@@ -358,6 +359,10 @@
                 }
                 $session->query($sql2);
                 $session->query($sql3);
+                if($ticket->getAlmuerzos() != ""){
+                  $sql5 = "UPDATE ticket_others SET K_IDTICKETCC = '".$ticket->getAlmuerzos()."' WHERE K_IDTICKETOTHERS = '".$ticket->getId().$row['count(K_IDTICKETOTHERS)']."';";
+                  $session->query($sql5);
+                }
                 $sql4 = "";
                 for($q = 0; $q < count($ticket->getTechs()); $q++){
                   $sql4 = "INSERT INTO ticketo_user (K_IDTICKETO, K_IDUSER)
@@ -465,7 +470,22 @@
             $session->query($sql);
           }
 
+          public function updateProgress($progress, $ticket){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            $sql = "UPDATE ticket SET Q_ESTADIA = ".explode(".",$progress)[0]." WHERE K_IDTICKET = '".$ticket."';";
+            $session->query($sql);
+          }
+
+          public function getProgress($ticket){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            $sql = "SELECT Q_ESTADIA FROM ticket WHERE K_IDTICKET = '".$ticket."';";
+            if ($session != "false"){
+              $result = $session->query($sql);
+              $row = $result->fetch_assoc();
+            }
+            return $row['Q_ESTADIA'];
+          }
         }
-
-
 ?>

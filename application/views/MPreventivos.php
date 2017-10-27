@@ -29,7 +29,21 @@
     <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
     <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
     <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
+    <style type="text/css">
 
+
+      /* HOVER STYLES */
+      .pop-up {
+        display: none;
+        position: absolute;
+        width: 280px;
+        padding: 10px;
+        background: #eeeeee;
+        color: #000000;
+        border: 1px solid #1a1a1a;
+        font-size: 90%;
+      }
+    </style>
     <script type="text/javascript" charset="utf-8">
         function showMessage(){
             var a = "<?php echo $msg[0]; ?>";
@@ -100,7 +114,28 @@
           $('#myModal').modal('show');
         }
     </script>
+    <script type="text/javascript">
+      function showExtras(l){
+        var moveLeft = -150;
+        var moveDown = -330;
+        try {
+          var selectEstado = document.getElementById("pop-up"+l);
+          selectEstado.style.display = 'block';
+        } catch (e) {
+        }
 
+      }
+      function hideExtras(l){
+        var moveLeft = -150;
+        var moveDown = -330;
+
+        try {
+          var selectEstado = document.getElementById("pop-up"+l);
+          selectEstado.style.display = 'none';
+        } catch (e) {
+        }
+      }
+    </script>
   </head>
 
   <body id="page4">
@@ -191,6 +226,7 @@
                   $meses[7] = 'Julio';
                   $meses[8] = 'Agosto';
                   $meses[9] = 'Septiembre';
+                  $meses[10] = 'Octubre';
 
                   echo "<br><br><br>";
                   echo "<h2 class='under'>"."Resumen mensual de estados por Ticket".$meses[$p]."</h2>";
@@ -253,8 +289,16 @@
                               echo "<th>Estado IT</th>";
                               echo "<th>Estado AA</th>";
                             }
-                            echo "<th>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</th>";
+                            if ($i != 5 && $i != 1){
+                              if($i == 2){
+                                echo "<th>Reg.</th>";
+                              } else {
+                                echo "<th>".$tablas[$meses[$p]]['tabla3']['Titulos'][$i]."</th>";
+                              }
+                            }
                           }
+                          echo "<th>Progreso</th>";
+
                           echo "<tr></thead><tbody>";
                           for ($i = 0; $i<count($tablas[$meses[$p]]['tabla3']['lineas']); $i++){
                               for ($j = 0; $j<count($tablas[$meses[$p]]['tabla3']['lineas'][$i]); $j++){
@@ -262,22 +306,76 @@
                                   for($l = 0; $l < count($PVDs); $l++){
                                     if($tablas[$meses[$p]]['tabla3']['lineas'][$i][4] == $PVDs[$l]->getId()){
                                       if($p < 8){
-                                        echo "<td><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+
+                                        if ($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getObservacionesF() != ""){
+                                          echo $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getObservacionesF();
+                                            echo "<div id='pop-up".$l."' class='pop-up'>";
+                                              echo "<h3>Observaciones</h3>";
+                                              echo "<p>";
+                                                echo $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getObservacionesF();
+                                              echo "</p>";
+                                            echo "</div>";
+                                        }
+
+                                        echo "<td><a onmouseout='hideExtras(".json_encode($l).")' onmouseover='showExtras(".json_encode($l).")' id='trigger' onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
                                         json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateS()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDuracion()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT() == "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT() == ""){
+                                          echo "<td>Sin iniciar</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT() != "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT() == ""){
+                                          echo "<td>En progreso</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSIT() != "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFIT() != ""){
+                                          echo "<td>Finalizado</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA() == "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA() == ""){
+                                          echo "<td>Sin iniciar</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA() != "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA() == ""){
+                                          echo "<td>En progreso</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateSAA() != "" && $PVDs[$l]->getMaintenance()[0]->getTicket()[0]->getDateFAA() != ""){
+                                          echo "<td>Finalizado</td>";
+                                        }
                                       } else {
-                                        echo "<td><a onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
+
+                                        if ($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getObservacionesF() != ""){
+                                          echo $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getObservacionesF();
+                                            echo "<div id='pop-up".$l."' class='pop-up'>";
+                                              echo "<h3>Observaciones</h3>";
+                                              echo "<p>";
+                                                echo $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getObservacionesF();
+                                              echo "</p>";
+                                            echo "</div>";
+                                        }
+
+                                        echo "<td><a onmouseout='hideExtras(".json_encode($l).")' onmouseover='showExtras(".json_encode($l).")' onclick='modalEditar(".json_encode($PVDs[$l]->getId()).",".json_encode($PVDs[$l]->getCity()).",".json_encode($PVDs[$l]->getDepartment()).",".json_encode($PVDs[$l]->getRegion()).",".json_encode($PVDs[$l]->getDireccion()).",".
                                         json_encode($PVDs[$l]->getTipologia()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getId()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getStatus()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateS()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateF()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDuracion()).",".
                                         json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getColor()).",".json_encode($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getTechs()).")'>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</a></td>";
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT() == "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT() == ""){
+                                          echo "<td>Sin iniciar</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT() != "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT() == ""){
+                                          echo "<td>En progreso</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSIT() != "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFIT() != ""){
+                                          echo "<td>Finalizado</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA() == "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA() == ""){
+                                          echo "<td>Sin iniciar</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA() != "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA() == ""){
+                                          echo "<td>En progreso</td>";
+                                        }
+                                        if($PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateSAA() != "" && $PVDs[$l]->getMaintenance()[1]->getTicket()[0]->getDateFAA() != ""){
+                                          echo "<td>Finalizado</td>";
+                                        }
                                       }
-                                      print_r($PVDs[$l]);
-                                      echo "<br><br>";
-                                      echo "<td>Estado IT</td>";
-                                      echo "<td>Estado AA</td>";
                                     }
                                   }
                                 } else {
@@ -288,10 +386,18 @@
                                       echo "<td><div style='width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF; border: solid black 1px;'>&nbsp;</div></td>";
                                     }
                                   }else{
-                                    echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</td>";
+                                    if($j == 5 || $j == 1){
+                                    } else {
+                                      if($j == 2){
+                                        echo "<td>".explode(' ',$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j])[1]."</td>";
+                                      }else {
+                                        echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][$j]."</td>";
+                                      }
+                                    }
                                   }
                                 }
                               }
+                            echo "<td>".$tablas[$meses[$p]]['tabla3']['lineas'][$i][5]."</td>";
                             echo "</tr>";
                           }
                         echo "</tbody></table>";
@@ -447,7 +553,6 @@
     <script data-config>
       var filtersConfig = {
         col_0: "none",
-        col_1: "none",
         col_10: "none",
         base_path: '/AdminZTE/assets/css/',
         filters_row_index: 1,
@@ -475,6 +580,8 @@
         tf8.init();
         var tf9 = new TableFilter('table3-9', filtersConfig);
         tf9.init();
+        var tf10 = new TableFilter('table3-10', filtersConfig);
+        tf10.init();
     </script>
   </body>
 </html>

@@ -88,5 +88,8 @@
                 $respuesta = "No se pudo actualizar";
               }
             }
+
+            public function getAllowancesPerMonth($month){
+            }
         }
 ?>

@@ -101,7 +101,12 @@ class Ticket extends CI_Controller {
         }
         $pvd = explode("/", $_POST['pvd'])[0];
         $ticketO = new ticket_model;
-        $ticketO = $ticketO->createTicket("TO-",$pvd,$_POST['tipo'], $_POST['date'], $_POST['dateF'], $_POST['duracion'], "", "", "", "", $users, "", $_POST['Observaciones']);
+        if($_POST['tipo'] != 7){
+          $ticketO = $ticketO->createTicket("TO-",$pvd,$_POST['tipo'], $_POST['date'], $_POST['dateF'], $_POST['duracion'], "", "", "", "", $users, "", $_POST['Observaciones']);
+        } else {
+          $ticketO = $ticketO->createTicket("TC-",$pvd,$_POST['tipo'], $_POST['date'], $_POST['dateF'], $_POST['duracion'], "", "", "", "", $users, "", $_POST['Observaciones']);
+          $ticketO->setAlmuerzos($_POST['fieldCCC']);
+        }
         $duration = $ticketO->calculateDuration();
         $ticketO->setDuracion($duration);
         $ticket = $this->dao_ticket_model->insertOtherTicket($ticketO);

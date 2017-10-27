@@ -280,6 +280,9 @@ class Mantenimientos extends CI_Controller {
       $tablas['Septiembre']['tabla1'] = $this->resumenPreventivosMes($MP, 'Septiembre');
       $tablas['Septiembre']['tabla2'] = $this->avanceDepartamentos($MP, 'Septiembre');
       $tablas['Septiembre']['tabla3'] = $this->detalleTickets($MP, 'Septiembre');
+      $tablas['Octubre']['tabla1'] = $this->resumenPreventivosMes($MP, 'Octubre');
+      $tablas['Octubre']['tabla2'] = $this->avanceDepartamentos($MP, 'Octubre');
+      $tablas['Octubre']['tabla3'] = $this->detalleTickets($MP, 'Octubre');
       return $tablas;
     }
 
@@ -374,7 +377,7 @@ class Mantenimientos extends CI_Controller {
             $tabla3['lineas'][$contador][7] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getStatus();
             $tabla3['lineas'][$contador][6] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getId();
             $tabla3['lineas'][$contador][4] = $MP[$mes][$i]['idPVD'];
-            $tabla3['lineas'][$contador][5] = $MP[$mes][$i]['tipologia'];
+            $tabla3['lineas'][$contador][5] = $this->dao_ticket_model->getProgress($MP[$mes][$i]['mantenimiento']->getTicket()[0]->getId());
             $tabla3['lineas'][$contador][3] = $MP[$mes][$i]['departamento']." / ".$MP[$mes][$i]['ciudad'];
             $tabla3['lineas'][$contador][0] = $MP[$mes][$i]['mantenimiento']->getTicket()[0]->getColor();
             $contador++;
@@ -525,7 +528,12 @@ class Mantenimientos extends CI_Controller {
           $MP['Septiembre']['Zona']=$this->reconocerZona($region, $MP['Septiembre']['Zona'], $mantenimiento);
           break;
         case 10:
-          $MP['Octubre'][$MP['Octubre']['contador']]= $mantenimiento;
+          $MP['Octubre'][$MP['Octubre']['contador']]['mantenimiento']= $mantenimiento;
+          $MP['Octubre'][$MP['Octubre']['contador']]['ciudad']= $city;
+          $MP['Octubre'][$MP['Octubre']['contador']]['departamento']= $department;
+          $MP['Octubre'][$MP['Octubre']['contador']]['idPVD']= $id;
+          $MP['Octubre'][$MP['Octubre']['contador']]['region']= $regionPVD;
+          $MP['Octubre'][$MP['Octubre']['contador']]['tipologia']= $tipologia;
           $MP['Octubre']['contador']++;
           $MP['Octubre']['Zona']=$this->reconocerZona($region, $MP['Octubre']['Zona'], $mantenimiento);
           break;
@@ -595,6 +603,7 @@ class Mantenimientos extends CI_Controller {
       $MP['Julio']['contador']=0;
       $MP['Agosto']['contador']=0;
       $MP['Septiembre']['contador']=0;
+      $MP['Octubre']['contador']=0;
 
       $MP['Enero']['Zona']['Zona1']['Cantidad']=0;
       $MP['Enero']['Zona']['Zona4']['Cantidad']=0;
@@ -614,6 +623,8 @@ class Mantenimientos extends CI_Controller {
       $MP['Agosto']['Zona']['Zona4']['Cantidad']=0;
       $MP['Septiembre']['Zona']['Zona1']['Cantidad']=0;
       $MP['Septiembre']['Zona']['Zona4']['Cantidad']=0;
+      $MP['Octubre']['Zona']['Zona1']['Cantidad']=0;
+      $MP['Octubre']['Zona']['Zona4']['Cantidad']=0;
 
       $MP['Enero']['Zona']['Zona1']['Estado']['Abierto']=0;
       $MP['Enero']['Zona']['Zona1']['Estado']['Ejecutado']=0;
@@ -669,6 +680,12 @@ class Mantenimientos extends CI_Controller {
       $MP['Septiembre']['Zona']['Zona4']['Estado']['Abierto']=0;
       $MP['Septiembre']['Zona']['Zona4']['Estado']['Ejecutado']=0;
       $MP['Septiembre']['Zona']['Zona4']['Estado']['Progreso']=0;
+      $MP['Octubre']['Zona']['Zona1']['Estado']['Abierto']=0;
+      $MP['Octubre']['Zona']['Zona1']['Estado']['Ejecutado']=0;
+      $MP['Octubre']['Zona']['Zona1']['Estado']['Progreso']=0;
+      $MP['Octubre']['Zona']['Zona4']['Estado']['Abierto']=0;
+      $MP['Octubre']['Zona']['Zona4']['Estado']['Ejecutado']=0;
+      $MP['Octubre']['Zona']['Zona4']['Estado']['Progreso']=0;
       return $MP;
     }
 }

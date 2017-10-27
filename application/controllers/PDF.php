@@ -18,6 +18,120 @@ class PDF extends CI_Controller {
         $this->load->model('correctiveM_model');
     }
 
+
+    public function createFacturationReport(){
+
+      $filename = "inventario_".$_GET['k_pvd'].".xls";
+
+      header("Content-Disposition: attachment; filename=\"$filename\"");
+      header("Content-Type: application/vnd.ms-excel");
+      $respuesta['ticket'] = $_GET['k_ticket'];
+
+      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
+      if($_GET['k_tipo'] == "Pl"){
+        $_GET['k_tipo'] = "Plus";
+      }
+      if($_GET['k_tipo'] == "Pi"){
+        $_GET['k_tipo'] = "Piloto";
+      }
+      $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);
+      if ($respuesta['PVD']->getRegion() == "Zona 1"){
+        $stirngPrecio = "V_PRICE_R1";
+      }
+      if ($respuesta['PVD']->getRegion() == "Zona 4"){
+        $stirngPrecio = "V_PRICE_R4";
+      }
+
+      for($i = 0; $i< count($respuesta['inventory']); $i++){
+        $respuesta['inventory'][$i]['valorT'] = 0;
+        $respuesta['inventory'][$i]['funcional'] = 0;
+        $respuesta['inventory'][$i]['averiado'] = 0;
+        $respuesta['inventory'][$i]['NE'] = 0;
+        $respuesta['inventory'][$i]['avance'] = 0;
+        $valoresParciales = array();
+        $p = 0;
+        for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Antes del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Durante el Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
+            $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
+          }
+          $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro Fotografico"."/".$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']."/"."?region=us-west-2&tab=overview";
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro%20Fotografico%20Correctivos/?region=us-west-2&tab=overview";
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "No encontrado"){
+            $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro%20Fotografico%20No%20Encontrados/?region=us-west-2&tab=overview";
+          }
+          if (isset($respuesta['inventory'][$i]['inventario'][$j]['url'])){
+            $respuesta['inventory'][$i]['inventario'][$j]['url'] = $url;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+            if($respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio] > 0){
+              $respuesta['inventory'][$i]['funcional']++;
+            }
+            $respuesta['inventory'][$i]['price'] = $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
+            if($respuesta['inventory'][$i]['inventario'][$j]['Q_PROGRESS'] == 1){
+              $respuesta['inventory'][$i]['valorT'] += $respuesta['inventory'][$i]['inventario'][$j][$stirngPrecio];
+              $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 100;
+
+            }
+            $valoresParciales[$p] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'];
+            $p++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            $respuesta['inventory'][$i]['averiado']++;
+          }
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "No encontrado"){
+            $respuesta['inventory'][$i]['NE']++;
+          }
+        }
+        if (count($valoresParciales) > 0){
+          $porcentaje  = 100 / count($valoresParciales);
+        }
+        for($p = 0; $p<count($valoresParciales); $p++){
+          $respuesta['inventory'][$i]['avance'] += $porcentaje / 100 * $valoresParciales[$p];
+        }
+         $respuesta['inventory'][$i]['avance'] = number_format((float) $respuesta['inventory'][$i]['avance'], 2, '.', '');
+         $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
+      }
+
+      // for ($i = 0; $i < count($respuesta['inventory']); $i++){
+      //   echo "<tr>";
+      //     echo $respuesta['inventory'][$i]['N_NAME']." ";
+      //     echo $respuesta['inventory'][$i]['price']." ";
+      //     echo $respuesta['inventory'][$i]['I_QUANTITY']." ";
+      //     echo $respuesta['inventory'][$i]['funcional']." ";
+      //     echo $respuesta['inventory'][$i]['averiado']." ";
+      //     echo $respuesta['inventory'][$i]['NE']." ";
+      //     echo $respuesta['inventory'][$i]['valorT']." ";
+      //   echo "</br></br>";
+      // }
+
+      for($i = 0; $i < count($respuesta['inventory']); $i++){
+        $data[$count] = ["Item" => $respuesta['inventory'][$i]['N_NAME'], "Unidad" => "UN", "Valor unitario incluido IVA" => $respuesta['inventory'][$i]['price'], "Cantidad" => $respuesta['inventory'][$i]['I_QUANTITY'], "Valor Total" => $respuesta['inventory'][$i]['valorT']];
+        $count++;
+      }
+
+      $flag = false;
+      foreach($data as $row) {
+        if(!$flag) {
+          // display field/column names as first row
+          echo implode("\t", array_keys($row)) . "\r\n";
+          $flag = true;
+        }
+        echo implode("\t", array_values($row)) . "\r\n";
+      }
+      exit;
+    }
+
     public function exportInventoryExcel(){
         // filename for download
         $filename = "inventario_".$_GET['k_pvd'].".xls";
@@ -31,12 +145,12 @@ class PDF extends CI_Controller {
         if($_GET['k_tipo'] == "Pi"){
           $_GET['k_tipo'] = "Piloto";
         }
-        //$inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
-        $inventory = $this->dao_inventory_model->getAllStuffPerPVD($_GET['k_pvd']);
+        //$respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+        $respuesta['inventory'] = $this->dao_inventory_model->getAllStuffPerPVD($_GET['k_pvd']);
         $count = 0;
-        for($i = 0; $i < count($inventory); $i++){
-          $marca = $this->dao_inventory_model->getModelbiId($inventory[$i]['K_IDMODEL']);
-          $data[$count] = ["Tipo de equipo" => $marca['sc'], "Marca" => $marca['ma'], "Modelo" => $marca['mo'], "Serial" => $inventory[$i]['N_SERIAL'], "Estado" => $inventory[$i]['N_ESTADO']];
+        for($i = 0; $i < count($respuesta['inventory']); $i++){
+          $marca = $this->dao_inventory_model->getModelbiId($respuesta['inventory'][$i]['K_IDMODEL']);
+          $data[$count] = ["Tipo de equipo" => $marca['sc'], "Marca" => $marca['ma'], "Modelo" => $marca['mo'], "Serial" => $respuesta['inventory'][$i]['N_SERIAL'], "Estado" => $respuesta['inventory'][$i]['N_ESTADO']];
           $count++;
         }
         $flag = false;
@@ -49,6 +163,14 @@ class PDF extends CI_Controller {
           echo implode("\t", array_values($row)) . "\r\n";
         }
         exit;
+    }
+
+    public function exportAllowancesExcel(){
+      $filename = "reportAllowances.xls";
+      header("Content-Disposition: attachment; filename=\"$filename\"");
+      header("Content-Type: application/vnd.ms-excel");
+      $table = $this->dao_maintenance_model->getAllowancesPerMonth($_GET['month']);
+
     }
 
     public function crearActaAA(){
@@ -117,7 +239,7 @@ class PDF extends CI_Controller {
          $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
       }
 
-      $inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
     //  print_r($respuesta['inventory']);
       $timezone = date_default_timezone_get();
       $date = date('m/d/Y', time());
@@ -126,7 +248,7 @@ class PDF extends CI_Controller {
       $pdf->AddPage();
       $pdf->SetFont('Arial','B',9);
       $pdf->Image('http://images.dailytech.com/nimage/34372_ZTE_Tomorrow_Never_Waits_FP_Wide.png',165,12,33);
-      $pdf->Image('https://image.ibb.co/frtUS5/logo_consorcio.png',10,12,38);
+      $pdf->Image('https://image.ibb.co/e8nBBG/pasted_image_0.png',13,14,38);
 
       //LLenar header
       $this->fillHeaderTableAA($pdf, $pvd, $date);
@@ -171,10 +293,10 @@ class PDF extends CI_Controller {
       $this->fillAbstractPVDAA($pdf, $respuesta['inventory']);
 
       //Llenar tabla de correctivos
-      $this->fillCorrectiveTableAA($pdf, $inventory);
+      $this->fillCorrectiveTableAA($pdf, $respuesta['inventory']);
 
       //Llenar tabla de correctivos
-      $this->fillFunctionalTableAA($pdf, $inventory);
+      $this->fillFunctionalTableAA($pdf, $respuesta['inventory']);
 
       //Lenar firmas
       $this->fillCCAA($pdf);
@@ -251,7 +373,7 @@ class PDF extends CI_Controller {
          $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
       }
 
-      $inventory = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
+      $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
     //  print_r($respuesta['inventory']);
       $timezone = date_default_timezone_get();
       $date = date('m/d/Y', time());
@@ -260,7 +382,7 @@ class PDF extends CI_Controller {
       $pdf->AddPage();
       $pdf->SetFont('Arial','B',9);
       $pdf->Image('http://images.dailytech.com/nimage/34372_ZTE_Tomorrow_Never_Waits_FP_Wide.png',250,12,33);
-      $pdf->Image('https://image.ibb.co/frtUS5/logo_consorcio.png',15,12,33);
+      $pdf->Image('https://image.ibb.co/e8nBBG/pasted_image_0.png',20,15,33);
 
       //LLenar header
       $this->fillHeaderTable($pdf, $pvd, $date);
@@ -274,7 +396,7 @@ class PDF extends CI_Controller {
       $pdf->Cell(275,5,utf8_decode('El resultado del mantenimiento se describe a continuación:'),0,1,'L');
 
       //Llenar tabla de correctivos
-      $this->fillCorrectiveTable($pdf, $inventory);
+      $this->fillCorrectiveTable($pdf, $respuesta['inventory']);
 
       //Lenar tabla de velocidad
       $this->fillSpeedTable($pdf);
@@ -413,13 +535,13 @@ class PDF extends CI_Controller {
       $pdf->Cell(30,5,'NO ENCONTRADO',1,1,'C');
       $pdf->SetFont('Arial','',7);
 
-      for ($i = 0; $i < count($inventory); $i++){
-        if ($inventory[$i]['N_NAME'] != "UPS" && $inventory[$i]['N_NAME'] != "Redes electricas" && $inventory[$i]['N_NAME'] != "Aire acondicionado"){
-          $pdf->Cell(155,5,utf8_decode($inventory[$i]['N_NAME']),1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['I_QUANTITY'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['funcional'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['averiado'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['NE'],1,1,'C');
+      for ($i = 0; $i < count($respuesta['inventory']); $i++){
+        if ($respuesta['inventory'][$i]['N_NAME'] != "UPS" && $respuesta['inventory'][$i]['N_NAME'] != "Redes electricas" && $respuesta['inventory'][$i]['N_NAME'] != "Aire acondicionado"){
+          $pdf->Cell(155,5,utf8_decode($respuesta['inventory'][$i]['N_NAME']),1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['I_QUANTITY'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['funcional'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['averiado'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['NE'],1,1,'C');
         }
       }
     }
@@ -438,13 +560,13 @@ class PDF extends CI_Controller {
       $pdf->Cell(30,5,'NO ENCONTRADO',1,1,'C');
       $pdf->SetFont('Arial','',7);
 
-      for ($i = 0; $i < count($inventory); $i++){
-        if ($inventory[$i]['N_NAME'] == "UPS" || $inventory[$i]['N_NAME'] == "Redes electricas" || $inventory[$i]['N_NAME'] == "Aire acondicionado"){
-          $pdf->Cell(70,5,utf8_decode($inventory[$i]['N_NAME']),1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['I_QUANTITY'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['funcional'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['averiado'],1,0,'C');
-          $pdf->Cell(30,5,$inventory[$i]['NE'],1,1,'C');
+      for ($i = 0; $i < count($respuesta['inventory']); $i++){
+        if ($respuesta['inventory'][$i]['N_NAME'] == "UPS" || $respuesta['inventory'][$i]['N_NAME'] == "Redes electricas" || $respuesta['inventory'][$i]['N_NAME'] == "Aire acondicionado"){
+          $pdf->Cell(70,5,utf8_decode($respuesta['inventory'][$i]['N_NAME']),1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['I_QUANTITY'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['funcional'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['averiado'],1,0,'C');
+          $pdf->Cell(30,5,$respuesta['inventory'][$i]['NE'],1,1,'C');
         }
       }
     }
@@ -484,17 +606,17 @@ class PDF extends CI_Controller {
         $pdf->Cell(35,5,'MODELO',"TLR",1,'C');
         $pdf->SetFont('Arial','',6);
 
-        for($i = 0; $i< count($inventory); $i++){
-          for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
-            if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
-              if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216){
-                $cateforia = $this->dao_inventory_model->getStuffCatById($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY']);
+        for($i = 0; $i< count($respuesta['inventory']); $i++){
+          for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+            if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+              if($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216){
+                $cateforia = $this->dao_inventory_model->getStuffCatById($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY']);
 
-                $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
+                $info = $this->dao_inventory_model->getModelbiId($respuesta['inventory'][$i]['inventario'][$j]['K_IDMODEL']);
 
                 $pdf->Cell(40,5,$_GET['k_ticket'],"TLR",0,'C');
                 $pdf->Cell(140,5,utf8_decode($cateforia['N_NAME']),"TLR",0,'C');
-                $pdf->Cell(30,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+                $pdf->Cell(30,5,$respuesta['inventory'][$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
                 $pdf->Cell(30,5,utf8_decode($info['ma']),"TLR",0,'C');
                 $pdf->Cell(35,5,utf8_decode($info['mo']),"TLR",1,'C');
               }
@@ -525,14 +647,14 @@ class PDF extends CI_Controller {
         $pdf->Cell(20,5,'MODELO',"TLR",1,'C');
         $pdf->SetFont('Arial','',6);
 
-        for($i = 0; $i< count($inventory); $i++){
-          for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
-            if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
-              if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 211 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 212 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 213 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 214 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 215 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 216){
-                $cateforia = $this->dao_inventory_model->getStuffCatById($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY']);
+        for($i = 0; $i< count($respuesta['inventory']); $i++){
+          for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+            if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Funcional"){
+              if($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 211 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 212 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 213 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 214 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 215 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 216){
+                $cateforia = $this->dao_inventory_model->getStuffCatById($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY']);
 
-                $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
-                $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
+                $info = $this->dao_inventory_model->getModelbiId($respuesta['inventory'][$i]['inventario'][$j]['K_IDMODEL']);
+                $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF']);
                 $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
                 $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
                 if($sizer > $sizer2){
@@ -545,7 +667,7 @@ class PDF extends CI_Controller {
                 }
                 $pdf->Cell(30,5,$_GET['k_ticket'],"TLR",0,'C');
                 $pdf->Cell(90,5,utf8_decode($cateforia['N_NAME']),"TLR",0,'C');
-                $pdf->Cell(25,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+                $pdf->Cell(25,5,$respuesta['inventory'][$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
                 $pdf->Cell(25,5,utf8_decode($info['ma']),"TLR",0,'C');
                 $pdf->Cell(20,5,utf8_decode($info['mo']),"TLR",1,'C');
 
@@ -597,13 +719,13 @@ class PDF extends CI_Controller {
       $pdf->Cell(35,5,'PARA SOLUCIONAR',"BLR",1,'C');
       $pdf->SetFont('Arial','',6);
 
-      for($i = 0; $i< count($inventory); $i++){
-        for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
-          if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 211 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 212 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 213 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 214 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 215 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 216 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 156 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 155 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 157 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 158 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 159 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 160 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 161 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 162 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 163 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 164 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 165 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 166 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 167 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 168 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 169 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 170 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 171 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 172 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 173 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 174 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 175 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 176 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 177 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 178 || $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 179){
+      for($i = 0; $i< count($respuesta['inventory']); $i++){
+        for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            if($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 211 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 212 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 213 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 214 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 215 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 216 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 156 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 155 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 157 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 158 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 159 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 160 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 161 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 162 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 163 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 164 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 165 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 166 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 167 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 168 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 169 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 170 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 171 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 172 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 173 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 174 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 175 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 176 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 177 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 178 || $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] == 179){
 
-              $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
-              $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
+              $info = $this->dao_inventory_model->getModelbiId($respuesta['inventory'][$i]['inventario'][$j]['K_IDMODEL']);
+              $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF']);
               $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
               $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
               if($sizer > $sizer2){
@@ -617,7 +739,7 @@ class PDF extends CI_Controller {
               $pdf->Cell(20,5,'',"TLR",0,'C');
               $pdf->Cell(20,5,$_GET['k_ticket'],"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode(substr($info['sc'],0,20)),"TLR",0,'C');
-              $pdf->Cell(25,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+              $pdf->Cell(25,5,$respuesta['inventory'][$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
               $pdf->Cell(25,5,utf8_decode($info['ma']),"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode($info['mo']),"TLR",0,'C');
               $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,18)),"TLR",0,'C');
@@ -679,12 +801,12 @@ class PDF extends CI_Controller {
       $pdf->Cell(20,5,'',"BLR",0,'C');
       $pdf->Cell(30,5,'PARA SOLUCIONAR',"BLR",1,'C');
 
-      for($i = 0; $i< count($inventory); $i++){
-        for($j = 0; $j< count($inventory[$i]['inventario']); $j++){
-          if($inventory[$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            if($inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 156 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 155 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 157 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 158 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 159 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 160 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 161 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 162 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 163 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 164 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 165 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 166 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 167 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 168 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 169 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 170 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 171 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 172 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 173 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 174 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 175 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 176 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 177 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 178 && $inventory[$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 179){
-              $info = $this->dao_inventory_model->getModelbiId($inventory[$i]['inventario'][$j]['K_IDMODEL']);
-              $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($inventory[$i]['inventario'][$j]['K_IDSTUFF']);
+      for($i = 0; $i< count($respuesta['inventory']); $i++){
+        for($j = 0; $j< count($respuesta['inventory'][$i]['inventario']); $j++){
+          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
+            if($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 211 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 212 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 213 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 214 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 215 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 216 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 156 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 155 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 157 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 158 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 159 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 160 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 161 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 162 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 163 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 164 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 165 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 166 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 167 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 168 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 169 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 170 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 171 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 172 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 173 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 174 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 175 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 176 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 177 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 178 && $respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF_CATEGORY'] != 179){
+              $info = $this->dao_inventory_model->getModelbiId($respuesta['inventory'][$i]['inventario'][$j]['K_IDMODEL']);
+              $corrective = $this->dao_inventory_model->getCorrectiveTicketPerStuff($respuesta['inventory'][$i]['inventario'][$j]['K_IDSTUFF']);
               $sizer = strlen($corrective['N_FAILURE_DESCRIPTION']);
               $sizer2 = strlen($corrective['N_NEW_ELEMENTS']);
               if($sizer > $sizer2){
@@ -701,10 +823,10 @@ class PDF extends CI_Controller {
               $pdf->Cell(20,5,utf8_decode(explode("T", $mysqlDateTime)[0]),"TLR",0,'C');
               $pdf->Cell(25,5,utf8_decode($_POST['nombreTec']),"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode(substr($info['sc'],0,16)),"TLR",0,'C');
-              $pdf->Cell(20,5,$inventory[$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
+              $pdf->Cell(20,5,$respuesta['inventory'][$i]['inventario'][$j]['N_SERIAL'],"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode($info['ma']),"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode(substr($info['mo'],0,16)),"TLR",0,'C');
-              $pdf->Cell(20,5,utf8_decode($inventory[$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']),"TLR",0,'C');
+              $pdf->Cell(20,5,utf8_decode($respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']),"TLR",0,'C');
               $pdf->Cell(25,5,utf8_decode(substr($corrective['N_FAILURE_DESCRIPTION'],0,16)),"TLR",0,'C');
               $pdf->Cell(20,5,utf8_decode(substr($corrective['N_FAILURE_CLASSIFICATION'],0,18)),"TLR",0,'C');
               $pdf->Cell(30,5,utf8_decode(substr($corrective['N_NEW_ELEMENTS'],0,16)),"TLR",1,'C');
@@ -736,7 +858,11 @@ class PDF extends CI_Controller {
       $ticket = $_GET['k_ticket'];
       $ticket = $this->dao_ticket_model->getTicketByID($ticket);
       //Encabezado
-      $pdf->Cell(275,18,'Informe de Mantenimiento Preventivo IT',1,1,'C');
+      $pdf->Cell(275,18,'Informe y Resumen de Mantenimiento Preventivo IT',1,1,'C');
+      $pdf->Cell(90, 5, 'Codigo: F-MPC-22', 1, 0, 'C');
+      $pdf->Cell(90, 5, utf8_decode('Versión: 1'), 1, 0, 'C');
+      $pdf->Cell(95, 5, 'Fecha de Vig.: 1/07/2017', 1, 1, 'C');
+
       //Salto de linea
       $pdf->Ln(5);
       $pdf->SetFont('Arial','B',7);
@@ -755,11 +881,11 @@ class PDF extends CI_Controller {
       $pdf->Cell(120,5,utf8_decode($pvd->getCity()),1,1,'C');
       //Tercera linea de la tabla
       $pdf->Cell(40,5,utf8_decode('Dirección'),1,0,'C');
-      $pdf->Cell(115,5,utf8_decode($pvd->getDireccion()),1,0,'C');
-      $pdf->Cell(30,5,'Fecha Inicio',1,0,'C');
-      $pdf->Cell(30,5,$ticket->getDateSIT(),1,0,'C');
-      $pdf->Cell(30,5,'Fecha Fin',1,0,'C');
-      $pdf->Cell(30,5,$date,1,1,'C');
+      $pdf->Cell(155,5,utf8_decode($pvd->getDireccion()),1,0,'C');
+      $pdf->Cell(20,5,'Fecha Inicio',1,0,'C');
+      $pdf->Cell(20,5,$ticket->getDateSIT(),1,0,'C');
+      $pdf->Cell(20,5,'Fecha Fin',1,0,'C');
+      $pdf->Cell(20,5,$date,1,1,'C');
       //Cuarta linea de la tabla
       $pdf->Cell(40,5,'Administrador',1,0,'C');
       $pdf->Cell(95,5,$_POST['nombreAdmin'],1,0,'C');
@@ -780,7 +906,10 @@ class PDF extends CI_Controller {
     public function fillHeaderTableAA($pdf, $pvd, $date){
 
       //Encabezado
-      $pdf->Cell(190,18,'Informe de Mantenimiento Preventivo AA',1,1,'C');
+      $pdf->Cell(190,18,'Informe y Resumen de Mantenimiento Preventivo AA',1,1,'C');
+      $pdf->Cell(65, 5, 'Codigo: F-MPC-22', 1, 0, 'C');
+      $pdf->Cell(65, 5, utf8_decode('Versión: 1'), 1, 0, 'C');
+      $pdf->Cell(60, 5, 'Fecha de Vig.: 1/07/2017', 1, 1, 'C');
       //Salto de linea
       $pdf->Ln(5);
       $pdf->SetFont('Arial','B',7);
@@ -799,9 +928,9 @@ class PDF extends CI_Controller {
       $pdf->Cell(80,5,utf8_decode($pvd->getCity()),1,1,'C');
       //Tercera linea de la tabla
       $pdf->Cell(20,5,utf8_decode('Dirección'),1,0,'C');
-      $pdf->Cell(90,5,utf8_decode($pvd->getDireccion()),1,0,'C');
-      $pdf->Cell(20,5,'Fecha',1,0,'C');
-      $pdf->Cell(60,5,$date,1,1,'C');
+      $pdf->Cell(140,5,utf8_decode($pvd->getDireccion()),1,0,'C');
+      $pdf->Cell(10,5,'Fecha',1,0,'C');
+      $pdf->Cell(20,5,$date,1,1,'C');
       //Cuarta linea de la tabla
       $pdf->Cell(20,5,'Administrador',1,0,'C');
       $pdf->Cell(90,5,$_POST['nombreAdmin'],1,0,'C');
@@ -818,4 +947,6 @@ class PDF extends CI_Controller {
       $pdf->Cell(20,5,utf8_decode('Identificación'),1,0,'C');
       $pdf->Cell(60,5,$_POST['cedulaTec'],1,1,'C');
     }
+
+
   }

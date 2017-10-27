@@ -556,6 +556,17 @@ create table ticket_ccc
    primary key (K_IDTICKET_CCC)
 );
 
+create table ticket_ccc
+(
+   K_IDTICKET_CCC                 int not null,
+   K_IDPVD                        int not null,
+   N_DESCRIPTION                  varchar(500),
+   N_ESTADO                       varchar(20),
+   N_OBSERVATION                  varchar(500),
+   N_TIPO                         varchar(3),
+   primary key (K_IDTICKET_CCC)
+);
+
 alter table equipment_type add constraint FK_PHASE_ET foreign key (K_IDPHASE)
       references phase (K_IDPHASE) on delete restrict on update restrict;
 
@@ -713,3 +724,9 @@ ALTER TABLE stuff add K_IDSTUFF int not null AUTO_INCREMENT;
 ALTER TABLE stuff add N_OBSERVATION varchar(200);
 ALTER TABLE ticket_ccc add N_TIPO varchar(3);
 ALTER TABLE ticket add N_ESTADO_I varchar(3);
+ALTER TABLE ticket add I_PROGRESS varchar(4);
+ALTER TABLE ticket_others add K_IDTICKETCC varchar(10);
+
+
+
+ALTER TABLE ticket_ccc MODIFY N_DESCRIPTION varchar(1500);

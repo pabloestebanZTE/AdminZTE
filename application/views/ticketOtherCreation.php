@@ -110,7 +110,8 @@
         document.getElementById("date").required="";
         document.getElementById("dateF").required="";
         document.getElementById("fieldCCC").required="required";
-      } else {
+      }
+      if(valorOption != 6) {
         fechaInicio.style.display = 'block';
         fechaFin.style.display = 'block';
         labelFecha.style.display = 'block';
@@ -122,6 +123,22 @@
         tipoSelect.style.display = 'none';
         labelCCC.style.display = 'none';
         fieldCCC.style.display = 'none';
+        document.getElementById("date").required="required";
+        document.getElementById("dateF").required="required";
+        document.getElementById("fieldCCC").required="";
+      }
+      if(valorOption == 7){
+        fechaInicio.style.display = 'block';
+        fechaFin.style.display = 'block';
+        labelFecha.style.display = 'block';
+        labelFechaF.style.display = 'block';
+        labelTec.style.display = 'block';
+        selectTec.style.display = 'block';
+        BEditar.style.display = 'block';
+        selectTipo.style.display = 'none';
+        tipoSelect.style.display = 'none';
+        labelCCC.style.display = 'block';
+        fieldCCC.style.display = 'block';
         document.getElementById("date").required="required";
         document.getElementById("dateF").required="required";
         document.getElementById("fieldCCC").required="";
