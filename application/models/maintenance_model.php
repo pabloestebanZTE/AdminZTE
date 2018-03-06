@@ -1,14 +1,14 @@
 <?php
 	//require_once 'Profesor_model.php';
 
-	class maintenance_model extends CI_Model{
+	class Maintenance_model extends CI_Model{
 
 		public $id;
 		public $idPVD;
 		public $type;
 		public $date;
     public $ticket;
-
+    
 		public function __construct(){
 
 		}

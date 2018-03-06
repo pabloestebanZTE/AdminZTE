@@ -1,7 +1,7 @@
 <?php
 	//require_once 'Profesor_model.php';
 
-	class correctiveM_model extends CI_Model{
+	class CorrectiveM_model extends CI_Model{
 
 		protected $id;
     protected $idTicket;

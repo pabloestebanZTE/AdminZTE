@@ -10,10 +10,10 @@
 
     var th=$(this),
      tContent=$('.tab-content',th),
-     navA=$('ul.nav a',th)
+     navA=$('ul.dropdown-menu a',th)
 
     tContent.not().hide();
-	tab_act=$('ul.nav .selected a').attr('href');
+	tab_act=$('ul.dropdown-menu .selected a').attr('href');
 	$(tab_act).show();
 
     navA.click(function(){
@@ -27,3 +27,4 @@
 
   }
  }
+

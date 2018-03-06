@@ -1,7 +1,7 @@
 <?php
 	//require_once 'Profesor_model.php';
 
-	class ticket_model extends CI_Model{
+	class Ticket_model extends CI_Model{
 
 		public $id;
 		public $idMaintenance;
@@ -77,9 +77,9 @@
 
 		public function setColor($color){$this->color = $color;}
 
-		public function getObservacionesI(){return $this->observacionesInicio;}
+    public function getObservacionesI(){return $this->observacionesInicio;}
 
-		public function setObservacionesI($observacionesInicio){$this->observacionesInicio = $observacionesInicio;}
+    public function setObservacionesI($observacionesInicio){$this->observacionesInicio = $observacionesInicio;}
 
 		public function getObservacionesF(){return $this->observacionesFinal;}
 
@@ -107,7 +107,7 @@
 			$newTicket->setDateFAA($dateFinishAA);
 			$newTicket->setTechs($techs);
 			$newTicket->setColor($color);
-			$newTicket->setObservacionesI($observacionesInicio);
+     		$newTicket->setObservacionesI($observacionesInicio);
 			return $newTicket;
     }
 

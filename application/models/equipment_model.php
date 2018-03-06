@@ -1,7 +1,7 @@
 <?php
 	//require_once 'Profesor_model.php';
 
-	class equipment_model extends CI_Model{
+	class Equipment_model extends CI_Model{
 
 		protected $id;
 		protected $categoria;

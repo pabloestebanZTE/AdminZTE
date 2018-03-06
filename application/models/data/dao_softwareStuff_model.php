@@ -4,7 +4,7 @@
 
 //    session_start();
 
-    class dao_softwareStuff_model extends CI_Model{
+    class Dao_softwareStuff_model extends CI_Model{
 
         public function __construct(){
             $this->load->model('data/configdb_model');
@@ -14,14 +14,12 @@
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
           if ($session != "false"){
-              $sql = "INSERT INTO software_inventory (N_OPERATIVE_SYSTEM, N_OFFICE_VERSION, N_ANTIVIRUS_VERSION, N_BROWSER_VERSION, N_SIMONTIC_VERSION, N_MAGIC_VERSION, N_SAC_VERSION, N_SEMILLA_VERSION, N_JAWS_VERSION, K_IDSTUFF)
+            $sql = "INSERT INTO software_inventory (N_OPERATIVE_SYSTEM, N_OFFICE_VERSION, N_ANTIVIRUS_VERSION, N_BROWSER_VERSION, N_SIMONTIC_VERSION, N_MAGIC_VERSION, N_SAC_VERSION, N_SEMILLA_VERSION, N_JAWS_VERSION, K_IDSTUFF)
                 VALUES ('".$OS."', '".$OV."', '".$AVV."', '".$BRV."', '".$SIV."','".$MAV."', '".$SACV."', '".$SEMV."', '".$JAWS."', ".$id.");";
-              $result = $session->query($sql);
+            $result = $session->query($sql);
           } else {
             $user = "Error de informacion";
           }
-          $sql = "INSERT INTO software_inventory ";
-
           return $respuesta;
         }
 

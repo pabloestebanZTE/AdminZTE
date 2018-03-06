@@ -2,26 +2,27 @@
 
 $msj = "";
 defined('BASEPATH') OR exit('No direct script access allowed');
-include 'PHPExcel-1.8/Classes/PHPExcel.php';       // include the class
+include 'PHPExcel-1.8.1/Classes/PHPExcel.php';       // include the class
 
 class KPI extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-
         $this->load->model('data/dao_kpi_model');
+        $this->load->model('data/configdb_model');
+
     }
 
-
     public function KPIPrincial(){
-
       $this->load->view('viewKPI');
     }
 
     public function KPIList(){
       $KPIs = $this->dao_kpi_model->getAllKPI();
-      $respuesta['kpis'] = $KPIs;
-      $this->load->view('kpiAdmin', $respuesta);
+      for($i = 0; $i< count($KPIs); $i++){
+        print_r($KPIs[$i]);
+        echo "<br><br>";
+      }
     }
 
     public function getKPIperSource(){
@@ -65,7 +66,7 @@ class KPI extends CI_Controller {
           }
         }
       }
-      $respuesta = $this->exportXL($kpi, $cell);
+    //  $respuesta = $this->exportXL($kpi, $cell);
       $respuesta = $this->dao_kpi_model->updateKPIResuelto($kpi);
       if ($respuesta == "false"){
         $GLOBALS['$msj'][0] = "Algo salio mal";
@@ -80,22 +81,26 @@ class KPI extends CI_Controller {
     }
 
 
-
     public function dw(){
-      $objPHPExcel = PHPExcel_IOFactory::load("archivos/KPI.xlsx");
-      //  $objPHPExcel->getActiveSheet()->setCellValue('A1', 'hello world!');
-      //  $objPHPExcel->getActiveSheet()->setTitle('Chesse1');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="KPI.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-      }
+      PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
+
+        $objPHPExcel = PHPExcel_IOFactory::load("archivos/KPI.xlsx");
+        //  $objPHPExcel->getActiveSheet()->setCellValue('A1', 'hello world!');
+        //  $objPHPExcel->getActiveSheet()->setTitle('Chesse1');
+          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          header('Content-Disposition: attachment;filename="KPI.xlsx"');
+          header('Cache-Control: max-age=0');
+          $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+          $objWriter->save('php://output');
+        }
+
+
 
     public function exportXL($kpi, $cell){
       for ($i = 0; $cell['kpi'][$i] != "<"; $i++){
         $q = $q.$cell['kpi'][$i];
       }
+      PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
       $objPHPExcel = PHPExcel_IOFactory::load("archivos/KPI.xlsx");
       $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(0, 1,  'nombre');
       $objPHPExcel->getSheetByName($q)->setCellValueByColumnAndRow(1, 1, $cell['cell1']." ");
@@ -128,40 +133,46 @@ class KPI extends CI_Controller {
       }
       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
       $objWriter->save("archivos/KPI.xlsx");
+      $callEndTime = microtime(true);
+    $callTime = $callEndTime - $callStartTime;
     }
 
+
     function download(){
-          $filename = $_GET['n_name'];
-          echo $filename;
-          if(!empty($filename)){
-            // Specify file path.
-            $path = 'archivos/'; // '/uplods/'
-            $download_file =  $path.$filename;}
-            echo $download_file;
-            // Check file is exists on given path.
-            if(file_exists($download_file))
-            {
-              // Getting file extension.
-              $extension = explode('.',$filename);
-              $extension = $extension[count($extension)-1];
-              // For Gecko browsers
-              // Supports for download resume
-              header('Accept-Ranges: bytes');
-              // Calculate File size
-              header('Content-Length: ' . filesize($download_file));
-              header('Content-Encoding: none');
-              // Change the mime type if the file is not PDF
-              header('Content-Type: application/octet-stream');
-              // Make the browser display the Save As dialog
-              header('Content-Disposition: attachment; filename=' . $filename);
-              readfile($download_file);
-              exit;
-            }
-            else
-            {
-              echo 'File does not exists on given path';
-            }
-         }
+      $filename = $_GET['n_name'];
+      echo $filename;
+      if(!empty($filename)){
+        // Specify file path.
+        $path = 'archivos/'; // '/uplods/'
+        $download_file =  $path.$filename;}
+        echo $download_file;
+        // Check file is exists on given path.
+        if(file_exists($download_file))
+        {
+          // Getting file extension.
+          $extension = explode('.',$filename);
+          $extension = $extension[count($extension)-1];
+          // For Gecko browsers
+          header('Content-Transfer-Encoding: binary');
+          header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');
+          // Supports for download resume
+          header('Accept-Ranges: bytes');
+          // Calculate File size
+          header('Content-Length: ' . filesize($download_file));
+          header('Content-Encoding: none');
+          // Change the mime type if the file is not PDF
+          header('Content-Type: application/'.$extension);
+          // Make the browser display the Save As dialog
+          header('Content-Disposition: attachment; filename=' . $filename);
+          readfile($download_file);
+          exit;
+        }
+        else
+        {
+          echo 'File does not exists on given path';
+        }
+     }
+
 
 
     function downloadFile() {
@@ -193,6 +204,8 @@ class KPI extends CI_Controller {
       fclose ($fd);
       exit;
   }
+
+
 
 }
 

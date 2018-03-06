@@ -4,7 +4,7 @@
 
 //    session_start();
 
-    class dao_MC_model extends CI_Model{
+    class Dao_MC_model extends CI_Model{
 
         public function __construct(){
             $this->load->model('data/configdb_model');
@@ -41,16 +41,16 @@
         public function editCCC($id, $estado, $desc, $tipo, $obs, $pvd){
           $dbConnection = new configdb_model();
           $session = $dbConnection->openSession();
-
           $sql0 = "SELECT * FROM ticket_ccc WHERE K_IDTICKET_CCC = ".$id.";";
-          $session->query($sql);
           if ($session != "false"){
+            $result = $session->query($sql0);
             if ($result->num_rows > 0) {
-              $sql = "UPDATE ticket_ccc SET N_ESTADO = '".$estado."', N_OBSERVATION = '".$desc."' WHERE K_IDTICKET_CCC = ".$id.";";
+              $sql = "UPDATE ticket_ccc SET N_ESTADO = '".$estado."', N_OBSERVATION = '".$desc."', N_TIPO = '".$tipo."', N_DESCRIPTION = '".$obs."' WHERE K_IDTICKET_CCC = ".$id.";";
+              // echo $sql;
+              // echo "<br><br>";
               $session->query($sql);
             } else {
               $sql = "INSERT INTO ticket_ccc (K_IDTICKET_CCC, K_IDPVD, N_OBSERVATION, N_ESTADO, N_DESCRIPTION, N_TIPO) values (".$id.", ".$pvd.", '".$desc."', '".$estado."', '".$obs."', '".$tipo."')";
-              echo $sql;
               $session->query($sql);
             }
           }

@@ -22,8 +22,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | If you need to allow multiple domains, remember that this file is still
 | a PHP script and you can easily do that on your own.
 |
+
 */
-$config['base_url'] = '';
+
+
+
+/**************************LOCAL HOST**************************/
+// $config['base_url'] = 'http://localhost/AdminZTE/';
+
+
+/************************+**SERVIDOR TEST***********************+***/
+// $config['base_url'] = 'http://testzte.us-west-2.elasticbeanstalk.com/';}
+
+
+/************************+**SERVIDOR CLIENTE***********************+***/
+$config['base_url'] = 'http://zte.consorcio2018technical.com/';
+
+
 
 /*
 |--------------------------------------------------------------------------

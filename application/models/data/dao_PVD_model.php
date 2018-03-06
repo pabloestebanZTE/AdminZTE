@@ -1,7 +1,11 @@
 <?php
+
     defined('BASEPATH') OR exit('No direct script access allowed');
+
 //    session_start();
-    class dao_PVD_model extends CI_Model{
+
+    class Dao_PVD_model extends CI_Model{
+
         public function __construct(){
             $this->load->model('pvd_model');
             $this->load->model('data/configdb_model');
@@ -44,13 +48,13 @@
         public function getPVDs(){
             $dbConnection = new configdb_model();
             $session = $dbConnection->openSession();
-            $sql = "SELECT PVD.K_IDPVD, PVD.K_IDCITY, PVD.K_IDEJECUTOR, PVD.K_IDADMIN, PVD.N_NAME, PVD.N_DIRECCION, PVD.N_TIPOLOGIA, PVD.N_FASE, REGION.N_NAME FROM PVD, CITY, DEPARTMENT, REGION WHERE PVD.K_IDCITY = CITY.K_IDCITY and CITY.K_IDDEPARTMENT = DEPARTMENT.K_IDDEPARTMENT and DEPARTMENT.K_IDREGION = REGION.K_IDREGION ORDER BY REGION.N_NAME, DEPARTMENT.N_NAME, CITY.N_NAME;";
+            $sql = "SELECT pvd.K_IDPVD, pvd.K_IDCITY, pvd.K_IDEJECUTOR, pvd.K_IDADMIN, pvd.N_NAME, pvd.N_DIRECCION, pvd.N_TIPOLOGIA, pvd.N_FASE, region.N_NAME FROM pvd, city, department, region WHERE pvd.K_IDCITY = city.K_IDCITY and city.K_IDDEPARTMENT = department.K_IDDEPARTMENT and department.K_IDREGION = region.K_IDREGION ORDER BY region.N_NAME, department.N_NAME, city.N_NAME;";
             if ($session != "false"){
               $result = $session->query($sql);
               if ($result->num_rows > 0) {
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
-                  $sql2 = "SELECT REGION.N_NAME as rn, DEPARTMENT.N_NAME as dn, CITY.N_NAME as cn FROM PVD, CITY, DEPARTMENT, REGION where PVD.K_IDCITY = CITY.K_IDCITY and CITY.K_IDDEPARTMENT = DEPARTMENT.K_IDDEPARTMENT and DEPARTMENT.K_IDREGION = REGION.K_IDREGION and PVD.K_IDPVD =".$row['K_IDPVD'].";";
+                  $sql2 = "SELECT region.N_NAME as rn, department.N_NAME as dn, city.N_NAME as cn FROM pvd, city, department, region where pvd.K_IDCITY = city.K_IDCITY and city.K_IDDEPARTMENT = department.K_IDDEPARTMENT and department.K_IDREGION = region.K_IDREGION and pvd.K_IDPVD =".$row['K_IDPVD'].";";
                   $result2 = $session->query($sql2);
                   if ($result2->num_rows > 0) {
                     $row2 = $result2->fetch_assoc();
@@ -70,111 +74,47 @@
             }
               //  $db->Connection->closeSession($session);
                 return $respuesta;
-        }
-
-        public function getAllPlaces(){
-          $zones = $this->getPVDZone();
-          $place = $this->getPVDPlace();
-          for ($i = 0; $i<count($place); $i++){
-            for ($j = 0; $j<count($zones); $j++){
-              if ($zones[$j]['id'] == $place[$i]['idZONE']){
-                $place[$i]['id'] = $zones[$j];
-              }
             }
-          }
-          return $place;
-        }
 
-        public function getAllPVDs(){
-            $dbConnection = new configdb_model();
-            $session = $dbConnection->openSession();
-            $sql = "SELECT * FROM pvd;";
-
-            if ($session != "false"){
-              $result = $session->query($sql);
-              if ($result->num_rows > 0) {
-                $i = 0;
-                while($row = $result->fetch_assoc()) {
-                  $PVD = new PVD_model();
-                  $PVD = $PVD->createPVD($row['K_IDPVD'],"", "", "", "", "", $row['N_TIPOLOGIA']);
-                  $respuesta[$i] = $PVD;
-                  $i++;
+            public function getAllCCCTicketsPerPBV($idPvd){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql  = "SELECT * FROM ticket_ccc WHERE K_IDPVD = ".$idPvd.";";
+              if ($session != "false"){
+                $result = $session->query($sql);
+                if ($result->num_rows > 0) {
+                  $i = 0;
+                  while($row = $result->fetch_assoc()) {
+                    $respuesta[$i] = $row;
+                    $i++;
+                  }
                 }
               }
-            } else {
-              $respuesta = "Error de informacion";
+              return $respuesta;
             }
-              //  $db->Connection->closeSession($session);
-                return $respuesta;
-          }
 
-          public function getPVDZone(){
-            $dbConnection = new configdb_model();
-            $session = $dbConnection->openSession();
-            $sql = "SELECT * FROM pvd_zone;";
-            if ($session != "false"){
-              $result = $session->query($sql);
-              if ($result->num_rows > 0) {
-                $i = 0;
-                while($row = $result->fetch_assoc()) {
-                  $respuesta[$i]['id'] = $row['K_IDPVDZONE'];
-                  $respuesta[$i]['name'] = $row['N_NAME'];
-                  $i++;
-                }
-              }
+            public function getAllPVDCI(){
+              $query = $this->db->get("pvd");
+              return $query->result();  
             }
-            return $respuesta;
-          }
-
-          public function getPVDPlace(){
-            $dbConnection = new configdb_model();
-            $session = $dbConnection->openSession();
-            $sql = "SELECT * FROM pvd_place;";
-            if ($session != "false"){
-              $result = $session->query($sql);
-              if ($result->num_rows > 0) {
-                $i = 0;
-                while($row = $result->fetch_assoc()) {
-                  $respuesta[$i]['idTIPO'] = $row['K_IDPVDT'];
-                  $respuesta[$i]['idZONE'] = $row['K_IDPVDZONE'];
-                  $i++;
-                }
-              }
+            
+            public function getAllCitiesCI(){
+              $query = $this->db->get("city");
+              return $query->result();  
             }
-            return $respuesta;
-          }
 
-          public function getPVDZoneById($id){
-            $dbConnection = new configdb_model();
-            $session = $dbConnection->openSession();
-            $sql = "SELECT * FROM pvd_zone where K_IDPVDZONE = ".$id.";";
-            if ($session != "false"){
-              $result = $session->query($sql);
-              if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $respuesta['id'] = $row['K_IDPVDZONE'];
-                $respuesta['nombre'] = $row['N_NAME'];
-              }
+            public function getAllDepartmentsCI(){
+              $query = $this->db->get("department");
+              return $query->result();  
             }
-            return $respuesta;
-          }
 
-          public function getAllCCCTicketsPerPBV($idPvd){
-            $dbConnection = new configdb_model();
-            $session = $dbConnection->openSession();
-            $sql  = "SELECT * FROM ticket_ccc WHERE K_IDPVD = ".$idPvd.";";
-            if ($session != "false"){
-              $result = $session->query($sql);
-              if ($result->num_rows > 0) {
-                $i = 0;
-                while($row = $result->fetch_assoc()) {
-                  $respuesta[$i] = $row;
-                  $i++;
-                }
-              }
+            public function getAllRegionCI(){
+              $query = $this->db->get("region");
+              return $query->result();  
             }
-            return $respuesta;
 
-          }
+
+
+
         }
 ?>

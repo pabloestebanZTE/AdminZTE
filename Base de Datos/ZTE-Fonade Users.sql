@@ -7,7 +7,3 @@ GRANT select ON ZTE_FONADE. * TO 'userZTE'@'localhost';
 GRANT update ON ZTE_FONADE. * TO 'userZTE'@'localhost';
 GRANT insert ON ZTE_FONADE. * TO 'userZTE'@'localhost';
 FLUSH PRIVILEGES;
-
-CREATE USER 'jairoPrada'@'%' IDENTIFIED BY 'a4b3c2d1//';
-GRANT select ON zte_fonade. * TO 'jairoPrada'@'%';
-FLUSH PRIVILEGES;

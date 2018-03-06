@@ -1,407 +1,335 @@
 <!DOCTYPE html>
   <html lang="en">
   <head>
-    <title>M. Preventivos</title>
-    <meta charset="utf-8">
-    <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/tablesStyles.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
-    <link rel="stylesheet" href="/AdminZTE/assets/css/etiqueta.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Editar Preventivos</title>
 
-    <script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_700.font.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
-    <script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
-    <link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
-    <script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
-    <script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
-
-    <script type="text/javascript" charset="utf-8" async defer>
-        $(document).ready(function(){
-          $(".wheel-button").wheelmenu({
-            trigger: "hover",
-            animation: "fly",
-            animationSpeed: "fast"
-          });
-        });
-        function showMessage(){
-            var a = "<?php echo $msg[0]; ?>";
-            var b = "<?php echo $msg[1]; ?>";
-            var c = "<?php echo $msg[2]; ?>";
-            sweetAlert(a, b, c);
-        }
-    </script>
-    <script>
-        function cloneSelect(p, i, field, userName, userLastname){
-          var fila = document.getElementById("fila"+p+"/"+i);
-          var select = document.getElementById("prueba");
-          select.style.visibility = 'hidden';
-          var select2 = select.cloneNode(true);
-          select2.style.visibility = 'visible';
-          var iDiv = document.createElement('div');
-          iDiv.className = 'cell';
-          select2.id = i+"-"+field;
-          select2.name = i+"-"+field;
-          iDiv.appendChild(select2);
-          fila.appendChild(iDiv);
-          if(userName != "") {
-            $("#"+select2.id).prepend($('<option value="-1" selected>'+userName+" "+userLastname+'</option>'));
-          } else {
-            $("#"+select2.id).prepend($('<option value="-1" selected></option>'));
-          }
-        }
-
-        function cambiarAtributo(x, f){
-          for (var i = 0; i < x; i++){
-            var dateField = document.getElementById(i+"-1");
-            var dateField1 = document.getElementById(i+"-2");
-            var dateField2 = document.getElementById(i+"-3");
-            var dateField3 = document.getElementById(i+"-8");
-            var dateField4 = document.getElementById(i+"-9");
-            var dateField7 = document.getElementById(i+"-12");
-            var dateField8 = document.getElementById(i+"-13");
-            var dateField5 = document.getElementById(i+"-10");
-            var dateField6 = document.getElementById(i+"-11");
-            var dateField9 = document.getElementById(i+"-14");
-            var dateField10 = document.getElementById(i+"-15");
-            var dateField11 = document.getElementById(i+"-observacionesInicio");
-
-            if (dateField != null){
-              try {
-                dateField.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 0");
-              }
-              try {
-                dateField2.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 2");
-              }
-              try {
-                dateField3.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 3");
-              }
-              try {
-                dateField4.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 4");
-              }
-              try {
-                dateField7.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 7");
-              }
-              try {
-                dateField8.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 8");
-              }
-              try {
-                dateField1.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 1");
-              }
-              try {
-                dateField5.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 5");
-              }
-              try {
-                dateField6.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 6");
-              }
-              try {
-                dateField9.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 9");
-              }
-              try {
-                dateField10.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 10");
-              }
-              try {
-                dateField11.removeAttribute('disabled');
-              }
-              catch(err) {
-                console.log("fieldNotFound 11");
-              }
-            }
-          }
-          var buttonField = document.getElementById("BEditar"+f);
-          var buttonEnviar = document.getElementById("btnSubmit"+f);
-          buttonEnviar.removeAttribute('disabled');
-          buttonField.setAttribute("disabled","disabled");
-        }
-    </script>
-
+      <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!--   ICONO PAGINA    -->
+        <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
+        <!--   BOOTSTRAP    -->
+        <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">
+        <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
+        <!--   HEADER CSS    -->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/reset.css" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/zerogrid.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css" type="text/css" media="all">
+        <!-- jquery JS -->
+        <script src="<?php echo base_url(); ?>assets/js/jquery-2.1.1.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>  
+        <!-- Push.js   -->
+        <script src="<?php echo base_url(); ?>assets/js/push.min.js"></script>    
   </head>
 
-  <body id="page4">
+  <body>
   	<div class="body1">
-  	<div class="body2">
-  	<div class="body5">
-  		<div class="main zerogrid">
-  <!-- header -->
-  			<header>
-  				<div class="wrapper rơw">
-          <h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
-  				<nav>
-  					<ul id="menu">
-              <?php
-                if ($_SESSION['permissions'] != NULL){
-                  echo "<li id='nav1'><a href='/AdminZTE/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
-                  if($_SESSION['permissions'][3] == 1){
-                    echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
-                  }
-                  if($_SESSION['permissions'][1] == 1){
-                    echo "<li id='nav4' ><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
-                  }
-                  if($_SESSION['permissions'][2] == 1){
-                    echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
-                  }
-                  if($_SESSION['permissions'][4] == 1){
-                    echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
-                  }
-                  if($_SESSION['permissions'][5] == 1){
-                    echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
-                  }
-                }
-              ?>
-              <li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
-  					</ul>
-  				</nav>
-  				</div>
-  			</header>
-  <!-- header end-->
-  		</div>
-  	</div>
-  	</div>
-  	</div>
-  	<div class="body3">
-  		<div class="main zerogrid">
-        <!-- content -->
-  			<article id="content">
-          <div class="wrapper tabs">
-            <?php
-            if($_SESSION['permissions'][5] == 1){
-              echo "<div class='wrapperWheel'>";
-                echo "<div class='mainWheel'>";
-                  echo "<a href='#wheel1' class='wheel-button nw'>";
-                    echo "<span><img src='/AdminZTE/assets/images/edit.png' /></span>";
-                  echo "</a>";
-                  echo "<ul id='wheel1'  data-angle='all'>";
-                    echo "<li class='item'><div id='cae_texto'><a href='/AdminZTE/index.php/Mantenimientos/preventivosPrincipal'><img src='/AdminZTE/assets/images/return.png' /></a>Return</div></li>";
-                  echo "</ul>";
-                echo "</div>";
-              echo "</div>";
-              if ($msj != ""){
-                echo "<script type='text/javascript'>showMessage();</script>";
-              }
-            }
-            echo "<h2 class='under'>Mantenimientos Preventivos </h2>";
-            echo "<select type='hidden' style='font-size:12px' name='prueba' id='prueba' disabled='disabled'  aria-describedby='basic-addon1'>";
-            for($j = 0; $j<count($users); $j++){
-              echo "<option value='".$users[$j]->getName()." ".$users[$j]->getLastname()." / ".$users[$j]->getID()."'>".$users[$j]->getName()." ".$users[$j]->getLastname()."</option>";
-            }
-            echo "</select>";
-
-            if($_SESSION['permissions'][6] == 1){
-              $meses[1] = 'Enero';
-              $meses['numerico'][1]= 1;
-              $meses[2] = 'Febrero';
-              $meses['numerico'][2]= 2;
-              $meses[3] = 'Marzo';
-              $meses['numerico'][3]= 3;
-              $meses[4] = 'Abril';
-              $meses['numerico'][4]= 4;
-              $meses[5] = 'Mayo';
-              $meses['numerico'][5]= 5;
-              $meses[6] = 'Junio';
-              $meses['numerico'][6]= 6;
-              $meses[7] = 'Julio';
-              $meses['numerico'][7]= 7;
-              $meses[8] = 'Agosto';
-              $meses['numerico'][8]= 8;
-              $meses[9] = 'Septiembre';
-              $meses['numerico'][9]= 9;
-              $meses[10] = 'Octubre';
-              $meses['numerico'][10]= 10;
-
-              echo "<ul class='nav'>";
-                echo "<center>";
-                for ($p = 1; $p <= count($meses)-1; $p++){
-                  if ($p == 1){
-                    echo "<li class='selected'><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
-
-                  } else {
-                    echo "<li><a href='#tab".$p."'><center>".$meses[$p]."</center></a></li>";
-                  }
-                }
-                echo "</center>";
-              echo "</ul>";
-              echo "<br><br><br>";
-
-              for ($p = 1; $p <= count($meses)-1; $p++){
-                echo "<div class='tab-content' id='tab".$p."'>";
-                  echo "<button value='Editar".$p."' name='BEditar".$p."' id='BEditar".$p."' type='button' class='btn btn-primary' onclick= 'cambiarAtributo(".count($PVDs).", ".$p.")'>Editar</button><br><br>";
-                  echo "<form method='post' name='formActualizar'>";
-                    echo "<input type='submit' value='Actualizar M.P.' disabled='disabled' id='btnSubmit".$p."' name='btnSubmit".$p."' class='btn btn-success'  onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Mantenimientos/updateMP' \">";
-                    echo "<br><br><br>";
-                    echo "<div class='tableFix'>";
-                      echo "<div class='row header green'>";
-                        echo "<div class='cell' style='font-size:13px'>Región</div>";
-                        echo "<div class='cell' style='font-size:13px'>Departamento</div>";
-                        echo "<div class='cell' style='font-size:13px'>Ciudad</div>";
-                        echo "<div class='cell' style='font-size:13px'>PVD</div>";
-                        echo "<div class='cell' style='font-size:13px'>Programado</div>";
-                        echo "<div class='cell' style='font-size:13px'>Ticket</div>";
-                        echo "<div class='cell' style='font-size:13px'>Estado</div>";
-                        echo "<div class='cell' style='font-size:13px'>Inicio IT</div>";
-                        echo "<div class='cell' style='font-size:13px'>Fin IT</div>";
-                        echo "<div class='cell' style='font-size:13px'>NombreTécnicoIT</div>";
-                        echo "<div class='cell' style='font-size:13px'>NombreAuxiliarIT</div>";
-                        echo "<div class='cell' style='font-size:13px'>Inicio AA</div>";
-                        echo "<div class='cell' style='font-size:13px'>Fin AA</div>";
-                        echo "<div class='cell' style='font-size:13px'>NombreTécnicoAA</div>";
-                        echo "<div class='cell' style='font-size:13px'>NombreAuxiliarAA</div>";
-                        echo "<div class='cell' style='font-size:13px'>InicioM</div>";
-                        echo "<div class='cell' style='font-size:13px'>FinM</div>";
-                        echo "<div class='cell' style='font-size:13px'>Duración</div>";
-                        echo "<div class='cell' style='font-size:13px'>Observaciones</div>";
-                      echo "</div>";
-                      for ($i = 0; $i<count($PVDs); $i++){
-                        $mes = explode("-",$PVDs[$i]->getMaintenance()[0]->getDate());
-                        if($mes[1] == $meses['numerico'][$p]){
-
-                            echo "<div class='row' id='fila".$p."/".$i."' name='fila".$p."/".$i."'>";
-                                echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getRegion()."</div>";
-                                echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getDepartment()."</div>";
-                                echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getCity()."</div>";
-                                echo "<div class='cell' style='font-size:12px'>".$PVDs[$i]->getId()."</div>";
-                                if($PVDs[$i]->getMaintenance() != NULL){
-
-
-                                  echo "<div class='cell'><input style='font-size:12px' id='".$i."-1' size='9' type='date' name='".$i."-1' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getDate()."'></div>";
-                                  if($PVDs[$i]->getMaintenance()[0]->getTicket() != "No Ticket"){
-                                    echo "<input id='".$i."-2' name='".$i."-2' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."'>";
-                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getId()."</div>";
-
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Ejecutado"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
-                                    }
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "En Progreso"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Ejecutado</option><option selected>En Progreso</option><option>Cancelado</option></select></div>";
-                                    }
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Cancelado"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option>Ejecutado</option><option selected>En Progreso</option><option selected>Cancelado</option></select></div>";
-                                    }
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getStatus() == "Abierto"){
-                                      echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option selected>Abierto</option><option>Ejecutado</option><option>En Progreso</option><option>Cancelado</option></select></div>";
-                                    }
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSIT()."'></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFIT()."'></div>";
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,'','');</script>";
-                                    } else {
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_T']['N_LASTNAME']).");</script>";
-                                    }
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,'','');</script>";
-                                    } else {
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['IT_A']['N_LASTNAME']).");</script>";
-                                    }
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateSAA()."'></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateFAA()."'></div>";
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,'','');</script>";
-                                    } else {
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_T']['N_LASTNAME']).");</script>";
-                                    }
-                                    if($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME'] == ""){
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,'','');</script>";
-                                    } else {
-                                      echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_NAME']).",".json_encode($PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getTechs()['users']['AA_A']['N_LASTNAME']).");</script>";
-                                    }
-                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateS()."</div>";
-                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDateF()."</div>";
-                                    echo "<div class='cell'>".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getDuracion()."</div>";
-                                    echo "<div class='cell'><input style='font-size:12px' type='text' id='".$i."-observacionesInicio'  name='".$i."-observacionesInicio' disabled='true' aria-describedby='basic-addon1' value='".$PVDs[$i]->getMaintenance()[0]->getTicket()[0]->getObservacionesI()."'></div>";
-                                  } else {
-                                    echo "<div class='cell'><input style='font-size:12px' id='".$i."-2' name='".$i."-2' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><select style='font-size:12px' name='".$i."-3' id='".$i."-3' name='".$i."-3' disabled='true' aria-describedby='basic-addon1'><option></option><option>Ejecutado</option><option>En Progreso</option><option>Abierto</option><option>Cancelado</option></select></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-8'  name='".$i."-8' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-9'  name='".$i."-9' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",10,'','');</script>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",11,'','');</script>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-12'  name='".$i."-12' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-13'  name='".$i."-13' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",14,'','');</script>";
-                                    echo "<script type='text/javascript'>cloneSelect(".json_encode($p).",".json_encode($i).",15,'','');</script>";
-                                    echo "<div class='cell'></div>";
-                                    echo "<div class='cell'></div>";
-                                    echo "<div class='cell'></div>";
-                                    echo "<div class='cell'><input size='9' style='font-size:12px' type='date' id='".$i."-observacionInicio'  name='".$i."-observacionInicio' disabled='true' aria-describedby='basic-addon1' value=''></div>";
-                                    }
-                                  echo "<input id='idM".$i."' name='".$i."-7' type='hidden'  class='form-control' value='".$PVDs[$i]->getMaintenance()[0]->getId()."'>";
-                                }
-                                echo "<input id='cantidad' name='cantidad' type='hidden'  class='form-control' value='".count($PVDs)."'>";
-                            echo "</div>";
-                        }
+      <div class="body2">
+        <div class="body5">
+          <div class="main zerogrid">
+      <!-- header -->
+            <header>
+              <div class="wrapper rơw">
+              <h1><a id="logo"><img src="<?php echo base_url(); ?>assets/images/logo.png" /></a></h1>
+              <nav>
+                <ul id="menu" class="menuTop">
+                  <?php
+                    if ($_SESSION['permissions'] != NULL){
+                      echo "<li id='nav1'><a href='".base_url()."User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
+                      if($_SESSION['permissions'][3] == 1){
+                        echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
                       }
-                    echo "</div>";
-                  echo "</form>";
-                echo "</div>";
-              }
-            }
-            ?>
+                      if($_SESSION['permissions'][1] == 1){
+                        echo "<li id='nav4'><a href='".base_url()."Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
+                      }
+                      if($_SESSION['permissions'][2] == 1){
+                        echo "<li id='nav4'><a href='".base_url()."MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
+                      }
+                      if($_SESSION['permissions'][4] == 1){
+                      echo "<li id='nav2'><a href='http://legalizaciones.us-west-2.elasticbeanstalk.com/?usuarioAdmin=".$_SESSION['id']."&passAdmin=".$_SESSION['pass']."'>legalizaciones<span>legalizaciones</span></a></li>";
+                    }
+                      if($_SESSION['permissions'][5] == 1){
+                        echo "<li id='nav5'><a href='".base_url()."ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
+                      }
+                    }
+                  ?>
+                  <li id="nav6"><a href="<?php echo base_url(); ?>welcome/index">Salir<span>Logout</span></a></li>
+                </ul>
+              </nav>
+              </div>
+            </header>
+      <!-- header end-->
+      <!-- content -->
           </div>
-  			</article>
-  		</div>
-  	</div>
+        </div>
+      </div>
+    </div>
+ <div class="bodyEdit">
+      <section class="content">
+        <div class="row">
+          <div class="col-xs-10 col-xs-offset-1">
+            <div class="box">
+               <center><h3><legend>Mantenimientos Preventivos</legend></h3></center><hr>        
+             <!-- /.box-header -->
+             <div class='box-body'>
+               <table id='tablePreventive' class='table table-bordered table-striped table-hover'>
+                 
+               </table>
+             </div>
+           <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </section>
+</div>
 
-  	<div class="body4">
-  		<div class="main zerogrid">
-  			<article id="content2">
-  				<div class="wrapper row">
+<!-- Modal Cierre -->
+<div id="modalEditTicket" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg2">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="<?php echo base_url(); ?>assets/images/close.png" alt="cerrar" id="modalImage" ></button>
+        <h3 class="modal-title" id="myModalLabel"></h3>
+      </div>
+      <div class="modal-body">
+        <div>
+         <form class="well form-horizontal" id="formModal" action=""  method="post" data-action="FOR_UPDATE" novalidate="novalidate">
+          <fieldset>
+            <div class="widget bg_white m-t-25 display-block">
+                <h2 class="h4 mp">
+                    <i class="fa fa-fw fa-question-circle"></i>&nbsp;&nbsp; General
+                </h2>
+                <fieldset class="col-md-6 control-label">
+                <!-- valores ocultos -->
+                <input type="hidden" id="mtxtTicket" value="">
 
-  				</div>
-  			</article>
-  <!-- content end -->
-  		</div>
-  	</div>
-    <script type="text/javascript"> Cufon.now(); </script>
-    <script>
-    	$(document).ready(function() {
-    		tabs.init();
-    	})
+                  <div class="form-group">
+                    <label for="mtxtPVD" class="col-md-3 control-label">PVD: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                            <input name="mtxtPVD" id="mtxtPVD" class="form-control" type="text" disabled="true">
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtProgramado" class="col-md-3 control-label">Programado: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-dashboard"></i></span>
+                            <input name="mtxtProgramado" id="mtxtProgramado" class="form-control" type="text" disabled="true">
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtIniMant" class="col-md-3 control-label">Ini Manten: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input name="mtxtIniMant" id="mtxtIniMant" class="form-control" type="text" disabled="true">
+                        </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <!--  fin seccion izquierda form-->
+                <!--  inicio seccion derecha form-->
+                <fieldset>
+                  
+                  <div class="form-group">
+                    <label for="mtxtEstado" class="col-md-3 control-label">Estado: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="statusColor"><i class="glyphicon glyphicon-hand-right"></i></span>
+                            <select name="mtxtEstado" id="mtxtEstado" class="form-control"> <!-- onchange="realizarCalificacion()" -->
+                                <option value="1">Abierto</option>
+                                <option value="2">En Progreso</option>
+                                <option value="3">Cancelado</option>
+                                <!-- <option value="4">En Espera Interventoria</option> -->
+                                <option value="5">Ejecutado</option>
+                            </select>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtDuracion" class="col-md-3 control-label">Duración: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            <input name="mtxtDuracion" id="mtxtDuracion" class="form-control" type="text" disabled="true">
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtFinMant" class="col-md-3 control-label">Fin Manten: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input name="mtxtFinMant" id="mtxtFinMant" class="form-control" type="text" disabled="true">
+                        </div>
+                    </div>
+                  </div>                 
+                </fieldset>
+                <!--  fin seccion derecha form---->
+            </div>
+
+            <div class="widget bg_white m-t-25 display-block">
+                <h2 class="h4 mp">
+                    <i class="fa fa-fw fa-question-circle"></i>IT
+                </h2>
+                <fieldset class="col-md-6 control-label">
+                    <div class="form-group">
+                  <label for="mtxtTecIT" class="col-md-3 control-label">Téc IT: &nbsp;</label>
+                  <div class="col-md-8 selectContainer">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class='glyphicon glyphicon-user'></i></span>
+                          <select name="mtxtTecIT" id="mtxtTecIT" class="form-control"> <!-- onchange="realizarCalificacion()" -->
+                              <option value=""></option>
+                          </select>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="mtxtIniIT" class="col-md-3 control-label">Inicio IT: &nbsp;</label>
+                  <div class="col-md-8 selectContainer">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class='glyphicon glyphicon-calendar'></i></span>
+                          <input name="mtxtIniIT" id="mtxtIniIT" class="form-control" type="date">
+                      </div>
+                  </div>
+                </div>
+                </fieldset>
+                <!--  fin seccion izquierda form---->
+
+                <!--  inicio seccion derecha form---->
+                <fieldset>
+                  <div class="form-group">
+                    <label for="mtxtAuxIT" class="col-md-3 control-label">Aux IT: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-user'></i></span>
+                            <select name="mtxtAuxIT" id="mtxtAuxIT" class="form-control"> <!-- onchange="realizarCalificacion()" -->
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtFinIT" class="col-md-3 control-label">Fin IT: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-calendar'></i></span>
+                            <input name="mtxtFinIT" id="mtxtFinIT" class="form-control" type="date">
+                        </div>
+                    </div>
+                  </div>
+                </fieldset>
+            </div>
+
+            <div class="widget bg_white m-t-25 display-block">
+                <h2 class="h4 mp">
+                    <i class="fa fa-fw fa-question-circle"></i>&nbsp;&nbsp; AA
+                </h2>
+                <fieldset class="col-md-6 control-label">
+
+                  <div class="form-group">
+                    <label for="mtxtTecAA" class="col-md-3 control-label">Téc AA: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-user'></i></span>
+                            <select name="mtxtTecAA" id="mtxtTecAA" class="form-control"> <!-- onchange="realizarCalificacion()" -->
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mtxtIniAA" class="col-md-3 control-label">Inicio AA: &nbsp;</label>
+                    <div class="col-md-8 selectContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-calendar'></i></span>
+                            <input name="mtxtIniAA" id="mtxtIniAA" class="form-control" type="date">
+                        </div>
+                     </div>
+                  </div>
+                </fieldset>
+                  <!--  fin seccion izquierda form---->
+
+                  <!--  inicio seccion derecha form---->
+                  <fieldset>
+
+                    <div class="form-group">
+                      <label for="mtxtAuxAA" class="col-md-3 control-label">Aux AA: &nbsp;</label>
+                      <div class="col-md-8 selectContainer">
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class='glyphicon glyphicon-user'></i></span>
+                              <select name="mtxtAuxAA" id="mtxtAuxAA" class="form-control"> <!-- onchange="realizarCalificacion()" -->
+                                  <option value=""></option>
+                              </select>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="mtxtFinAA" class="col-md-3 control-label">Fin AA: &nbsp;</label>
+                      <div class="col-md-8 selectContainer">
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class='glyphicon glyphicon-calendar'></i></span>
+                              <input name="mtxtFinAA" id="mtxtFinAA" class="form-control" type="date">
+                          </div>
+                      </div>
+                    </div>
+                  </fieldset>
+              </div>
+
+              <div class="widget bg_white m-t-25 display-block">
+                  <div class="form-group" id="formCenter">
+                    <!-- <label for="mtxtObservaciones" class="col-md-3 control-label">Observaciones: &nbsp;</label> -->
+                      <div class="col-md-10 selectContainer">
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class='glyphicon glyphicon-edit'></i></span>
+                              <input name="mtxtObservaciones" id="mtxtObservaciones" class="form-control" type="text" placeholder="Observaciones">
+                          </div>
+                      </div>
+                  </div>                
+              </div>
+
+          </fieldset>
+         </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="mbtnCerrarModal" data-dismiss="modal"><i class='glyphicon glyphicon-remove'></i>&nbsp;Cancelar</button>
+        <button type="button" class="btn btn-info" id="mbtnUpdticket"><i class='glyphicon glyphicon-save'></i>&nbsp;Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+    <script type="text/javascript">var baseurl = "<?php echo base_url(); ?>";</script>
+    <!-- declarola url para usarla con js y los permisos -->
+    <script type="text/javascript">
+        var baseurl = "<?php echo base_url(); ?>";
+        var permisos = "<?php echo $_SESSION['permissions'][4]; ?>"
     </script>
+        <!-- DataTables -->
+    <script src="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <!-- llenar tabla y editar -->
+    <script src="<?php echo base_url(); ?>assets/js/editPreventivos/editPreventTable.js"></script>
+
+
   </body>
 </html>

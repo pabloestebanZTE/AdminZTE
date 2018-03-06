@@ -2,34 +2,15 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require ('assets/extensions/fpdf/fpdf.php');
-/*
-require 'assets/aws_s3_sdk/aws-autoloader.php';
-use Aws\S3\S3Client;
 
-$s3Client = S3Client::factory(array(
-  'http' => [ 'verify' => false ],
-    'version' => 'latest',
-    'region' => 'us-west-2',
-    'credentials' => array(
-        'key'    => 'AKIAJUCUHLTBZFNXHJ6Q',
-        'secret' => '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',
-    )
-));
-
-$iterator = $s3Client->getIterator('ListObjects', array(
-    'Bucket' => strtolower($_GET['k_ticket'])
-));
-
-$GLOBALS['bucket'] = $iterator;
-*/
 
 class Equipment extends CI_Controller {
 
     function __construct() {
         parent::__construct();
         $this->load->model('data/dao_user_model');
-        $this->load->model('data/dao_ticket_model');
         $this->load->model('data/dao_PVD_model');
+        $this->load->model('data/dao_ticket_model');
         $this->load->model('data/dao_inventory_model');
         $this->load->model('data/dao_softwareStuff_model');
         $this->load->model('data/dao_MC_model');
@@ -37,45 +18,26 @@ class Equipment extends CI_Controller {
         $this->load->model('equipment_model');
         $this->load->model('correctiveM_model');
         $this->load->model('mail/mail_manager');
-    }
 
-/*
-    public function listBucket($folder){
-      print_r($GLOBALS['bucket']);
-      try {
-        foreach ($GLOBALS['bucket'] as $object) {
-          print_r($object);
-          $direccion = explode("/", $object['Key']);
-          if(count($direccion)>4){
-            if($direccion[4] != ""){
-              $folder[$direccion[1]][$direccion[2]][$direccion[3]] = 1;
-            }
-            $direccion = NULL;
-          }
-        }
-      } catch (Exception $e ) {
-        echo ".o.o";
-      }
-    //  print_r($folder);
-      return $folder;
+        $this->load->library('session');
+ $this->load->helper('form');
     }
-*/
 
     public function inventoryPVD(){
-  //    $folders = $this->createFolders();
-  //    $folders = $this->listBucket($folders);
-      $respuesta['ticket'] = $_GET['k_ticket'];
-      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
-      $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       if($_GET['k_tipo'] == "Pl"){
         $_GET['k_tipo'] = "Plus";
       }
       if($_GET['k_tipo'] == "Pi"){
         $_GET['k_tipo'] = "Piloto";
       }
+      $respuesta['ticket'] = $_GET['k_ticket'];
+      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      $respuesta['CCC'] =  $this->dao_PVD_model->getAllCCCTicketsPerPBV($_GET['k_pvd']);
       $respuesta['inventory'] = $this->dao_inventory_model->getEquipmentTypePVD($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['generic'] = $this->dao_inventory_model->getAllEquipment($_GET['k_fase'], $_GET['k_tipo'], $_GET['k_pvd']);
       $respuesta['software'] = $this->dao_softwareStuff_model->getAllSoftwareInventoryPerPVD($_GET['k_pvd']);
+      $respuesta['estadoI'] = $this->dao_ticket_model->getEstadoI($_GET['k_ticket']);
+
       $respuesta['avance'] = 0;
       $porcentaje = 100/count($respuesta['inventory']);
       if ($respuesta['PVD']->getRegion() == "Zona 1"){
@@ -109,12 +71,11 @@ class Equipment extends CI_Controller {
           if($folders[$respuesta['inventory'][$i]['N_NAME']][$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']]['Despues del Mantenimiento'] == 1 && $respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] != "Averiado"){
             $respuesta['inventory'][$i]['inventario'][$j]['progreso'] = $respuesta['inventory'][$i]['inventario'][$j]['progreso'] + 0;
           }
-          $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro Fotografico"."/".$respuesta['inventory'][$i]['inventario'][$j]['K_IDPVD_PLACE']['N_NAME']."/"."?region=us-west-2&tab=overview";
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "Averiado"){
-            $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro%20Fotografico%20Correctivos/?region=us-west-2&tab=overview";
+          if ($respuesta['PVD']->getRegion() == "Zona 1"){
+            $url = "https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg";
           }
-          if($respuesta['inventory'][$i]['inventario'][$j]['N_ESTADO'] == "No encontrado"){
-            $url = "https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$respuesta['PVD']->getRegion())[1]."/".strtolower($_GET['k_ticket'])."/Registro%20Fotografico%20No%20Encontrados/?region=us-west-2&tab=overview";
+          if ($respuesta['PVD']->getRegion() == "Zona 4"){
+            $url = "https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ";
           }
           if (isset($respuesta['inventory'][$i]['inventario'][$j]['url'])){
             $respuesta['inventory'][$i]['inventario'][$j]['url'] = $url;
@@ -147,8 +108,8 @@ class Equipment extends CI_Controller {
          $respuesta['avance'] = $respuesta['avance'] + ((100/count($respuesta['inventory']))/100*$respuesta['inventory'][$i]['avance']);
       }
       $respuesta['avance'] = number_format((float) $respuesta['avance'], 2, '.', '');
-  //    echo $respuesta['avance'];
       $this->dao_ticket_model->updateProgress($respuesta['avance'], $_GET['k_ticket']);
+      //print_r($respuesta);
       $this->load->view('PmaintenanceProcedure', $respuesta);
     }
 
@@ -216,8 +177,65 @@ class Equipment extends CI_Controller {
 
     public function approveTicket(){
       $this->dao_ticket_model->approveTicket($_GET['k_ticket']);
-      $this->mail_manager->mailNotification($_GET['k_ticket']);
+    //  $this->mail_manager->mailNotification($_GET['k_ticket']);
+      $PVD = $this->dao_PVD_model->getPVDbyId($_GET['k_pvd']);
+      //-------------------------------email------------------
+
+     $cuerpo = "<html>
+                   <head>
+                   <title>asignacion</title>
+                    <link rel= 'stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css'>
+                    <link rel= 'stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css'>
+                     <script src='//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js'></script>
+
+                   </head>
+                  <body>
+                   <h4>Buen Día, se confirma que el reporte correspondiente al PVD ".$_GET['k_pvd']." ha sido entregado y se encuentra disponible en la plataforma para su revisión.</h4><br>
+
+                   El link a la página del mantenimiento es el siguiente:
+
+                   <a href='http://zte.consorcio2018technical.com/index.php/Equipment/inventoryPVD?k_fase=".$_GET['k_fase']."&k_tipo=".$_GET['k_tipo']."&k_pvd=".$_GET['k_pvd']."&k_ticket=".$_GET['k_ticket']."'>Página principal ticket número ".$_GET['k_ticket']."<a>
+             <div class='box-body'>
+                <table id='example1' class='table table-bordered table-striped'>
+
+                  <tbody>
+                  ";
+                 $cuerpo = $cuerpo."<tfoot>
+
+                               </tfoot>
+                </table>
+              </div><br><br>
+              <p style= 'color: blue'> Este es un correo automático. Por favor, no responda este mensaje. </p>
+
+           </body>
+           </html>
+       ";
+
+     $this->load->library('email');
+
+     $config['mailtype'] = 'html'; // o text
+     $this->email->initialize($config);
+
+     $this->email->from('zolid@zte.com', 'ZOLID_ZTE');
+
+   //  $this->email->to(strtolower($mailEngC).', '.strtolower($asig->getMail()));
+
+     if($PVD->getRegion() == "Zona 1"){
+      $this->email->to('sandra.cardenas@zte.com.cn, jonnatan.villalobos@zte.com.cn, marcela.espitiacuervo@zte.com.cn, johan.beltran@zte.com.cn, coordinador.tecnico1@fonadeud.com.co');
+      }else {
+      $this->email->to('sandra.cardenas@zte.com.cn, oscar.gonzalez01@zte.com.cn, juan.ramirez@zte.com.cn, johan.beltran@zte.com.cn, coordinador.tecnico4@fonadeud.com.co');
+     }
+
+     $this->email->cc('paestebanv@gmail.com');//, cesar.rios.ext@claro.com.co
+
+     $this->email->bcc('pablo.esteban@zte.com.cn');
+
+     $this->email->subject("Notificación de finalización mantenimiento preventivo. PVD: ".$_GET['k_pvd'].".");
+
+     $this->email->message($cuerpo);
+
+     $this->email->send();
+
       $this->inventoryPVD();
     }
-
 }

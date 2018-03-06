@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Creacion Tickets</title>
+<title>Detalles Mantenimiento Preventivo</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="/AdminZTE/assets/css/mainModalWindow2.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/chunkyButtons.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/wheelmenu.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/index.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/tablesInventory.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/multiTable.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/mainModalWindow2.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/reset.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/layout.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/chunkyButtons.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/zerogrid.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/responsive.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/wheelmenu.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/index.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert/dist/sweetalert.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/tablesInventory.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/multiTable.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.6.js" ></script>
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_700.font.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/jquery.easing.1.3.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/tms-0.3.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/tms_presets.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/jcarousellite.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/script.js"></script>
-<script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
-<script src="/AdminZTE/assets/js/responsiveslides.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/tabs.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/jquery.wheelmenu.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/canvasjs.min.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/css/canvasJS/Charts/Charts.js"></script>
-<link rel="stylesheet" href="/AdminZTE/assets/css/sweetalert/dist/sweetalert.css" />
-<script src="/AdminZTE/assets/css/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/cufon-yui.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/cufon-replace.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/Swis721_Cn_BT_400.font.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/Swis721_Cn_BT_700.font.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/tms-0.3.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/tms_presets.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jcarousellite.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/script.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/css3-mediaqueries.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/responsiveslides.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/tabs.js"></script>
+<script src="<?php echo base_url(); ?>assets/css/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.wheelmenu.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/css/canvasJS/canvasjs.min.js"></script>
+
 
 <script>
 var newElementQuantityCCC = "<?php echo count($CCC); ?>";
@@ -82,7 +76,7 @@ var idZonesG;
           closeOnConfirm: false
         },
         function(){
-          window.location.href="http://localhost/AdminZTE/index.php/Equipment/deleteElement?k_fase=<?php echo $PVD->getFase() ?>&k_tipo=<?php echo $PVD->getTipologia() ?>&k_pvd=<?php echo $PVD->getID() ?>&k_ticket=<?php echo $ticket ?>&k_element="+idInv;
+          window.location.href="<?php echo base_url(); ?>Equipment/deleteElement?k_fase=<?php echo $PVD->getFase() ?>&k_tipo=<?php echo $PVD->getTipologia() ?>&k_pvd=<?php echo $PVD->getID() ?>&k_ticket=<?php echo $ticket ?>&k_element="+idInv;
         });
       }
 
@@ -161,8 +155,8 @@ var idZonesG;
           zone = zone + "<option value='-1'>"+inventario[i].K_IDPVD_PLACE.N_NAME+"</option>";
           zone = zone+zones;
           zone = zone+"</select></td>";
-
           var id = "<td hidden><input id='idElement"+newElementQuantity+"' name='idElement"+newElementQuantity+"' value='"+inventario[i].K_IDSTUFF+"'></td>";
+
           if(inventario[i].N_NAME != null) {
             var observaciones = "<td id='tdta"+newElementQuantity+"'><textarea name='observaciones"+newElementQuantity+"' id='observaciones"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'  placeholder='Descripción de la falla *' >"+inventario[i].N_NAME+"</textarea></td>";
           } else {
@@ -230,11 +224,11 @@ var idZonesG;
       $('#todo-list').empty();
       var check = "";
       for (var i = 0; i < checklist.length; i++){
-        check = check + "<span class='todo-wrap'><input type='checkbox' id='"+i+"'/><label for='"+i+"' class='todo'><i class='fa fa-check ::after'></i>"+checklist[i].K_IDITEM_CHECKLIST.N_NAME+"</label></span>";
+        check = check + "<span class='todo-wrap'><input type='checkbox' id='"+i+"'/><label for='"+i+"' class='todo'><i class='fa fa-check'></i>"+checklist[i].K_IDITEM_CHECKLIST.N_NAME+"</label></span>";
       }
       $('#todo-list').append(check);
-      cantidad = "<?php echo $avance ?>";
-      if (cantidad > 50){
+      avance = "<?php echo $avance ?>";
+      if (avance > 60){
         for (var i = 0; i < checklist.length; i++){
           document.getElementById(""+i).checked = true;
         }
@@ -386,7 +380,12 @@ var idZonesG;
       var fieldName = "<td><input name='fieldName"+newElementQuantity+"' id='fieldName"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldPlaca = "<td><input name='fieldPlaca"+newElementQuantity+"' id='fieldPlaca"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
       var fieldParte = "<td><input name='fieldParte"+newElementQuantity+"' id='fieldParte"+newElementQuantity+"' style='font-size:10px' type='text' aria-describedby='basic-addon1'></td>";
-      var href = "https://console.aws.amazon.com/s3/buckets/region-"+"<?php echo explode(' ',$PVD->getRegion())[1] ?>"+"/"+"<?php echo strtolower($ticket) ?>"+"/Registro Fotografico/"+nameZonesG[0]+"/?region=us-west-2&tab=overview";
+      var region = "<?php echo $PVD->getRegion();?>";
+      if (region == "Zona 1"){
+        var href = "https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg";
+      } else {
+        var href = "https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ";
+      }
       var fotos = "<td><a id='fotos"+newElementQuantity+"' name='fotos"+newElementQuantity+"' class='push_button blue' href='"+href+"' target='_blank'>Ver</a></td>";
 
       var zonaE = "<td><select onchange='cambiarURL("+newElementQuantity+")' style='font-size:10px' name='selectZones"+newElementQuantity+"' id='selectZones"+newElementQuantity+"' aria-describedby='basic-addon1'>";
@@ -405,7 +404,6 @@ var idZonesG;
       $('#inventory').append( "<tr id='linea"+newElementQuantity+"' name='linea"+newElementQuantity+"'>"+deleteE+options+manufacturers+models+fieldName+fieldPlaca+fieldParte+zonaE+estados+fotos+finalizado+observacion+"</tr>" );
       newElementQuantity++;
       $("#Elements").val(newElementQuantity);
-
     }
 
     function añadirElementoCCC(){
@@ -456,30 +454,30 @@ $(window).on('load', function() {
 <!-- header -->
 			<header>
 				<div class="wrapper row">
-				<h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
+				<h1><a id="logo"><img src="<?php echo base_url(); ?>assets/images/logo.png" /></a></h1>
 				<nav>
 					<ul id="menu">
           	<?php
 							if ($_SESSION['permissions'] != NULL){
-                echo "<li id='nav1'><a href='/AdminZTE/index.php/User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
+                echo "<li id='nav1'><a href='".base_url()."User/loadPrincipalView'>Bienvenid@<span>".$_SESSION['name']."</span></a></li>";
 								if($_SESSION['permissions'][3] == 1){
 									echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
 								}
 								if($_SESSION['permissions'][1] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='".base_url()."Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][2] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='".base_url()."MCorrectivos/formMC'>Correctivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][4] == 1){
-									echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
-								}
+                  echo "<li id='nav2'><a href='http://legalizaciones.us-west-2.elasticbeanstalk.com/?usuarioAdmin=".$_SESSION['id']."&passAdmin=".$_SESSION['pass']."'>legalizaciones<span>legalizaciones</span></a></li>";
+                }
 								if($_SESSION['permissions'][5] == 1){
-                  echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
+                  echo "<li id='nav5'><a href='".base_url()."ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
 								}
 							}
             ?>
-						<li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
+						<li id="nav6"><a href="<?php echo base_url(); ?>welcome/index">Salir<span>Logout</span></a></li>
 					</ul>
 				</nav>
 				</div>
@@ -496,7 +494,7 @@ $(window).on('load', function() {
         echo "<div id='pricing-table' class='clear'>";
           echo "<center>";
                 echo "<div class='plan' id='most-popular'>";
-                    echo "<h3>Información General<span><img src='/AdminZTE/assets/images/pvd.png'/></span></h3>";
+                    echo "<h3>Información General<span><img src='".base_url()."assets/images/pvd.png'/></span></h3>";
                     echo "<ul>";
                         echo "<li><b>Ticket: </b>".$ticket."</li>";
                         echo "<li><b>ID: </b>".$PVD->getId()."</li>";
@@ -521,17 +519,31 @@ $(window).on('load', function() {
             if($_SESSION['id'] != 314618 && $_SESSION['id'] != 314619){
                 echo "<a class='btn btn-success btn-sm' onclick='showModalCCC()'>Tickets CCC</a>";
             }
-            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/region-".explode(' ',$PVD->getRegion())[1]."/".strtolower($ticket)."/Videos/AA/?region=us-west-2&tab=overview'>Videos AA </a>";
-            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/region-".explode(' ',$PVD->getRegion())[1]."/".strtolower($ticket)."/Videos/IT/?region=us-west-2&tab=overview'>Videos IT </a>";
-            if($_SESSION['id'] != 314618 && $_SESSION['id'] != 314619){
+            if ($PVD->getRegion() == "Zona 1"){
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg'>Videos AA </a>";
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg'>Videos IT </a>";
+            }
+            if ($PVD->getRegion() == "Zona 4"){
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ'>Videos AA </a>";
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ'>Videos IT </a>";
+            }
+
+          if($_SESSION['id'] != 314618 && $_SESSION['id'] != 314619){
               echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaIT()'> Generar Acta IT</a>";
               echo "<a class='btn btn-primary btn-sm' role='button' onclick='showActaAA()'> Generar Acta AA</a>";
             }
-          echo "</div></center><br><br><br>";
-          echo "<center><div class='btn-group'>";
-            echo "<a class='btn btn-primary btn-sm' target='_blank' href='/AdminZTE/index.php/PDF/exportInventoryExcel?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Exportar Inventario</a>";
-            echo "<a class='btn btn-primary btn-sm' target='_blank' href='/AdminZTE/index.php/PDF/createFacturationReport?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Generar Acta Facturacion</a>";
-          echo "</div></center><br><br><br>";
+            echo "</div></center><br><br><br>";
+            echo "<center><div class='btn-group'>";
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='".base_url()."PDF/exportInventoryExcel?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Exportar Inventario</a>";
+              echo "<a class='btn btn-primary btn-sm' target='_blank' href='".base_url()."PDF/createFacturationReport?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Generar Acta Facturacion</a>";
+              if ($PVD->getRegion() == "Zona 1"){
+                echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg'>Acta</a>";
+              }
+              if ($PVD->getRegion() == "Zona 4"){
+                echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ'>Acta</a>";
+              }
+            echo "</div></center><br><br><br>";
+
 
 
           echo "<div id='formActaIT' name='formActaIT' hidden>";
@@ -575,7 +587,7 @@ $(window).on('load', function() {
                    echo "<td><input id='ciudadTec' name='ciudadTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='velocidadD' name='velocidadD' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='velocidadU' name='velocidadU' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
-                   echo "<td><button onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/PDF/crearActaIT?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
+                   echo "<td><button onclick = \"this.form.action = '".base_url()."PDF/crearActaIT?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
                  echo "</tr>";
               echo "</tbody>";
             echo "</table><br><br>";
@@ -619,7 +631,7 @@ $(window).on('load', function() {
                    echo "<td><input id='nombreTec' name='nombreTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='cedulaTec' name='cedulaTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
                    echo "<td><input id='ciudadTec' name='ciudadTec' style='font-size:10px' type='text' aria-describedby='basic-addon1' required></td>";
-                   echo "<td><button onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/PDF/crearActaAA?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
+                   echo "<td><button onclick = \"this.form.action = '".base_url()."PDF/crearActaAA?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"type='submit' class='push_button blue' target='_blank'>importar<button></td>";
                  echo "</tr>";
               echo "</tbody>";
             echo "</table><br><br>";
@@ -658,12 +670,19 @@ $(window).on('load', function() {
                echo "</tbody>";
              echo "</table>";
             }
-
             if($_SESSION['id'] == 1023000199 || $_SESSION['id'] == 1014295226){
-              echo "<center><div class='btn-group'>";
-                echo "<br><br><br><a class='btn btn-danger btn-sm' href='/AdminZTE/index.php/Equipment/approveTicket?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Aprobar a Interventoria</a>";
-              echo "</div></center><br><br><br>";
+              if ($estadoI != 1){
+                echo "<center><div class='btn-group'>";
+                  echo "<br><br><br><a class='btn btn-danger btn-sm' href='".base_url()."Equipment/approveTicket?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Aprobar a Interventoria</a>";
+                echo "</div></center><br><br><br>";
+              }
             }
+            // echo "<form method='post' name='formActualizar'>";
+            //   echo "<center><div class='btn-group'>";
+            //     echo "<br><br><br><textarea name='anotaciones'>".$anotaciones."</textarea>";
+            //     echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = '".base_url()."Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+            //   echo "</div></center><br><br><br>";
+            // echo "</form>";
 
            ?>
 			</article>
@@ -688,7 +707,7 @@ $(window).on('load', function() {
                       echo "<center><div class='btn-group'>";
                         if($_SESSION['id'] != 314618 && $_SESSION['id'] != 314619){
                           echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElemento()'><i class='fa fa-plus-square' aria-hidden='true'></i> Añadir Elemento</button>";
-                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = '".base_url()."Equipment/updateInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                         }
                         echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                       echo "</div></center>";
@@ -735,12 +754,12 @@ $(window).on('load', function() {
                             echo "<thead>";
                               echo "<tr>";
                                 echo "<th><h1>Eliminar</h1></th>";
-                                echo "<th><h1>Elemento</h1></th>";
+                                echo "<th><h1>Elemento </h1></th>";
                                 echo "<th><h1>Marca</h1></th>";
                                 echo "<th><h1>Modelo</h1></th>";
                                 echo "<th><h1>Serial</h1></th>";
                                 echo "<th><h1>Placa de inventario</h1></th>";
-                                echo "<th><h1>Número parte</h1></th>";
+                                echo "<th><h1>Número de parte</h1></th>";
                                 echo "<th><h1>Área</h1></th>";
                                 echo "<th><h1>Estado</h1></th>";
                                 echo "<th><h1>Galeria</h1></th>";
@@ -824,10 +843,15 @@ $(window).on('load', function() {
                       if (isset($software)){
                         echo "<center><div class='btn-group'>";
                           if($_SESSION['id'] != 314618 && $_SESSION['id'] != 314619){
-                            echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                            echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = '".base_url()."Equipment/updateSoftwareInventory?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                           }
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
-                          echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://console.aws.amazon.com/s3/buckets/region-".explode(" ",$PVD->getRegion())[1]."/".strtolower($ticket)."/Registro Fotografico Software /?region=us-west-2&tab=overview'>Registro Fotografico de Software </a>";
+                          if ($PVD->getRegion() == "Zona 1"){
+                            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SaZGNJT0E4OTY0Rjg'>Registro Fotografico de Software </a>";
+                          }
+                          if ($PVD->getRegion() == "Zona 4"){
+                            echo "<a class='btn btn-primary btn-sm' target='_blank' href='https://drive.google.com/drive/folders/0BxX2l5kpb3SabFduRW1hMFhyWDQ'>Registro Fotografico de Software </a>";
+                          }
                         echo "</div></center>";
                         echo "<article id='content'>";
                           echo "<table class='container' id='tableCorrective' name='tableCorrective'>";
@@ -892,7 +916,7 @@ $(window).on('load', function() {
                   <div class="linea">
                     <?php
                         echo "<center><div class='btn-group'>";
-                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = 'http://localhost/AdminZTE/index.php/Equipment/updateCCC?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
+                          echo "<button type='submit' class='btn btn-info btn-sm' onclick = \"this.form.action = '".base_url()."Equipment/updateCCC?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' \"><i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar Cambios</button>";
                           echo "<button type='button' class='btn btn-primary btn-sm' onclick='añadirElementoCCC()'><i class='fa fa-plus-square' aria-hidden='true'></i> Añadir Elemento</button>";
                           echo "<button type='button' class='btn btn-danger btn-sm' data-dismiss='modal'><i class='fa fa-window-close' aria-hidden='true'></i> Salir</button>";
                         echo "</div></center>";
@@ -912,8 +936,25 @@ $(window).on('load', function() {
                               echo "<tr>";
                                 echo "<td hidden><input id='idCCC".$i."' name='idCCC".$i."' value='".$CCC[$i]['K_IDTICKET_CCC']."' style='font-size:10px' aria-describedby='basic-addon1'></td>";
                                 echo "<td>".$CCC[$i]['K_IDTICKET_CCC']."</td>";
-                                echo "<td>".$CCC[$i]['N_TIPO']."</td>";
-                                echo "<td>".$CCC[$i]['N_DESCRIPTION']."</td>";
+
+                                if($CCC[$i]['N_TIPO'] == "IT"){
+                                  echo "<td><select style='font-size:10px' name='selectTipo".$i."' aria-describedby='basic-addon1'>";
+                                    echo "<option selected='selected' value='IT'>IT</option>";
+                                    echo "<option value='AA'>AA</option>";
+                                  echo "</select></td>";
+                                }
+
+                                if($CCC[$i]['N_TIPO'] == "AA"){
+                                  echo "<td><select style='font-size:10px' name='selectTipo".$i."' aria-describedby='basic-addon1'>";
+                                    echo "<option selected='selected' value='AA'>AA</option>";
+                                    echo "<option value='IT'>IT</option>";
+                                  echo "</select></td>";
+                                }
+                                // echo "<td>".$CCC[$i]['N_TIPO']."</td>";
+
+                                echo "<td><textarea rows='5' cols='70' name='desc".$i."'>".$CCC[$i]['N_DESCRIPTION']."</textarea></td>";
+
+                              //  echo "<td>".$CCC[$i]['N_DESCRIPTION']."</td>";
                                 echo "<td><select style='font-size:10px' name='select".$i."' aria-describedby='basic-addon1'>";
                                   echo "<option selected='selected' value='".$CCC[$i]['N_ESTADO']."'>".$CCC[$i]['N_ESTADO']."</option>";
                                   echo "<option value='Abierto'>Abierto</option>";

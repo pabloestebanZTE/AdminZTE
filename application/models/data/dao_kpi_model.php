@@ -4,7 +4,7 @@
 
 //    session_start();
 
-    class dao_kpi_model extends CI_Model{
+    class Dao_kpi_model extends CI_Model{
 
         public function __construct(){
             $this->load->model('data/configdb_model');

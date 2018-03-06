@@ -5,24 +5,24 @@
 <meta charset="utf-8">
 <link rel="icon" href="http://cellaron.com/media/wysiwyg/zte-mwc-2015-8-l-124x124.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="/AdminZTE/assets/css/reset.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/layout.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/style.css" type="text/css" media="all">
-<link rel="stylesheet" href="/AdminZTE/assets/css/zerogrid.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/responsive.css">
-<link rel="stylesheet" href="/AdminZTE/assets/css/responsiveslides.css" />
-<script type="text/javascript" src="/AdminZTE/assets/js/jquery-1.6.js" ></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/cufon-yui.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/cufon-replace.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_400.font.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/Swis721_Cn_BT_700.font.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/jquery.easing.1.3.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/tms-0.3.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/tms_presets.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/jcarousellite.js"></script>
-<script type="text/javascript" src="/AdminZTE/assets/js/script.js"></script>
-<script src="/AdminZTE/assets/js/css3-mediaqueries.js"></script>
-<script src="/AdminZTE/assets/js/responsiveslides.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/reset.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/layout.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/zerogrid.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/responsive.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/responsiveslides.css" />
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.6.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/cufon-yui.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/cufon-replace.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/Swis721_Cn_BT_400.font.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/Swis721_Cn_BT_700.font.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/tms-0.3.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/tms_presets.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jcarousellite.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/script.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/css3-mediaqueries.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/responsiveslides.js"></script>
 	<script>
 		$(function () {
 		  $("#slider").responsiveSlides({
@@ -44,7 +44,7 @@
 <!-- header -->
 			<header>
 				<div class="wrapper row">
-				<h1><a id="logo"><img src="/AdminZTE/assets/images/logo.png" /></a></h1>
+				<h1><a id="logo"><img src="<?php echo base_url(); ?>assets/images/logo.png" /></a></h1>
 				<nav>
 					<ul id="menu">
           	<?php
@@ -54,23 +54,23 @@
 									echo "<li id='nav3'><a href='#'>PVD<span>HV</span></a></li>";
 								}
 								if($_SESSION['permissions'][1] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='".base_url()."Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][2] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/MCorrectivos/verMC'>Correctivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='#'>Correctivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][4] == 1){
-									echo "<li id='nav2'><a href='#'>Facturacion<span>Facturas</span></a></li>";
+									echo "<li id='nav2'><a href='http://legalizaciones.us-west-2.elasticbeanstalk.com/?usuarioAdmin=".$_SESSION['id']."&passAdmin=".$_SESSION['pass']."'>legalizaciones<span>legalizaciones</span></a></li>";
 								}
 								if($_SESSION['permissions'][5] == 1){
-									echo "<li id='nav5'><a href='/AdminZTE/index.php/ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
+									echo "<li id='nav5'><a href='".base_url()."ZTEPlatform/platformZTE'>ZTE<span>Plataforma</span></a></li>";
 								}
 								if($_SESSION['permissions'][20] == 1){
-									echo "<li id='nav4'><a href='/AdminZTE/index.php/Mantenimientos/preventivosInterventoria'>Mantenimientos<span>Interventoria</span></a></li>";
+									echo "<li id='nav4'><a href='".base_url()."Mantenimientos/preventivosInterventoria'>Mantenimientos<span>Interventoria</span></a></li>";
 								}
 							}
             ?>
-						<li id="nav6"><a href="/AdminZTE/index.php/welcome/index">Salir<span>Logout</span></a></li>
+						<li id="nav6"><a href="<?php echo base_url(); ?>Welcome/index">Salir<span>Logout</span></a></li>
 					</ul>
 				</nav>
 				</div>
@@ -79,9 +79,9 @@
 					<div class="slider">
 					  	<div class="rslides_container">
 							<ul class="rslides" id="slider">
-								<li><img src="/AdminZTE/assets/images/imagenRotativa4.png" alt=""></li>
-								<li><img src="/AdminZTE/assets/images/imagenRotativa3.png" alt=""></li>
-								<li><img src="/AdminZTE/assets/images/imagenRotativa5.png" alt=""></li>
+								<li><img src="<?php echo base_url(); ?>assets/images/imagenRotativa4.png" alt=""></li>
+								<li><img src="<?php echo base_url(); ?>assets/images/imagenRotativa3.png" alt=""></li>
+								<li><img src="<?php echo base_url(); ?>assets/images/imagenRotativa5.png" alt=""></li>
 							</ul>
 						</div>
 					</div>
@@ -94,6 +94,7 @@
 	<div class="body3">
 		<div class="main zerogrid">
 <!-- content -->
+<!--
 			<article id="content">
 				<div class="wrapper row">
 					<section class="col-1-4">
@@ -126,6 +127,7 @@
 					</section>
 				</div>
 			</article>
+-->
 		</div>
 	</div>
 	<div class="body4">
@@ -134,7 +136,7 @@
 				<div class="wrapper row">
 					<section class="col-1-4">
 					<div class="wrap-col">
-						<h4>¿Porque elegirnos?</h4>
+						<h4>Contenido</h4>
 						<ul class="list1">
 							<li><a href="#">Proyecto ZTE-FONADE</a></li>
 							<li><a href="#">Manteniminetos</a></li>
@@ -142,8 +144,8 @@
 							<li><a href="#">Manejo Interno</a></li>
 						</ul>
 					</div>
-				</section>
-				<section class="col-1-4">
+					</section>
+					<section class="col-1-4">
 					<div class="wrap-col">
 						<h4>Dirección</h4>
 						<ul class="address">
@@ -158,10 +160,10 @@
 					<div class="wrap-col">
 						<h4>Síguenos</h4>
 						<ul id="icons">
-							<li><a href="#"><img src="/AdminZTE/assets/images/icon1.jpg" alt="">Facebook</a></li>
-							<li><a href="#"><img src="/AdminZTE/assets/images/icon2.jpg" alt="">Twitter</a></li>
-							<li><a href="#"><img src="/AdminZTE/assets/images/icon3.jpg" alt="">LinkedIn</a></li>
-							<li><a href="#"><img src="/AdminZTE/assets/images/icon4.jpg" alt="">Delicious</a></li>
+							<li><a href="#"><img src="<?php echo base_url(); ?>assets/images/icon1.jpg" alt="">Facebook</a></li>
+							<li><a href="#"><img src="<?php echo base_url(); ?>assets/images/icon2.jpg" alt="">Twitter</a></li>
+							<li><a href="#"><img src="<?php echo base_url(); ?>assets/images/icon3.jpg" alt="">LinkedIn</a></li>
+							<li><a href="#"><img src="<?php echo base_url(); ?>assets/images/icon4.jpg" alt="">Delicious</a></li>
 						</ul>
 					</div>
 					</section>

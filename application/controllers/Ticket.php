@@ -31,16 +31,7 @@ class Ticket extends CI_Controller {
       $this->load->view('ticketDetail', $respuesta);
     }
 
-    public function updateTicketDetail(){
-      $this->dao_ticket_model->updateTicketDetails($_POST);
-      $respuesta['ticket'] = $this->dao_ticket_model->getTicketByID($_POST['id']);
-      $respuesta = $this->fixArrayUsers($respuesta);
-      $respuesta['maintenance'] = $this->dao_maintenance_model->getManPrePerID($respuesta['ticket']->getIdM());
-      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($respuesta['maintenance']->getIdPVD());
-      $this->load->view('ticketDetail', $respuesta);
-    }
-
-    //----------------------------------camilo----------------------------------
+     //----------------------------------camilo----------------------------------
     public function ticketODetails(){
       $respuesta['ticket']=$this->dao_ticket_model->getTicketOByID($_GET['k_ticket']);
       $this->load->view('ticketODetails',$respuesta);
@@ -70,12 +61,16 @@ class Ticket extends CI_Controller {
       return $respuesta;
     }
 
-    public function OtherTicketsPrincipal(){
-      $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherMaintenances();
-      $this->load->view('OthersPrincipal', $respuesta);
+    public function updateTicketDetail(){
+      $this->dao_ticket_model->updateTicketDetails($_POST);
+      $respuesta['ticket'] = $this->dao_ticket_model->getTicketByID($_POST['id']);
+      $respuesta = $this->fixArrayUsers($respuesta);
+      $respuesta['maintenance'] = $this->dao_maintenance_model->getManPrePerID($respuesta['ticket']->getIdM());
+      $respuesta['PVD'] = $this->dao_PVD_model->getPVDbyId($respuesta['maintenance']->getIdPVD());
+      $this->load->view('ticketDetail', $respuesta);
     }
 
-    public function CCCTicketsPrincipal(){
+    public function OtherTicketsPrincipal(){
       $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherMaintenances();
       $this->load->view('OthersPrincipal', $respuesta);
     }

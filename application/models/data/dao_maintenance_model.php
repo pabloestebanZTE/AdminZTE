@@ -4,7 +4,7 @@
 
 //    session_start();
 
-    class dao_maintenance_model extends CI_Model{
+    class Dao_maintenance_model extends CI_Model{
 
         public function __construct(){
             $this->load->model('maintenance_model');
@@ -89,7 +89,13 @@
               }
             }
 
-            public function getAllowancesPerMonth($month){
+            public function getAllMaintenancesCI(){
+              $query = $this->db->get("maintenance");
+              return $query->result();  
             }
+
+
+
+
         }
 ?>

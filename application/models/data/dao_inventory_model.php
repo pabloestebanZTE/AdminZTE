@@ -4,7 +4,7 @@
 
   //    session_start();
 
-  class dao_inventory_model extends CI_Model{
+  class Dao_inventory_model extends CI_Model{
     public function __construct(){
       $this->load->model('data/configdb_model');
     }
@@ -179,49 +179,181 @@
      }
 
      public function getModelbiId($idModel){
-       $dbConnection = new configdb_model();
-       $session = $dbConnection->openSession();
-       $sql =  "SELECT * FROM MODEL WHERE K_IDMODEL = ".$idModel.";";
-       if ($session != "false"){
-         $result = $session->query($sql);
-         $row = $result->fetch_assoc();
-         $sql2 = "SELECT * FROM manufacturer WHERE K_IDMANUFACTURER = ".$row['K_IDMANUFACTURER'].";";
-         $sql3 = "SELECT * FROM stuff_category WHERE K_IDSTUFF_CATEGORY = ".$row['K_IDSTUFF_CATEGORY'].";";
-         $result2 = $session->query($sql2);
-         $result3 = $session->query($sql3);
-         $row2 = $result2->fetch_assoc();
-         $row3 = $result3->fetch_assoc();
-         $respuesta['ma'] = $row2['N_NAME'];
-         $respuesta['sc'] = $row3['N_NAME'];
-         $respuesta['mo'] = $row['N_NAME'];
-       }
-       return $respuesta;
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql =  "SELECT * FROM model WHERE K_IDMODEL = ".$idModel.";";
+      if ($session != "false"){
+        $result = $session->query($sql);
+        if ($result->num_rows > 0) {
+          $row = $result->fetch_assoc();
+          $sql2 = "SELECT * FROM manufacturer WHERE K_IDMANUFACTURER = ".$row['K_IDMANUFACTURER'].";";
+          $sql3 = "SELECT * FROM stuff_category WHERE K_IDSTUFF_CATEGORY = ".$row['K_IDSTUFF_CATEGORY'].";";
+          $result2 = $session->query($sql2);
+          $result3 = $session->query($sql3);
+          $row2 = $result2->fetch_assoc();
+          $row3 = $result3->fetch_assoc();
+        }
+        $respuesta['ma'] = $row2['N_NAME'];
+        $respuesta['sc'] = $row3['N_NAME'];
+        $respuesta['mo'] = $row['N_NAME'];
+      }
+      return $respuesta;
+    }
+
+    public function getCorrectiveTicketPerStuff($idStuff){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql =  "SELECT * FROM ticket_corrective_maintenance WHERE K_IDSTUFF = ".$idStuff.";";
+      if ($session != "false"){
+        $result = $session->query($sql);
+        $row = $result->fetch_assoc();
+      }
+      return $row;
+    }
+
+    public function getAllStuffPerPVD($idPVD){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql = "SELECT * FROM stuff WHERE K_IDPVD = ".$idPVD.";";
+      if ($session != "false"){
+        $result = $session->query($sql);
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          $respuesta[$i] = $row;
+          $i++;
+        }
+      }
+      return $respuesta;
+    }
+
+    public function getAAperPVD($pvd, $reg){
+      $dbConnection = new configdb_model();
+      $session = $dbConnection->openSession();
+      $sql = "SELECT * FROM stuff_category where K_IDEQUIPMENT_GENERIC = 34 ;";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          $respuesta[$i] = $row;
+          $i++;
+        }
+      }
+
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 211";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[12][0]++;
+            $respuesta[12][2]+= $respuesta[0][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[12][1]++;
+          }
+          $i++;
+        }
+      } else {
+         $respuesta[12][0] = 0;
+         $respuesta[12][1] = 0;
+      }
+
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 212";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[18][0]++;
+            $respuesta[18][2]+= $respuesta[1][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[18][1]++;
+          }
+          $i++;
+        }
+      } else {
+        $respuesta[18][0] = 0;
+        $respuesta[18][1] = 0;
+      }
+
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 213";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[24][0]++;
+            $respuesta[24][2]+= $respuesta[2][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[24][1]++;
+          }
+          $i++;
+        }
+      } else {
+        $respuesta[24][0] = 0;
+        $respuesta[24][1] = 0;
      }
 
-     public function getCorrectiveTicketPerStuff($idStuff){
-       $dbConnection = new configdb_model();
-       $session = $dbConnection->openSession();
-       $sql =  "SELECT * FROM ticket_corrective_maintenance WHERE K_IDSTUFF = ".$idStuff.";";
-       if ($session != "false"){
-         $result = $session->query($sql);
-         $row = $result->fetch_assoc();
-       }
-       return $row;
-     }
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 214";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[36][0]++;
+            $respuesta[36][2]+= $respuesta[3][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[36][1]++;
+          }
+          $i++;
+        }
+      } else {
+        $respuesta[36][0] = 0;
+        $respuesta[36][1] = 0;
+      }
 
-     public function getAllStuffPerPVD($idPVD){
-       $dbConnection = new configdb_model();
-       $session = $dbConnection->openSession();
-       $sql = "SELECT * FROM stuff WHERE K_IDPVD = ".$idPVD.";";
-       if ($session != "false"){
-         $result = $session->query($sql);
-         $i = 0;
-         while($row = $result->fetch_assoc()) {
-           $respuesta[$i] = $row;
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 215";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[48][0]++;
+            $respuesta[48][2]+= $respuesta[4][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[48][1]++;
+          }
            $i++;
-         }
-       }
-       return $respuesta;
-     }
+        }
+      } else {
+        $respuesta[48][0] = 0;
+        $respuesta[48][1] = 0;
+      }
+
+      $sql = "SELECT * FROM stuff where K_IDPVD = ".$pvd." and K_IDSTUFF_CATEGORY = 216";
+      $result = $session->query($sql);
+      if ($result->num_rows > 0) {
+        $i = 0;
+        while($row = $result->fetch_assoc()) {
+          if($row['N_ESTADO']  == "Funcional"){
+            $respuesta[9][0]++;
+            $respuesta[9][2]+= $respuesta[5][$reg];
+          }
+          if($row['N_ESTADO']  == "Averiado"){
+            $respuesta[9][1]++;
+          }
+          $i++;
+        }
+      } else {
+        $respuesta[9][0] = 0;
+        $respuesta[9][1] = 0;
+      }
+      return $respuesta;
+
+    }
   }
 ?>
