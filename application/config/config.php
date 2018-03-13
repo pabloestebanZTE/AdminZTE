@@ -28,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 /**************************LOCAL HOST**************************/
-// $config['base_url'] = 'http://localhost/AdminZTE/';
+$config['base_url'] = 'http://localhost/AdminZTE/';
 
 
 /************************+**SERVIDOR TEST***********************+***/
@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 /************************+**SERVIDOR CLIENTE***********************+***/
-$config['base_url'] = 'http://zte.consorcio2018technical.com/';
+// $config['base_url'] = 'http://zte.consorcio2018technical.com/';
 
 
 

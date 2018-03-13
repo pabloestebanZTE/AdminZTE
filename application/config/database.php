@@ -72,7 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 
-$active_group = 'servidor';
+$active_group = 'local';
 $query_builder = TRUE;
 
 /*********************LOCAL HOST***********************************/

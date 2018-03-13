@@ -175,98 +175,39 @@
         <article id="content" class="row bg-white">
           <div class="wrapper col-md-12">
             <h2 class="under">Información General</h2>
+            <h3 class="under">Usuario: zte-fonade / Password: a4b3c2d1</h3>
+
             <!-- primera Grafica -->
             <section>
-                  <div class='tableauPlaceholder' id='viz1518192808842' style='position: relative'>
-                    <noscript>
-                      <a href='#'><img alt='Cantidad de mantenimientos por región ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;Cantidaddemantenimientosporregin&#47;1_rss.png' style='border: none' />
-                      </a>
-                    </noscript>
-                    <object class='tableauViz'  style='display:none;'>
-                      <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-                      <param name='embed_code_version' value='3' /> <param name='site_root' value='' />
-                      <param name='name' value='ReporteFonade&#47;Cantidaddemantenimientosporregin' />
-                      <param name='tabs' value='no' />
-                      <param name='toolbar' value='yes' />
-                      <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;Cantidaddemantenimientosporregin&#47;1.png' />
-                      <param name='animate_transition' value='yes' />
-                      <param name='display_static_image' value='yes' />
-                      <param name='display_spinner' value='yes' />
-                      <param name='display_overlay' value='yes' />
-                      <param name='display_count' value='yes' />
-                    </object>
-                  </div>
-                <script type='text/javascript'>
-                    var divElement = document.getElementById('viz1518192808842');
-                    var vizElement = divElement.getElementsByTagName('object')[0];
-                        vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*2)+'px';
-                    var scriptElement = document.createElement('script');
-                        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                        vizElement.parentNode.insertBefore(scriptElement, vizElement);
-                </script>
-            <!-- segunda Grafica   -->
-            </section>
-              <div class='tableauPlaceholder' id='viz1518192943039' style='position: relative'>
-                <noscript>
-                    <a href='#'>
-                        <img alt='Estado mantenimientos por Región ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;EstadomantenimientosporRegin&#47;1_rss.png' style='border: none' />
-                     </a>
-                </noscript>
-                <object class='tableauViz'  style='display:none;'>
-                  <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+              <script type='text/javascript' src='http://181.49.46.6/javascripts/api/viz_v1.js'></script>
+              <div class='tableauPlaceholder' style='width: 100%; height: 564px;'>
+                <object class='tableauViz' width='100%' height='564' style='display:none;'>
+                  <param name='host_url' value='http%3A%2F%2F181.49.46.6%2F' />
                   <param name='embed_code_version' value='3' />
                   <param name='site_root' value='' />
-                  <param name='name' value='ReporteFonade&#47;EstadomantenimientosporRegin' />
-                  <param name='tabs' value='no' />
+                  <param name='name' value='ReporteFonade&#47;Cantidaddemantenimientosporregin' />
+                  <param name='tabs' value='yes' />
                   <param name='toolbar' value='yes' />
-                  <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;EstadomantenimientosporRegin&#47;1.png' />
-                  <param name='animate_transition' value='yes' />
-                  <param name='display_static_image' value='yes' />
-                  <param name='display_spinner' value='yes' />
-                  <param name='display_overlay' value='yes' />
-                  <param name='display_count' value='yes' />
+                  <param name='showAppBanner' value='false' />
+                  <param name='filter' value='iframeSizedToWindow=true' />
                 </object>
               </div>
-              <script type='text/javascript'>
-                var divElement = document.getElementById('viz1518192943039');
-                var vizElement = divElement.getElementsByTagName('object')[0];
-                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*2)+'px';
-                var scriptElement = document.createElement('script');
-                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                    vizElement.parentNode.insertBefore(scriptElement, vizElement);
-              </script>
-              <!-- tercera grafica -->
+            </section>
             <section>
-              <div class='tableauPlaceholder' id='viz1518192977179' style='position: relative'>
-                <noscript>
-                  <a href='#'>
-                    <img alt='Resumen y estadística ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;Resumenyestadstica&#47;1_rss.png' style='border: none' />
-                  </a>
-                </noscript>
-                <object class='tableauViz'  style='display:none;'>
-                  <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+              <script type='text/javascript' src='http://181.49.46.6/javascripts/api/viz_v1.js'></script>
+              <div class='tableauPlaceholder' style='width: 100%; height: 564px;'>
+                <object class='tableauViz' width='100%' height='564' style='display:none;'>
+                  <param name='host_url' value='http%3A%2F%2F181.49.46.6%2F' />
                   <param name='embed_code_version' value='3' />
                   <param name='site_root' value='' />
-                  <param name='name' value='ReporteFonade&#47;Resumenyestadstica' />
-                  <param name='tabs' value='no' />
-                  <param name='toolbar' value='yes' />
-                  <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Re&#47;ReporteFonade&#47;Resumenyestadstica&#47;1.png' />
-                  <param name='animate_transition' value='yes' />
-                  <param name='display_static_image' value='yes' />
-                  <param name='display_spinner' value='yes' />
-                  <param name='display_overlay' value='yes' />
-                  <param name='display_count' value='yes' />
+                  <param name='name' value='ANSFonade&#47;MantenimientosFinalizados' />
+                  <param name='tabs' value='yes' /><param name='toolbar' value='yes' />
+                  <param name='showAppBanner' value='false' />
+                  <param name='filter' value='iframeSizedToWindow=true' />
                 </object>
               </div>
-              <script type='text/javascript'>
-                var divElement = document.getElementById('viz1518192977179');
-                var vizElement = divElement.getElementsByTagName('object')[0];
-                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*2)+'px';
-                var scriptElement = document.createElement('script');
-                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                    vizElement.parentNode.insertBefore(scriptElement, vizElement);
-              </script>
             </section>
+
 
       <!-- fin graficas -->
       <!-- tablas -->

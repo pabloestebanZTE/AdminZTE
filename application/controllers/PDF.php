@@ -506,7 +506,7 @@ class PDF extends CI_Controller {
 
 
 
-      $pdf->Ln(40);
+      $pdf->Ln(30);
       $pdf->Cell(30,5,'Firma administrador PVD',0,0,'L');
       $pdf->Cell(100,5,'',0,0,'C');
       $pdf->Cell(30,5,'Firma representante del integrador',0,1,'L');
