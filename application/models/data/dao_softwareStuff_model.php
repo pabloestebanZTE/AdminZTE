@@ -16,6 +16,7 @@
           if ($session != "false"){
             $sql = "INSERT INTO software_inventory (N_OPERATIVE_SYSTEM, N_OFFICE_VERSION, N_ANTIVIRUS_VERSION, N_BROWSER_VERSION, N_SIMONTIC_VERSION, N_MAGIC_VERSION, N_SAC_VERSION, N_SEMILLA_VERSION, N_JAWS_VERSION, K_IDSTUFF)
                 VALUES ('".$OS."', '".$OV."', '".$AVV."', '".$BRV."', '".$SIV."','".$MAV."', '".$SACV."', '".$SEMV."', '".$JAWS."', ".$id.");";
+                echo "<br><br><br>".$sql;
             $result = $session->query($sql);
           } else {
             $user = "Error de informacion";

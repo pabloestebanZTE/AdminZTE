@@ -36,9 +36,12 @@ class Mantenimientos extends CI_Controller {
        $idNewTicket = "TPM-".$pvd[0]."-".$count;
        $ticket = new ticket_model;
        $ticket = $ticket->createTicket($idNewTicket, $idMiantenance, "Abierto", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,$_POST['Observaciones']);
-       $this->dao_ticket_model->insertTicket($ticket, 1);
+       $ticket->setDateS($_POST['date']);
+       $ticket->setDateF($_POST['dateFinish']);
 
+       $this->dao_ticket_model->insertTicket($ticket, 1);
        $id = $this->dao_ticket_model->getTicketByID($idNewTicket);
+
        if($id != "No ticket" && $id != "Error en BD"){
          if($_POST['TIT'] != -1){
            $this->dao_ticket_model->insertTech($ticket->getId(), explode("/",$_POST['TIT'])[1], "IT-T");
@@ -60,12 +63,12 @@ class Mantenimientos extends CI_Controller {
          $GLOBALS['$msgJS'][1] = "Contacte al administrador del servicio";
          $GLOBALS['$msgJS'][2] = "error";
        }
-     } else {
+   } else {
        $GLOBALS['$msgJS'][0] = "Algo salio mal";
        $GLOBALS['$msgJS'][1] = "Contacte al administrador del servicio";
        $GLOBALS['$msgJS'][2] = "error";
-     }
-     print_r($GLOBALS['$msgJS']);
+      }
+     // print_r($GLOBALS['$msgJS']);
      $this->preventivosPrincipal();
    }
 
@@ -89,6 +92,24 @@ class Mantenimientos extends CI_Controller {
        $respuesta['msg'] = $GLOBALS['$msgJS'];
      }
      $this->load->view('preventivosP', $respuesta);
+   }
+
+   public function correctivosPrincipal(){
+     $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherCorrectiveMaintenances();
+     $respuesta['PVDs'] = $this->dao_PVD_model->getPVDs();
+
+
+     for($i = 0; $i < count($respuesta['tickets']); $i++){
+       for($j = 0; $j <  count($respuesta['PVDs']); $j++){
+         if($respuesta['tickets'][$i]->idMaintenance == $respuesta['PVDs'][$j]->id){
+           $respuesta['tickets'][$i]->idMaintenance = $respuesta['PVDs'][$j];
+           // print_r($respuesta['tickets'][$i]);
+           // echo "<br><br>";
+           $j = count($respuesta['PVDs']);
+         }
+       }
+     }
+     $this->load->view('correctivosP', $respuesta);
    }
 
    function loadMPView(){
@@ -147,8 +168,8 @@ class Mantenimientos extends CI_Controller {
     $respuesta['department'] = $this->dao_PVD_model->getAllDepartmentsCI();
 
     // añadiendo la region a los depart. coincidientes
-    for ($i=0; $i < count($respuesta['department']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['region']); $j++) { 
+    for ($i=0; $i < count($respuesta['department']) ; $i++) {
+      for ($j=0; $j < count($respuesta['region']); $j++) {
         if ($respuesta['department'][$i]->K_IDREGION == $respuesta['region'][$j]->K_IDREGION) {
           $respuesta['department'][$i]->K_IDREGION = $respuesta['region'][$j];
           $j = count($respuesta['region']) + 1;//+1 se usa para romper el for de abajo
@@ -156,8 +177,8 @@ class Mantenimientos extends CI_Controller {
       }
     }
     // añandiendo departments a las city coincidientes
-    for ($i=0; $i < count($respuesta['city']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['department']); $j++) { 
+    for ($i=0; $i < count($respuesta['city']) ; $i++) {
+      for ($j=0; $j < count($respuesta['department']); $j++) {
         if ($respuesta['city'][$i]->K_IDDEPARTMENT == $respuesta['department'][$j]->K_IDDEPARTMENT) {
           $respuesta['city'][$i]->K_IDDEPARTMENT = $respuesta['department'][$j];
           $j = count($respuesta['department']) + 1;//+1 se usa para romper el for de abajo
@@ -165,8 +186,8 @@ class Mantenimientos extends CI_Controller {
       }
     }
     // añandiendo city a los PVD coincidientes
-    for ($i=0; $i < count($respuesta['pvd']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['city']); $j++) { 
+    for ($i=0; $i < count($respuesta['pvd']) ; $i++) {
+      for ($j=0; $j < count($respuesta['city']); $j++) {
         if ($respuesta['pvd'][$i]->K_IDCITY == $respuesta['city'][$j]->K_IDCITY) {
           $respuesta['pvd'][$i]->K_IDCITY = $respuesta['city'][$j];
           $j = count($respuesta['city']) + 1;//+1 se usa para romper el for de abajo
@@ -174,8 +195,8 @@ class Mantenimientos extends CI_Controller {
       }
     }
     // añandiendo pvd a los maintenance
-    for ($i=0; $i < count($respuesta['maintenance']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['pvd']); $j++) { 
+    for ($i=0; $i < count($respuesta['maintenance']) ; $i++) {
+      for ($j=0; $j < count($respuesta['pvd']); $j++) {
         if ($respuesta['maintenance'][$i]->K_IDPVD == $respuesta['pvd'][$j]->K_IDPVD) {
           $respuesta['maintenance'][$i]->K_IDPVD = $respuesta['pvd'][$j];
           $j = count($respuesta['pvd']) + 1;//+1 se usa para romper el for de abajo
@@ -183,8 +204,8 @@ class Mantenimientos extends CI_Controller {
       }
     }
     // añandiendo maintenance a los ticket
-    for ($i=0; $i < count($respuesta['ticket']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['maintenance']); $j++) { 
+    for ($i=0; $i < count($respuesta['ticket']) ; $i++) {
+      for ($j=0; $j < count($respuesta['maintenance']); $j++) {
         if ($respuesta['ticket'][$i]->K_IDMAINTENANCE == $respuesta['maintenance'][$j]->K_IDMAINTENANCE) {
           $respuesta['ticket'][$i]->K_IDMAINTENANCE = $respuesta['maintenance'][$j];
           $j = count($respuesta['maintenance']) + 1;//+1 se usa para romper el for de abajo
@@ -193,8 +214,8 @@ class Mantenimientos extends CI_Controller {
     }
     /****************ahora pasamos de user a ticket****************/
     // añandiendo user a los ticketUser
-    for ($i=0; $i < count($respuesta['ticketUser']) ; $i++) { 
-      for ($j=0; $j < count($respuesta['user']); $j++) { 
+    for ($i=0; $i < count($respuesta['ticketUser']) ; $i++) {
+      for ($j=0; $j < count($respuesta['user']); $j++) {
         if ($respuesta['ticketUser'][$i]->K_IDUSER == $respuesta['user'][$j]->K_IDUSER) {
           $respuesta['ticketUser'][$i]->K_IDUSER = $respuesta['user'][$j];
           $j = count($respuesta['user']) + 1;//+1 se usa para romper el for de abajo
@@ -204,9 +225,9 @@ class Mantenimientos extends CI_Controller {
     // añandiendo ticketUser a los ticket
     // Agrego los disintos usuarios de un mismo ticket (ticketUser) a nuestro objeto de ticket
 
-    for ($i=0; $i < count($respuesta['ticket']) ; $i++) { 
-      $flag = 0;  
-      for ($j=0; $j < count($respuesta['ticketUser']); $j++) { 
+    for ($i=0; $i < count($respuesta['ticket']) ; $i++) {
+      $flag = 0;
+      for ($j=0; $j < count($respuesta['ticketUser']); $j++) {
         if ($respuesta['ticket'][$i]->K_IDTICKET == $respuesta['ticketUser'][$j]->K_IDTICKET  && $respuesta['ticketUser'][$j]->N_TYPE == 'IT-T') {
           $respuesta['ticket'][$i]->T_IT = $respuesta['ticketUser'][$j];
           $flag++;
@@ -231,7 +252,7 @@ class Mantenimientos extends CI_Controller {
      // print_r($respuesta['ticket']);
     echo json_encode($respuesta['ticket']);
 
-     
+
    }
    /***************FIN  editarMP camilo***************/
    /*Actualizar mantenimiento preventivo Camilo*/
@@ -855,6 +876,24 @@ class Mantenimientos extends CI_Controller {
      $MP['Diciembre']['Zona']['Zona4']['Estado']['Ejecutado']=0;
      $MP['Diciembre']['Zona']['Zona4']['Estado']['Progreso']=0;
      return $MP;
+   }
+
+   public function loadCorrectiveView(){
+     // $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherCorrectiveMaintenances();
+     $respuesta['tickets'] = $this->dao_ticket_model->getAllOtherCorrectiveMaintenances();
+     $respuesta['pvds'] = $this->dao_PVD_model->getPVDs();
+
+     // print_r($respuesta['pvds']);
+     for($i = 0; $i < count($respuesta['tickets']); $i++){
+       for($j = 0; $j < count($respuesta['pvds']); $j++){
+         if($respuesta['pvds'][$j]->id == $respuesta['tickets'][$i]->idMaintenance){
+           $respuesta['tickets'][$i]->idMaintenance = $respuesta['pvds'][$j];
+         }
+       }
+     }
+    // print_r($respuesta['tickets']);
+     $this->load->view('correctiveMaintenances', $respuesta);
+
    }
 }
 

@@ -115,7 +115,7 @@
                     echo "</a>";
                     echo "<div class='pointer'><center>Clic sobre mi</center></div>";
                     echo "<ul id='wheel'  data-angle='all'>";
-                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='#'><img src='".base_url()."assets/images/correctivos.ico' /></a>Correctivos</div></li>";
+                      echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='".base_url()."Mantenimientos/correctivosPrincipal'><img src='".base_url()."assets/images/correctivos.ico' /></a>Correctivos</div></li>";
                       echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='".base_url()."Ticket/OtherTicketsPrincipal'><img src='".base_url()."assets/images/otros.png'></a>Otros</div></li>";
                       echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='".base_url()."Mantenimientos/preventivosPrincipal'><img src='".base_url()."assets/images/preventivos.ico' /></a>Preventivos</div></li>";
                     echo "</ul>";

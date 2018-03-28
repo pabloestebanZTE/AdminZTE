@@ -57,7 +57,7 @@
 									echo "<li id='nav4'><a href='".base_url()."Mantenimientos/loadMPView'>Preventivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][2] == 1){
-									echo "<li id='nav4'><a href='#'>Correctivos<span>Mantenimientos</span></a></li>";
+									echo "<li id='nav4'><a href='".base_url()."Mantenimientos/loadCorrectiveView'>Correctivos<span>Mantenimientos</span></a></li>";
 								}
 								if($_SESSION['permissions'][4] == 1){
 									echo "<li id='nav2'><a href='http://legalizaciones.us-west-2.elasticbeanstalk.com/?usuarioAdmin=".$_SESSION['id']."&passAdmin=".$_SESSION['pass']."'>legalizaciones<span>legalizaciones</span></a></li>";

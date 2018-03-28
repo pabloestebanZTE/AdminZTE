@@ -95,26 +95,44 @@
 
             public function getAllPVDCI(){
               $query = $this->db->get("pvd");
-              return $query->result();  
+              return $query->result();
             }
-            
+
             public function getAllCitiesCI(){
               $query = $this->db->get("city");
-              return $query->result();  
+              return $query->result();
             }
 
             public function getAllDepartmentsCI(){
               $query = $this->db->get("department");
-              return $query->result();  
+              return $query->result();
             }
 
             public function getAllRegionCI(){
               $query = $this->db->get("region");
-              return $query->result();  
+              return $query->result();
             }
 
-
-
+            public function getAllPVDs(){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT * FROM pvd";
+              if ($session != "false"){
+                $result = $session->query($sql);
+                if ($result->num_rows > 0) {
+                  $i = 0;
+                  while($row = $result->fetch_assoc()) {
+                    $pvd = new Pvd_model();
+                    $pvd = $pvd->createPVD($row['K_IDPVD'], $row['K_IDCITY'], "", "", $row['N_DIRECCION'], $row['N_FASE'], $row['N_TIPOLOGIA']);
+                    $respuesta[$i] = $pvd;
+                    $i++;
+                  }
+                }
+              } else {
+                $respuesta = "Error de informacion";
+              }
+              return $respuesta;
+            }
 
         }
 ?>

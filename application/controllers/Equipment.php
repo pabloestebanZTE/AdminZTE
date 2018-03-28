@@ -238,4 +238,21 @@ class Equipment extends CI_Controller {
 
       $this->inventoryPVD();
     }
+
+    public function palabritas(){
+      $frase = "super fuerte";
+      $lng = strlen($frase);
+      $counter = 0;
+      for($i = 0; $i < $lng; $i++){
+        $counter = $i;
+        for($j = 0; $j < $lng; $j++){
+          echo $frase[$counter];
+          $counter++;
+          if($counter == $lng){
+            $counter= 0;
+          }
+        }
+        echo "<br>";
+      }
+    }
 }

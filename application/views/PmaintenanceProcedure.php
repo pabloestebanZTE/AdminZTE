@@ -670,7 +670,7 @@ $(window).on('load', function() {
                echo "</tbody>";
              echo "</table>";
             }
-            if($_SESSION['id'] == 1023000199 || $_SESSION['id'] == 1014295226){
+            if($_SESSION['id'] == 1023000199 || $_SESSION['id'] == 1014295226 || $_SESSION['id'] == 1023919446){
               if ($estadoI != 1){
                 echo "<center><div class='btn-group'>";
                   echo "<br><br><br><a class='btn btn-danger btn-sm' href='".base_url()."Equipment/approveTicket?k_fase=".$PVD->getFase()."&k_tipo=".$PVD->getTipologia()."&k_pvd=".$PVD->getID()."&k_ticket=".$ticket."' >Aprobar a Interventoria</a>";

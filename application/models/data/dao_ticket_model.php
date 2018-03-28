@@ -117,6 +117,56 @@
             return $respuesta;
           }
 
+          public function getCorrectiveTicketByID($id){
+            $dbConnection = new configdb_model();
+            $session = $dbConnection->openSession();
+            $sql = "SELECT * FROM ticket_others where K_IDTICKETOTHERS = '".$id."';";
+            if ($session != "false"){
+              $result = $session->query($sql);
+              if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $ticket = new ticket_model();
+                $sql2 = "SELECT n_name from ticket_status where K_IDSTATUSTICKET = ".$row['K_IDSTATUSTICKET'].";";
+                $result2 = $session->query($sql2);
+                $row2 = $result2->fetch_assoc();
+                $sql3 = "SELECT * FROM ticket_user where K_IDTICKET = '".$row['K_IDTICKET']."';";
+                $result3 = $session->query($sql3);
+                while($row3 = $result3->fetch_assoc()) {
+                  $sql4 = "SELECT N_NAME, N_LASTNAME, K_IDUSER FROM user where K_IDUSER = ".$row3['K_IDUSER'].";";
+                  $result4 = $session->query($sql4);
+                  $row4 = $result4->fetch_assoc();
+                  $row4['Almuerzos'] = $row3['Q_ALMUERZOS'];
+                  $row4['Estadias'] = $row3['Q_ESTADIA'];
+                  $row4['Observaciones'] = $row3['N_OBSERVATION_F'];
+                  $tipoTech = explode("-",$row3['N_TYPE']);
+                  if($tipoTech[0] == "IT"){
+                    if ($tipoTech[1] == "T"){
+                      $users['users']['IT_T'] = $row4;
+                    } else {
+                      $users['users']['IT_A'] = $row4;
+                    }
+                  } else {
+                    if ($tipoTech[1] == "T"){
+                      $users['users']['AA_T'] = $row4;
+                    } else {
+                      $users['users']['AA_A'] = $row4;
+                    }
+                  }
+                }
+                $ticket = $ticket->createTicket($row['K_IDTICKET'], $row['K_IDMAINTENANCE'], $row2['n_name'], $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], $row['D_STARTDATEIT'], $row['D_FINISHDATEIT'], $row['D_STARTDATEAA'], $row['D_FINISHDATEAA'], $users, $row['N_COLOR'], $row['K_OBSERVATION_I']);
+                $ticket->setObservacionesF($row['N_OBSERVATION_F']);
+                $ticket->setAlmuerzos($row['Q_ALMUERZOS']);
+                $ticket->setEstadia($row['Q_ESTADIA']);
+                $respuesta = $ticket;
+              } else {
+                $respuesta = "No ticket";
+                }
+            } else {
+              $respuesta = "Error en BD";
+            }
+            return $respuesta;
+          }
+
           public function getAllTickets(){
             $dbConnection = new configdb_model();
             $session = $dbConnection->openSession();
@@ -154,9 +204,10 @@
             $sql = "SELECT K_IDSTATUSTICKET from ticket_status where N_NAME = '".$ticket->getStatus()."';";
             $result = $session->query($sql);
             $row = $result->fetch_assoc();
-            $sql = "insert into ticket (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE)
-              values ('".$ticket->getId()."',".$ticket->getIdM().",".$row['K_IDSTATUSTICKET'].",STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'));";
+            $sql = "insert into ticket (K_IDTICKET, K_IDMAINTENANCE, K_IDSTATUSTICKET, D_STARTDATE, D_POSIBLE_START_DATE, D_POSIBLE_FINISH_DATE)
+              values ('".$ticket->getId()."',".$ticket->getIdM().",".$row['K_IDSTATUSTICKET'].",STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'),STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'),STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'));";
               $session->query($sql);
+              $ticket->setDateF(NULL);
               if ($ticket->getDateS() != NULL){
                 $sql = "UPDATE ticket SET D_STARTDATE=STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d')"." WHERE K_IDTICKET='".$ticket->getId()."';";
                 $session->query($sql);
@@ -189,6 +240,8 @@
                 $sql = "UPDATE ticket SET N_COLOR='".$ticket->getColor()."' WHERE K_IDTICKET='".$ticket->getId()."';";
                 $session->query($sql);
               }
+
+
               if ($ticket->getObservacionesI() != NULL){
               $sql = "UPDATE ticket SET K_OBSERVATION_I='".$ticket->getObservacionesI()."' WHERE K_IDTICKET='".$ticket->getId()."';";
               $session->query($sql);
@@ -326,8 +379,9 @@
                 for($i = strlen($row['count(K_IDTICKETOTHERS)']); $i <5; $i++){
                   $row['count(K_IDTICKETOTHERS)'] = "0".$row['count(K_IDTICKETOTHERS)'];
                 }
-                $sql2 = "INSERT INTO ticket_others (K_IDTICKETOTHERS, D_STARTDATE, D_FINISHDATE, I_DURATION, K_IDTICKETT, N_OBSERVATION_F)
-                  values ('".$ticket->getId().$row['count(K_IDTICKETOTHERS)']."',STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'), STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'), ".$ticket->getDuracion().", ".$ticket->getStatus().", '".$ticket->getObservacionesI()."');";
+                $sql2 = "INSERT INTO ticket_others (K_IDTICKETOTHERS, D_STARTDATE, D_FINISHDATE, I_DURATION, K_IDTICKETT, N_OBSERVATION_F, N_TIPO)
+                  values ('".$ticket->getId().$row['count(K_IDTICKETOTHERS)']."',STR_TO_DATE('".$ticket->getDateS()."', '%Y-%m-%d'), STR_TO_DATE('".$ticket->getDateF()."', '%Y-%m-%d'), ".$ticket->getDuracion().", ".$ticket->getStatus().", '".$ticket->getObservacionesI()."','".$ticket->getColor()."');";
+                // echo $sql2;
                 if($ticket->getIdM() != "-1"){
                   $sql3 = "UPDATE ticket_others SET K_IDPVD =".$ticket->getIdM()." where K_IDTICKETOTHERS = '".$ticket->getId().$row['count(K_IDTICKETOTHERS)']."';";
                 }
@@ -375,6 +429,34 @@
               }
               return $respuesta;
             }
+
+
+            public function getAllOtherCorrectiveMaintenances(){
+              $dbConnection = new configdb_model();
+              $session = $dbConnection->openSession();
+              $sql = "SELECT * FROM ticket_others where N_TIPO = 'Correctivo' OR N_TIPO = 'Reposicion'";
+              //Verificar que la sesion exista
+              if ($session != "false"){
+                $result = $session->query($sql);
+              //Verificar que la consulta traiga algo
+                if ($result->num_rows > 0) {
+                  $i = 0;
+                  while($row = $result->fetch_assoc()) {
+                        $ticket = new ticket_model();
+                        $ticket = $ticket->createTicket($row['K_IDTICKETOTHERS'], $row['K_IDPVD'], "", $row['D_STARTDATE'], $row['D_FINISHDATE'], $row['I_DURATION'], $row['N_TIPO'], "", "", "", "", "", $row['N_OBSERVATION_F']);
+                        $respuesta[$i] = $ticket;
+                        $i++;
+                  }
+                } else {
+                  $respuesta = "No tickets";
+                }
+              } else {
+                $respuesta = "Error en BD";
+              }
+              // print_r($respuesta);
+              return $respuesta;
+            }
+
 
              //-------------------------------------camilo-------------------------------------
             public function getTicketOByID($id){
@@ -474,12 +556,12 @@
 
           public function getAllTicketsCI(){
             $query = $this->db->get("ticket");
-            return $query->result();            
+            return $query->result();
           }
 
           public function getAllTicketUserCI(){
             $query = $this->db->get("ticket_user");
-            return $query->result();            
+            return $query->result();
           }
 
           // Obtengo los parametros y enviamos datos a las distintas funciones
@@ -542,10 +624,10 @@
 
               $this->db->select("K_IDTICKET,N_TYPE");
               $this->db->from('ticket_user');
-              $this->db->where('K_IDTICKET', $parameter['ticket']);    
+              $this->db->where('K_IDTICKET', $parameter['ticket']);
               $this->db->where('N_TYPE', 'IT-T');
-              $query = $this->db->get();    
-   
+              $query = $this->db->get();
+
               if($query->num_rows() > 0 ){
                 $this->db->where('K_IDTICKET', $parameter['ticket']);
                 $this->db->where('N_TYPE', 'IT-T');
@@ -572,10 +654,10 @@
 
               $this->db->select("K_IDTICKET,N_TYPE");
               $this->db->from('ticket_user');
-              $this->db->where('K_IDTICKET', $parameter['ticket']);    
+              $this->db->where('K_IDTICKET', $parameter['ticket']);
               $this->db->where('N_TYPE', 'IT-A');
-              $query = $this->db->get();    
-   
+              $query = $this->db->get();
+
               if($query->num_rows() > 0 ){
                 $this->db->where('K_IDTICKET', $parameter['ticket']);
                 $this->db->where('N_TYPE', 'IT-A');
@@ -600,10 +682,10 @@
 
             $this->db->select("K_IDTICKET,N_TYPE");
             $this->db->from('ticket_user');
-            $this->db->where('K_IDTICKET', $parameter['ticket']);    
+            $this->db->where('K_IDTICKET', $parameter['ticket']);
             $this->db->where('N_TYPE', 'AA-T');
-            $query = $this->db->get();    
- 
+            $query = $this->db->get();
+
             if($query->num_rows() > 0 ){
               $this->db->where('K_IDTICKET', $parameter['ticket']);
               $this->db->where('N_TYPE', 'AA-T');
@@ -630,10 +712,10 @@
 
             $this->db->select("K_IDTICKET,N_TYPE");
             $this->db->from('ticket_user');
-            $this->db->where('K_IDTICKET', $parameter['ticket']);    
+            $this->db->where('K_IDTICKET', $parameter['ticket']);
             $this->db->where('N_TYPE', 'AA-A');
-            $query = $this->db->get();    
- 
+            $query = $this->db->get();
+
             if($query->num_rows() > 0 ){
               $this->db->where('K_IDTICKET', $parameter['ticket']);
               $this->db->where('N_TYPE', 'AA-A');
@@ -646,7 +728,7 @@
             if ($error['message']) {
               print_r($error);
               return "error";
-            } 
+            }
           }
 
 

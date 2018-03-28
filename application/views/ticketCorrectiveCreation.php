@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Creacion Tickets</title>
+<title>Creación Otros Tickets</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,9 +15,9 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/forms.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/wheelmenu.css">
 <link href="<?php echo base_url(); ?>assets/css/index.css" rel="stylesheet">
-<link rel="stylesheet" href="/AdminZTE<?php echo base_url(); ?>assets/css/etiqueta.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert/dist/sweetalert.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/responsiveslides.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/etiqueta.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" >
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Teko:400,700">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -42,6 +42,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.wheelmenu.js"></script>
 
 <script>
+    var cantidadTec = 0;
     $(document).ready(function(){
       $(".wheel-button").wheelmenu({
         trigger: "hover",
@@ -70,6 +71,80 @@
 
       console.log(valorOption);
     }
+
+    function añadirTec(){
+      var select = document.getElementById("tec-0");
+      var div = document.getElementById("divTec");
+      var select2 = select.cloneNode(true);
+      cantidadTec++;
+      select2.id = "tec-"+cantidadTec;
+      select2.name = "tec-"+cantidadTec;
+      div.appendChild(select2);
+    }
+
+    function arreglarForm(){
+    var valorOption = 7;
+    console.log(valorOption);
+    var fechaInicio = document.getElementById("date");
+    var fechaFin = document.getElementById("dateF");
+    var labelFecha = document.getElementById("labelFecha");
+    var labelFechaF = document.getElementById("labelFechaF");
+    var labelTec = document.getElementById("labelTec");
+    var selectTec = document.getElementById("tec-0");
+    var BEditar = document.getElementById("BEditar");
+    var tipoSelect = document.getElementById("tipoSelect");
+    var selectTipo = document.getElementById("selectTipo");
+    var labelCCC = document.getElementById("labelCCC");
+    var fieldCCC = document.getElementById("fieldCCC");
+
+    if(valorOption == 6){
+      fechaInicio.style.display = 'none';
+      fechaFin.style.display = 'none';
+      labelFecha.style.display = 'none';
+      labelFechaF.style.display = 'none';
+      labelTec.style.display = 'none';
+      selectTec.style.display = 'none';
+      BEditar.style.display = 'none';
+      selectTipo.style.display = 'block';
+      tipoSelect.style.display = 'block';
+      labelCCC.style.display = 'block';
+      fieldCCC.style.display = 'block';
+      document.getElementById("date").required="";
+      document.getElementById("dateF").required="";
+      document.getElementById("fieldCCC").required="required";
+    } else {
+      fechaInicio.style.display = 'block';
+      fechaFin.style.display = 'block';
+      labelFecha.style.display = 'block';
+      labelFechaF.style.display = 'block';
+      labelTec.style.display = 'block';
+      selectTec.style.display = 'block';
+      BEditar.style.display = 'block';
+      selectTipo.style.display = 'none';
+      tipoSelect.style.display = 'none';
+      labelCCC.style.display = 'none';
+      fieldCCC.style.display = 'none';
+      document.getElementById("date").required="required";
+      document.getElementById("dateF").required="required";
+      document.getElementById("fieldCCC").required="";
+    }
+    if(valorOption == 7){
+      fechaInicio.style.display = 'block';
+      fechaFin.style.display = 'block';
+      labelFecha.style.display = 'block';
+      labelFechaF.style.display = 'block';
+      labelTec.style.display = 'block';
+      selectTec.style.display = 'block';
+      BEditar.style.display = 'block';
+      selectTipo.style.display = 'none';
+      tipoSelect.style.display = 'none';
+      labelCCC.style.display = 'block';
+      fieldCCC.style.display = 'block';
+      document.getElementById("date").required="required";
+      document.getElementById("dateF").required="required";
+      document.getElementById("fieldCCC").required="";
+    }
+  }
 </script>
 
 </head>
@@ -127,7 +202,7 @@
                     echo "<span><img src='".base_url()."assets/images/plus.ico' /></span>";
                   echo "</a>";
                   echo "<ul id='wheel1'  data-angle='all'>";
-                    echo "<li class='item'><div class='cae_texto' id='cae_texto'><a href='".base_url()."Mantenimientos/preventivosPrincipal'><img src='".base_url()."assets/images/return.png' /></a>Return</div></li>";
+                    echo "<li class='item'><div id='cae_texto'><a href='".base_url()."Ticket/OtherTicketsPrincipal'><img src='".base_url()."assets/images/return.png' /></a>Return</div></li>";
                   echo "</ul>";
                 echo "</div>";
               echo "</div>";
@@ -138,7 +213,7 @@
             if($_SESSION['permissions'][11] == 1){
               echo "<section class='col-4-4'>";
                 echo "<div class='wrap-col'>";
-                  echo "<h2 class='under'>Creación de Tickets</h2>";
+                  echo "<h2 class='under'>Creación de Tickets : Correctivos</h2>";
                     echo "<div class='wrapper tabs'>";
                     echo "<div id='tabPreventivos'>";
                     echo "<div class='form-style-5'>";
@@ -147,63 +222,62 @@
                           echo "<legend><span class='number'>1</span> Información PVD</legend>";
                           echo "<label for='job'>ID PVD:</label>";
                           echo "<select id='pvd' name='pvd' onchange='fillInputs()'>";
+                            echo "<option value='-1'></option>";
                             for($i = 0; $i<count($pvds); $i++){
                               echo "<option value='".$pvds[$i]->getId()."/".$pvds[$i]->getCity()."/".$pvds[$i]->getDepartment()."/".$pvds[$i]->getDireccion()."/".$pvds[$i]->getTipologia()."/".$pvds[$i]->getAdmin()['N_NAME']."/".$pvds[$i]->getAdmin()['I_PHONE']."'>".$pvds[$i]->getId()."</option>";
                             }
                           echo "</select>";
                           echo "<label for='job'>Departament / Ciudad:</label>";
-                          echo "<input type='text' name='dep-cit'  id='dep-cit' value='".$pvds[0]->getCity()." / ".$pvds[0]->getDepartment()."' disabled='disabled'>";
+                          echo "<input type='text' name='dep-cit'  id='dep-cit' value='' disabled='disabled'>";
                           echo "<label for='job'>Dirección:</label>";
-                          echo "<input type='text' name='direccion'  id='direccion' value='".$pvds[0]->getDireccion()."' disabled='disabled'>";
+                          echo "<input type='text' name='direccion'  id='direccion' value='' disabled='disabled'>";
                           echo "<label for='job'>Tipologia:</label>";
-                          echo "<input type='text' name='tipologia'  id='tipologia' value='".$pvds[0]->getTipologia()."' disabled='disabled'>";
+                          echo "<input type='text' name='tipologia'  id='tipologia' value='' disabled='disabled'>";
                           echo "<label for='job'>Nombre administrador:</label>";
-                          echo "<input type='text' name='Administrador'  id='Administrador' value='".$pvds[0]->getAdmin()['N_NAME']."' disabled='disabled'>";
+                          echo "<input type='text' name='Administrador'  id='Administrador' value='' disabled='disabled'>";
                           echo "<label for='job'>Contacto administrador:</label>";
-                          echo "<input type='text' name='CAdministrador'  id='CAdministrador' value='".$pvds[0]->getAdmin()['I_PHONE']."' disabled='disabled'>";
+                          echo "<input type='text' name='CAdministrador'  id='CAdministrador' value='' disabled='disabled'>";
 
-                          echo "<legend><span class='number'>2</span> Información Mantenimiento</legend>";
-                          echo "<label for='job'>Fecha Tentativa Inicio:</label>";
-                          echo "<input type='date' name='date' placeholder='Fecha *' required>";
-                          echo "<label for='job'>Fecha Tentativa Fin:</label>";
-                          echo "<input type='date' name='dateFinish' placeholder='Fecha *' required>";
-                          echo "<label for='job'>Nombre del técnico IT:</label>";
-                          echo "<select id='TIT' name='TIT'>";
-                            echo "<option value='-1'></option>";
-                            for($i = 0; $i<count($users); $i++){
-                              echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
-                            }
+                          echo "<legend><span class='number'>2</span> Información Ticket</legend>";
+
+                          echo "<select id='pvd' name='tipoC'>";
+                            echo "<option value='Reposicion'>Reposicion</option>";
+                            echo "<option value='Correctivo'>Correctivo</option>";
                           echo "</select>";
-                          echo "<label for='job'>Nombre del aux IT:</label>";
-                          echo "<select id='AIT' name='AIT'>";
-                            echo "<option value='-1'></option>";
-                            for($i = 0; $i<count($users); $i++){
-                              echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
-                            }
+                          echo "<label for='job' id='labelFecha'>Fecha Inicio:</label>";
+                          echo "<input type='date' name='date' id='date' placeholder='Fecha Inicio*' required>";
+                          echo "<label for='job' id='labelFechaF'>Fecha Fin:</label>";
+                          echo "<input type='date' name='dateF' id='dateF' placeholder='Fecha Fin*' required>";
+                          echo "<label for='job' id='labelCCC' style='display: none;'>Ticket CCC:</label>";
+                          echo "<input type='text' name='fieldCCC' id='fieldCCC' placeholder='Ticket CCC*' style='display: none;'>";
+                          echo "<label for='job' id='tipoSelect' style='display: none;'>Tipo de Elemento:</label>";
+                          echo "<select id='selectTipo' name='selectTipo' style='display: none;>";
+                            echo "<option value='AA'>AA</option>";
+                            echo "<option value='IT'>IT</option>";
+                            echo "<option value='AA'>AA</option>";
                           echo "</select>";
-                          echo "<label for='job'>Nombre del técnico AA:</label>";
-                          echo "<select id='TAA' name='TAA'>";
-                            echo "<option value='-1'></option>";
-                            for($i = 0; $i<count($users); $i++){
-                              echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
-                            }
-                          echo "</select>";
-                          echo "<label for='job'>Nombre del aux AA:</label>";
-                          echo "<select id='AAA' name='AAA'>";
-                            echo "<option value='-1'></option>";
-                            for($i = 0; $i<count($users); $i++){
-                              echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
-                            }
-                          echo "</select>";
+                          echo "<label for='job' id='labelTec'>Nombre técnico(s):</label>";
+                          echo "<div name='divTec' id='divTec'>";
+                            echo "<select id='tec-0' name='tec-0' >";
+                              echo "<option value='-1'></option>";
+                              for($i = 0; $i<count($users); $i++){
+                                echo "<option value='".$users[$i]->getName()." ".$users[$i]->getLastname()." / ".$users[$i]->getID()."'>".$users[$i]->getName()." ".$users[$i]->getLastname()."</option>";
+                              }
+                            echo "</select>";
+                          echo "</div>";
+                          echo "<button value='Añadir técnico' name='BEditar' id='BEditar' type='button' class='btn btn-primary' onclick= 'añadirTec()'>Añadir técnico</button><br><br>";
+
                           echo "<label for='job'>Observaciones :</label>";
                           echo "<textarea name='Observaciones' id='Observaciones' placeholder='Máximo 500 caracteres *'></textarea>";
-                        echo "<input type='submit' value='Crear Ticket' class='btn btn-success' onclick =\"this.form.action = '".base_url()."Mantenimientos/createTicketMP'\" >";
+                        echo "<input type='submit' value='Crear Ticket' class='btn btn-success' onclick =\"this.form.action = '".base_url()."Ticket/createCorrectiveTicket'\" >";
                       echo "</form>";
                     echo "</div>";
                   echo "</div>";
                 echo "</div>";
               echo "</div>";
             echo "</section>";
+            echo "<script>arreglarForm();</script>";
+
           } else {
             echo "<h2 class='under'>No tienes permisos para acceder a esta area</h2>";
           }
