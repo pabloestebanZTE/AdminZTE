@@ -34,12 +34,12 @@
         // }
 
         public function openSession(){
-          $user = "root";
-          $pass = "";
+          $user = "AdminZTE";
+          $pass = "a4b3c2d1";
           $db = "zte_fonade";
 
           try {
-            $connection = new mysqli('localhost', $user, $pass, $db);
+            $connection = new mysqli('35.198.9.249', $user, $pass, $db);
             $connection->set_charset("utf8");
           } catch (Exception $e ) {
              $connection = "false";
